@@ -44,6 +44,8 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
     - Dikerjakan oleh: Anthony Edbert Feriyanto
 6. Service Center App (Aplikasi Django ini berisi informasi mengenai service center yang tersedia, terdapat fitur _appointment_ yang dapat digunakan untuk generate sebuah tiket untuk _service_)
     - Dikerjakan oleh: Bertrand Gwynfory Iskandar
+7. Article About Gadget (Memuat artikel yang membahas informasi update terbaru seputar gadget)
+	- Dikerjakan oleh : Eva Yunia Aliyanshah
 
 ## 📈 Sumber Initial Dataset 📈
 [https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv](https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv)

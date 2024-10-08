@@ -43,6 +43,7 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
 5. Detail Product App (Memuat informasi detail mengenai suatu product dan memberikan link untuk melakukan pembelanjaan)
     - Dikerjakan oleh: Anthony Edbert Feriyanto
 6. Service Center App (Aplikasi Django ini berisi informasi mengenai service center yang tersedia, terdapat fitur _appointment_ yang dapat digunakan untuk generate sebuah tiket untuk _service_)
+    - Dikerjakan oleh: Bertrand Gwynfory Iskandar
 
 ## 📈 Sumber Initial Dataset 📈
 [https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv](https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv)

@@ -46,6 +46,8 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
     - Dikerjakan oleh: Bertrand Gwynfory Iskandar
 7. Article About Gadget (Memuat artikel yang membahas informasi update terbaru seputar gadget)
 	- Dikerjakan oleh : Eva Yunia Aliyanshah
+8. User Profile (Memuat halaman yang menampilkan informasi detail mengenai user seperti, nama, email, no telepon, dan lainnya)
+	- Dikerjakan oleh : Eva Yunia Aliyanshah
 
 ## 📈 Sumber Initial Dataset 📈
 [https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv](https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv)

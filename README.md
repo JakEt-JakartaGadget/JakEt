@@ -22,3 +22,9 @@ Lebih dari itu, JakEt berperan sebagai penghubung antara pengguna dan penyedia l
 
 Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih mudah, terjangkau, dan aman bagi warga Jakarta Selatan, serta mendukung gaya hidup modern yang semakin mengandalkan teknologi. 
 
+
+
+## Modul Aplikasi
+
+## Persona
+

@@ -62,22 +62,28 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
 [https://www.google.co.id/maps/search/service+center+jakarta+selatan/@-6.2833046,106.7772294,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI0MTAwMi4xIKXMDSoASAFQAw%3D%3D](https://www.google.co.id/maps/search/service+center+jakarta+selatan/@-6.2833046,106.7772294,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI0MTAwMi4xIKXMDSoASAFQAw%3D%3D)
 
 ## 🧑🏻 Persona 🧑🏻
+
 **1. User yang tidak login**
-- Meninjau halaman web dan produk-produk di dalamnya
-- Memanfaatkan fitur search and filter
+- Meninjau halaman web dan produk-produk di dalamnya.
+- Memanfaatkan fitur search and filter untuk menemukan produk yang diinginkan.
+- Meninjau artikel terbaru mengenai gadget yang tersedia di platform.
 
 **2. User yang sudah login**
-- Menambahkan ke dalam wishlist
-- Meninjau detail produk
-- Memanfaatkan fitur Comparison Tool untuk membandingkan produk
-- Membuat appointment dengan service center
-- Meninjau, memulai, dan berkontribusi dalam forum diskusi
-- Berkomunikasi dengan Customer Service
+- Menambahkan produk ke dalam wishlist.
+- Meninjau detail produk dan informasi lengkapnya, termasuk spesifikasi dan ulasan pengguna lain.
+- Memanfaatkan fitur Comparison Tool untuk membandingkan spesifikasi dan harga beberapa produk secara berdampingan.
+- Membuat appointment dengan service center melalui Tiket App untuk perbaikan atau konsultasi.
+- Meninjau, memulai, dan berkontribusi dalam forum diskusi mengenai produk atau topik terkait, berbagi pengalaman dan mendapatkan saran dari pengguna lain.
+- Berkomunikasi dengan Customer Service melalui fitur chat untuk mendapatkan bantuan atau informasi lebih lanjut.
+- Mengakses dan mengelola profil pengguna.
 
 **3. Admin**
 - Mengakses Dashboard untuk insert, edit, dan delete produk dalam database
 - Menanggapi chat user dalam bagian Customer Service
-- Menambahkan artikel dalam aplikasi
+- Menambahkan artikel terbaru mengenai gadget dalam aplikasi
+- Memantau appointment yang dibuat oleh user
+- Mengelola informasi service center yang tersedia
+- Mengelola dan memperbarui dataset produk yang digunakan dalam aplikasi
 
 ## 🌐 Tautan Deployment Aplikasi 🌐
 Tautan aplikasi PWS: [http://anthony-edbert-jaket.pbp.cs.ui.ac.id](http://anthony-edbert-jaket.pbp.cs.ui.ac.id)

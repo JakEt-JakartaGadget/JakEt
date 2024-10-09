@@ -34,26 +34,28 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
 ## 🖥️ Modul Aplikasi 🖥️
 1. Autentikasi pengguna (apakah pengguna yang login merupakan admin atau user)
     - Dikerjakan oleh: Anthony Edbert Feriyanto
-2. Homepage (Aplikasi Django ini berfungsi untuk menampilkan halaman utama antarmuka dataset product dalam web ini. pada antarmuka tersebut juga disediakan fitur sorting, filter, dan search. Fitur filter berupa pemfilteran berdasarkan kategori product.)
+1. Homepage (Aplikasi Django ini berfungsi untuk menampilkan halaman utama antarmuka dataset product dalam web ini. pada antarmuka tersebut juga disediakan fitur sorting, filter, dan search. Fitur filter berupa pemfilteran berdasarkan kategori product.)
     - Dikerjakan oleh: Anthony Edbert Feriyanto
-3. Dashboard App
+1. Dashboard App
     - Dikerjakan oleh: Anthony Edbert Feriyanto
-4. Review App (ulasan user terhadap product berupa bintang dengan skala 1-5, komentar (opsional), foto product (opsional))
+1. User Discussion Forum (User yang login dapat memulai dan mengikuti diskusi mengenai produk atau topik)
+    - Dikerjakan oleh: Ida Made Revindra Dikta Mahendra
+1. Detail Product App (Memuat informasi detail mengenai suatu product dan memberikan link untuk melakukan pembelanjaan)
     - Dikerjakan oleh: Anthony Edbert Feriyanto
-5. Detail Product App (Memuat informasi detail mengenai suatu product dan memberikan link untuk melakukan pembelanjaan)
-    - Dikerjakan oleh: Anthony Edbert Feriyanto
-6. Service Center App (Aplikasi Django ini berisi informasi mengenai service center yang tersedia)
+1. Service Center App (Aplikasi Django ini berisi informasi mengenai service center yang tersedia)
     - Dikerjakan oleh: Bertrand Gwynfory Iskandar
-7. Tiket App (Aplikasi yang digunakan untuk generate sebuah tiket melalui _appointment_ untuk service center)
+1. Tiket App (Aplikasi yang digunakan untuk generate sebuah tiket melalui _appointment_ untuk service center)
     - Dikerjakan oleh: Bertrand Gwynfory Iskandar
-8. Article About Gadget (Memuat artikel yang membahas informasi update terbaru seputar gadget)
+1. Article About Gadget (Memuat artikel yang membahas informasi update terbaru seputar gadget)
 	- Dikerjakan oleh : Eva Yunia Aliyanshah
-9. User Profile (Memuat halaman yang menampilkan informasi detail mengenai user seperti, nama, email, no telepon, dan lainnya)
+1. User Profile (Memuat halaman yang menampilkan informasi detail mengenai user seperti, nama, email, no telepon, dan lainnya)
 	- Dikerjakan oleh : Eva Yunia Aliyanshah
-9. Wishlist & Favorites (Memuat fitur yang memungkinkan pengguna dapat menambahkan gadget ke daftar wishlist atau favorit mereka untuk melacak gadget yang menarik dan bisa dibandingkan dengan produk yang punya kategori sama)
+1. Wishlist & Favorites (Memuat fitur yang memungkinkan pengguna dapat menambahkan gadget ke daftar wishlist atau favorit mereka untuk melacak gadget yang menarik dan bisa dibandingkan dengan produk yang punya kategori sama)
     - Dikerjakan oleh : Abraham Jordy Ollen
-10. Comparison Tool (Memuat fitur yang memungkinkan pengguna untuk membandingkan spesifikasi dan harga beberapa gadget dari dataset yang sudah diambil (tergantung kategorinya, misal : laptop, mobiles, headphones, dan dataset lainnya) secara berdampingan. Ini sangat membantu pengguna dalam membuat keputusan berdasarkan perbandingan yang objektif.)
+1. Comparison Tool (Memuat fitur yang memungkinkan pengguna untuk membandingkan spesifikasi dan harga beberapa gadget dari dataset yang sudah diambil (tergantung kategorinya, misal : laptop, mobiles, headphones, dan dataset lainnya) secara berdampingan. Ini sangat membantu pengguna dalam membuat keputusan berdasarkan perbandingan yang objektif.)
     - Dikerjakan oleh : Abraham Jordy Ollen
+1. Customer Service Chat (Chat antara User yang login dengan admin)
+    - Dikerjakan oleh : Ida Made Revindra Dikta Mahendra
 
 ## 📈 Sumber Initial Dataset 📈
 [https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv](https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv)

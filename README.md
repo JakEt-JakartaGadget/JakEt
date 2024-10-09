@@ -44,7 +44,7 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
     - Dikerjakan oleh: Anthony Edbert Feriyanto
 6. Service Center App (Aplikasi Django ini berisi informasi mengenai service center yang tersedia)
     - Dikerjakan oleh: Bertrand Gwynfory Iskandar
-7. Appointment App (Aplikasi yang digunakan untuk schedule sebuah _appointment_ untuk toko gadget dan service center)
+7. Tiket App (Aplikasi yang digunakan untuk generate sebuah tiket melalui _appointment_ untuk service center)
     - Dikerjakan oleh: Bertrand Gwynfory Iskandar
 8. Article About Gadget (Memuat artikel yang membahas informasi update terbaru seputar gadget)
 	- Dikerjakan oleh : Eva Yunia Aliyanshah

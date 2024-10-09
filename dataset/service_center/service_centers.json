@@ -1,142 +1,170 @@
 [
     {
-        "Name":"LG Service Center Jakarta Selatan",
-        "Address":"Jl. RS. Fatmawati Raya No.1 A, RT.2\/RW.1, Pd. Labu, Kec. Cilandak, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12450",
-        "Contact ":"1 500 140",
-        "Reviews":4.2,
-        "Total Reviews":1151
+        "Name": "LG Service Center Jakarta Selatan",
+        "Maps Link": "https://maps.app.goo.gl/MG1mHgx1t2iAdp5s9",
+        "Address": "Jl. RS. Fatmawati Raya No.1 A, RT.2/RW.1, Pd. Labu, Kec. Cilandak, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12450",
+        "Contact": "1 500 140",
+        "Reviews": 4.2,
+        "Total Reviews": 1151
     },
     {
-        "Name":"CV Aneka Jaya (Service Elektronik)",
-        "Address":"Jl. Moh. Kahfi 1 No.45, RT.7\/RW.2, Ciganjur, Kec. Jagakarsa, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12630",
-        "Contact ":"0818-0875-1212",
-        "Reviews":4.0,
-        "Total Reviews":18
+        "Name": "CV Aneka Jaya (Service Elektronik)",
+        "Maps Link": "https://maps.app.goo.gl/h2FFHmepiHNTzD8J9",
+        "Address": "Jl. Moh. Kahfi 1 No.45, RT.7/RW.2, Ciganjur, Kec. Jagakarsa, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12630",
+        "Contact": "0818-0875-1212",
+        "Reviews": 4,
+        "Total Reviews": 18
     },
     {
-        "Name":"Labora Service Electronics",
-        "Address":"Jl. Duren Tiga Selatan No.31, RT.1\/RW.2, Duren Tiga, Kec. Pancoran, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12760",
-        "Contact ":"0816-1707-0112",
-        "Reviews":4.8,
-        "Total Reviews":38
+        "Name": "Labora Service Electronics",
+        "Maps Link": "https://maps.app.goo.gl/yYBtPz5TcYs315u26",
+        "Address": "Jl. Duren Tiga Selatan No.31, RT.1/RW.2, Duren Tiga, Kec. Pancoran, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12760",
+        "Contact": "0816-1707-0112",
+        "Reviews": 4.8,
+        "Total Reviews": 38
     },
     {
-        "Name":"Sony Authorized Service Center",
-        "Address":"2, Jl. RS. Fatmawati Raya No.9A, RT.3\/RW.7, Gandaria Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12140",
-        "Contact ":"0858-1061-1286",
-        "Reviews":4.4,
-        "Total Reviews":576
+        "Name": "Sony Authorized Service Center",
+        "Maps Link": "https://maps.app.goo.gl/tWET3ssrSQyj3Xpk9",
+        "Address": "2, Jl. RS. Fatmawati Raya No.9A, RT.3/RW.7, Gandaria Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12140",
+        "Contact": "0858-1061-1286",
+        "Reviews": 4.4,
+        "Total Reviews": 576
     },
     {
-        "Name":"Duta Service Tv Led",
-        "Address":"Jl. Dr. Saharjo Jl. Swadaya II No.17, RT.7\/RW.9, Manggarai, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12850",
-        "Contact ":"0812-3573-2727",
-        "Reviews":4.9,
-        "Total Reviews":239
+        "Name": "Duta Service Tv Led",
+        "Maps Link": "https://maps.app.goo.gl/Qa4emdJgZR5H8AkB9",
+        "Address": "Jl. Dr. Saharjo Jl. Swadaya II No.17, RT.7/RW.9, Manggarai, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12850",
+        "Contact": "0812-3573-2727",
+        "Reviews": 4.9,
+        "Total Reviews": 239
     },
     {
-        "Name":"MURSID SERVICE ELEKTRONIK",
-        "Address":"Jl. Sonton No.2, RT.03\/02\/RW.No.38, Lenteng Agung, Kec. Jagakarsa, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12610",
-        "Contact ":"0812-9261-412",
-        "Reviews":4.9,
-        "Total Reviews":19
+        "Name": "MURSID SERVICE ELEKTRONIK",
+        "Maps Link": "https://maps.app.goo.gl/aYsPAsNMEQiHtzzz5",
+        "Address": "Jl. Sonton No.2, RT.03/02/RW.No.38, Lenteng Agung, Kec. Jagakarsa, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12610",
+        "Contact": "0812-9261-412",
+        "Reviews": 4.9,
+        "Total Reviews": 19
     },
     {
-        "Name":"Service Elektronik Bpk. Dede \/ Rinata",
-        "Address":"Belakang Gudang Aqua, Gg. Pelangi No.29, RT.10\/RW.1, Rawajati, Kec. Pancoran, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12750",
-        "Contact ":"0812-9417-455",
-        "Reviews":4.8,
-        "Total Reviews":33
+        "Name": "Service Elektronik Bpk. Dede / Rinata",
+        "Maps Link": "https://maps.app.goo.gl/Qe2ZuYNQU6dxxpEv9",
+        "Address": "Belakang Gudang Aqua, Gg. Pelangi No.29, RT.10/RW.1, Rawajati, Kec. Pancoran, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12750",
+        "Contact": "0812-9417-455",
+        "Reviews": 4.8,
+        "Total Reviews": 33
     },
     {
-        "Name":"PHILIPS CONSUMER EXPERIENCE CENTER",
-        "Address":"Jl. Sultan Iskandar Muda No.9 E 8, RT.8\/RW.1, Kby. Lama Sel., Kec. Kby. Lama, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12240",
-        "Contact ":"(021) 27518592",
-        "Reviews":4.6,
-        "Total Reviews":347
+        "Name": "PHILIPS CONSUMER EXPERIENCE CENTER",
+        "Maps Link": "https://maps.app.goo.gl/pLhqi8P8VNMaz4tL7",
+        "Address": "Jl. Sultan Iskandar Muda No.9 E 8, RT.8/RW.1, Kby. Lama Sel., Kec. Kby. Lama, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12240",
+        "Contact": "(021) 27518592",
+        "Reviews": 4.6,
+        "Total Reviews": 347
     },
     {
-        "Name":"Samsung Service Center - ITC Fatmawati",
-        "Address":"ITC Fatmawati, Lantai 1. No. 49 - 51, RT.3\/RW.5, Cipete Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12150",
-        "Contact ":"0800 1128888",
-        "Reviews":4.9,
-        "Total Reviews":4209
+        "Name": "Samsung Service Center - ITC Fatmawati",
+        "Maps Link": "https://maps.app.goo.gl/zxSd3kSCdi2wvsV19",
+        "Address": "ITC Fatmawati, Lantai 1. No. 49 - 51, RT.3/RW.5, Cipete Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12150",
+        "Contact": "0800 1128888",
+        "Reviews": 4.9,
+        "Total Reviews": 4209
     },
     {
-        "Name":"MANTO Service TV LED",
-        "Address":"Pasar Jembatan Merah, Jl. Dr. Saharjo No.159, RT.6\/RW.3, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12860",
-        "Contact ":"0852-1310-9750",
-        "Reviews":4.5,
-        "Total Reviews":59
+        "Name": "MANTO Service TV LED",
+        "Maps Link": "https://maps.app.goo.gl/9AhmHN8JpcKkQhnu9",
+        "Address": "Pasar Jembatan Merah, Jl. Dr. Saharjo No.159, RT.6/RW.3, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12860",
+        "Contact": "0852-1310-9750",
+        "Reviews": 4.5,
+        "Total Reviews": 59
     },
     {
-        "Name":"HP Service Center Jakarta",
-        "Address":"Prudential Center Kota Kasablanka Lantai 5 Unit C-E, Jl. Raya Casablanca No.Kav. 88 16, RT.16\/RW.5, Menteng Dalam, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12870",
-        "Contact ":"0813-1852-1007",
-        "Reviews":4.4,
-        "Total Reviews":1782
+        "Name": "HP Service Center Jakarta",
+        "Maps Link": "https://maps.app.goo.gl/ftDS73xw8mUZLv1i8",
+        "Address": "Prudential Center Kota Kasablanka Lantai 5 Unit C-E, Jl. Raya Casablanca No.Kav. 88 16, RT.16/RW.5, Menteng Dalam, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12870",
+        "Contact": "0813-1852-1007",
+        "Reviews": 4.4,
+        "Total Reviews": 1782
     },
     {
-        "Name":"Acer Customer Service Center - Fatmawati",
-        "Address":"Ruko ITC Fatmawati No.7, Jl. RS. Fatmawati Raya No.28 3, RT.3\/RW.5, Cipete Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12430",
-        "Contact ":"(021) 1500155",
-        "Reviews":4.3,
-        "Total Reviews":560
+        "Name": "Acer Customer Service Center - Fatmawati",
+        "Maps Link": "https://maps.app.goo.gl/EcVDHhpEeWkzZK8UA",
+        "Address": "Ruko ITC Fatmawati No.7, Jl. RS. Fatmawati Raya No.28 3, RT.3/RW.5, Cipete Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12430",
+        "Contact": "(021) 1500155",
+        "Reviews": 4.3,
+        "Total Reviews": 560
     },
     {
-        "Name":"Xiaomi Service Center ESC ITC Fatmawati Jakarta",
-        "Address":"ITC Fatmawati, Ruko No.21 Pintu 2, RT.1\/RW.5, Cipete Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12150",
-        "Contact ":"0851-7995-6249",
-        "Reviews":4.1,
-        "Total Reviews":1361
+        "Name": "Xiaomi Service Center ESC ITC Fatmawati Jakarta",
+        "Maps Link": "https://maps.app.goo.gl/L686Pr2kEhgGSruc8",
+        "Address": "ITC Fatmawati, Ruko No.21 Pintu 2, RT.1/RW.5, Cipete Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12150",
+        "Contact": "0851-7995-6249",
+        "Reviews": 4.1,
+        "Total Reviews": 1361
     },
     {
-        "Name":"Apple Service Indonesia",
-        "Address":"Kios AL-19, Kalibata City, JL. Kalibata Raya, Apartemen, Tower Akasia, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12750",
-        "Contact ":"0838-7474-7555",
-        "Reviews":5.0,
-        "Total Reviews":174
+        "Name": "Apple Service Indonesia",
+        "Maps Link": "https://maps.app.goo.gl/DxLDpVHQFgJ6xmTAA",
+        "Address": "Kios AL-19, Kalibata City, JL. Kalibata Raya, Apartemen, Tower Akasia, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12750",
+        "Contact": "0838-7474-7555",
+        "Reviews": 5,
+        "Total Reviews": 174
     },
     {
-        "Name":"SHARP Service Center Jakarta Selatan",
-        "Address":"Jl. Ciputat Raya No.1b, RT.8\/RW.6, Pd. Pinang, Kec. Kby. Lama, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12310",
-        "Contact ":"0800 1225588",
-        "Reviews":4.0,
-        "Total Reviews":95
+        "Name": "SHARP Service Center Jakarta Selatan",
+        "Maps Link": "https://maps.app.goo.gl/GKPgV7JZQVEZABcTA",
+        "Address": "Jl. Ciputat Raya No.1b, RT.8/RW.6, Pd. Pinang, Kec. Kby. Lama, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12310",
+        "Contact": "0800 1225588",
+        "Reviews": 4,
+        "Total Reviews": 95
     },
     {
-        "Name":"HUAWEI Authorized Service Center-HES Pondok Indah Mal Jakarta",
-        "Address":"HUAWEI PIM PONDOK INDAH MALL 2 LT.03 NO.308, RT.1\/RW.16, Pd. Pinang, Kec. Kby. Lama, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12310",
-        "Contact ":"(021) 75920536",
-        "Reviews":5.0,
-        "Total Reviews":1490
+        "Name": "HUAWEI Authorized Service Center-HES Pondok Indah Mal Jakarta",
+        "Maps Link": "https://maps.app.goo.gl/orz1bDRKnYkDXByq7",
+        "Address": "HUAWEI PIM PONDOK INDAH MALL 2 LT.03 NO.308, RT.1/RW.16, Pd. Pinang, Kec. Kby. Lama, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12310",
+        "Contact": "(021) 75920536",
+        "Reviews": 5,
+        "Total Reviews": 1490
     },
     {
-        "Name":"vivo Service Center - Fatmawati",
-        "Address":"ITC Fatmawati, Lantai 1 Blok 198-199, Jl. RS. Fatmawati Raya No.39, RT.1\/RW.5, Cipete Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12150",
-        "Contact ":"(021) 50207073",
-        "Reviews":4.8,
-        "Total Reviews":131
+        "Name": "vivo Service Center - Fatmawati",
+        "Maps Link": "https://maps.app.goo.gl/m2MZgtHK6HGcBBRc8",
+        "Address": "ITC Fatmawati, Lantai 1 Blok 198-199, Jl. RS. Fatmawati Raya No.39, RT.1/RW.5, Cipete Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12150",
+        "Contact": "(021) 50207073",
+        "Reviews": 4.8,
+        "Total Reviews": 131
     },
     {
-        "Name":"Akses Komunikasi ( Sparepart Acc dan Servis Handphone )",
-        "Address":"ITC Fatmawati, Jl. RS. Fatmawati Raya No.146 Lantai 2, Cipete Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12150",
-        "Contact ":"0813-8656-8854",
-        "Reviews":5.0,
-        "Total Reviews":268
+        "Name": "Akses Komunikasi ( Sparepart Acc dan Servis Handphone )",
+        "Maps Link": "https://maps.app.goo.gl/zzqPcz356unA28bQ9",
+        "Address": "ITC Fatmawati, Jl. RS. Fatmawati Raya No.146 Lantai 2, Cipete Utara, Kec. Kby. Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12150",
+        "Contact": "0813-8656-8854",
+        "Reviews": 5,
+        "Total Reviews": 268
     },
     {
-        "Name":"Service iPhone Jakarta Kurmac Repair",
-        "Address":"ITC Fatmawati Lantai Dasar No.144, Jakarta Selatan, Jakarta 12150",
-        "Contact ":"0811-9122-169",
-        "Reviews":4.9,
-        "Total Reviews":431
+        "Name": "Service iPhone Jakarta Kurmac Repair",
+        "Maps Link": "https://maps.app.goo.gl/4hTeu5izbBZAKTHR8",
+        "Address": "ITC Fatmawati Lantai Dasar No.144, Jakarta Selatan, Jakarta 12150",
+        "Contact": "0811-9122-169",
+        "Reviews": 4.9,
+        "Total Reviews": 431
     },
     {
-        "Name":"ABA Irepair iPhone & iPad Repair Service",
-        "Address":"Jl. Lebak Bulus Raya No.5, depan masjid PTIQ No.02, RT.2, Kec. Cilandak, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12440",
-        "Contact ":"0811-8954-274",
-        "Reviews":4.6,
-        "Total Reviews":376
+        "Name": "ABA Irepair iPhone & iPad Repair Service",
+        "Maps Link": "https://maps.app.goo.gl/GQmKFah3LphcBYew9",
+        "Address": "Jl. Lebak Bulus Raya No.5, depan masjid PTIQ No.02, RT.2, Kec. Cilandak, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12440",
+        "Contact": "0811-8954-274",
+        "Reviews": 4.6,
+        "Total Reviews": 376
+    },
+    {
+        "Name": "Jasa servis hp Syifa Cellular Service HP Jakarta timur",
+        "Maps Link": "https://g.co/kgs/AmZU9Bb",
+        "Address": "Jl. Albaidho II No.1, RT.4/RW.6, Lubang Buaya, Kec. Cipayung, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13810",
+        "Contact": "0813-1437-8999",
+        "Reviews": 4.9,
+        "Total Reviews": 329
     }
 ]

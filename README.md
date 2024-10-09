@@ -42,15 +42,18 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
     - Dikerjakan oleh: Anthony Edbert Feriyanto
 5. Detail Product App (Memuat informasi detail mengenai suatu product dan memberikan link untuk melakukan pembelanjaan)
     - Dikerjakan oleh: Anthony Edbert Feriyanto
-6. Service Center App (Aplikasi Django ini berisi informasi mengenai service center yang tersedia, terdapat fitur _appointment_ yang dapat digunakan untuk generate sebuah tiket untuk _service_)
+6. Service Center App (Aplikasi Django ini berisi informasi mengenai service center yang tersedia)
     - Dikerjakan oleh: Bertrand Gwynfory Iskandar
-7. Article About Gadget (Memuat artikel yang membahas informasi update terbaru seputar gadget)
+7. Appointment App (Aplikasi yang digunakan untuk schedule sebuah _appointment_ untuk toko gadget dan service center)
+    - Dikerjakan oleh: Bertrand Gwynfory Iskandar
+8. Article About Gadget (Memuat artikel yang membahas informasi update terbaru seputar gadget)
 	- Dikerjakan oleh : Eva Yunia Aliyanshah
-8. User Profile (Memuat halaman yang menampilkan informasi detail mengenai user seperti, nama, email, no telepon, dan lainnya)
+9. User Profile (Memuat halaman yang menampilkan informasi detail mengenai user seperti, nama, email, no telepon, dan lainnya)
 	- Dikerjakan oleh : Eva Yunia Aliyanshah
 
 ## 📈 Sumber Initial Dataset 📈
 [https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv](https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv)
+[https://www.google.co.id/maps/search/service+center+jakarta+selatan/@-6.2833046,106.7772294,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI0MTAwMi4xIKXMDSoASAFQAw%3D%3D](https://www.google.co.id/maps/search/service+center+jakarta+selatan/@-6.2833046,106.7772294,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI0MTAwMi4xIKXMDSoASAFQAw%3D%3D)
 
 ## 🧑🏻 Persona 🧑🏻
 **1. User yang tidak login**

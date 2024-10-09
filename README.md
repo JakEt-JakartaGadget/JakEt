@@ -37,7 +37,7 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
 1. Homepage (Aplikasi Django ini berfungsi untuk menampilkan halaman utama antarmuka dataset product dalam web ini. pada antarmuka tersebut juga disediakan fitur sorting, filter, dan search. Fitur filter berupa pemfilteran berdasarkan kategori product.)
     - Dikerjakan oleh: Anthony Edbert Feriyanto
 1. Dashboard App
-    - Dikerjakan oleh: Anthony Edbert Feriyanto
+    - Dikerjakan oleh: Anthony Edbert Feriyanto & Ida Made Revindra Dikta Mahendra
 1. User Discussion Forum (User yang login dapat memulai dan mengikuti diskusi mengenai produk atau topik)
     - Dikerjakan oleh: Ida Made Revindra Dikta Mahendra
 1. Detail Product App (Memuat informasi detail mengenai suatu product dan memberikan link untuk melakukan pembelanjaan)

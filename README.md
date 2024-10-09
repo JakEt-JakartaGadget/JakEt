@@ -48,6 +48,10 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
 	- Dikerjakan oleh : Eva Yunia Aliyanshah
 8. User Profile (Memuat halaman yang menampilkan informasi detail mengenai user seperti, nama, email, no telepon, dan lainnya)
 	- Dikerjakan oleh : Eva Yunia Aliyanshah
+9. Wishlist & Favorites (Memuat fitur yang memungkinkan pengguna dapat menambahkan gadget ke daftar wishlist atau favorit mereka untuk melacak gadget yang menarik dan bisa dibandingkan dengan produk yang punya kategori sama)
+    - Dikerjakan oleh : Abraham Jordy Ollen
+10. Comparison Tool (Memuat fitur yang memungkinkan pengguna untuk membandingkan spesifikasi dan harga beberapa gadget dari dataset yang sudah diambil (tergantung kategorinya, misal : laptop, mobiles, headphones, dan dataset lainnya) secara berdampingan. Ini sangat membantu pengguna dalam membuat keputusan berdasarkan perbandingan yang objektif.)
+    - Dikerjakan oleh : Abraham Jordy Ollen
 
 ## 📈 Sumber Initial Dataset 📈
 [https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv](https://www.kaggle.com/code/kerneler/starter-gadgets360-electronics-dataset-095343b9-a/input?select=mobiles.csv)

@@ -63,14 +63,21 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
 
 ## 🧑🏻 Persona 🧑🏻
 **1. User yang tidak login**
-- a,b,c,d
+- Meninjau halaman web dan produk-produk di dalamnya
+- Memanfaatkan fitur search and filter
 
 **2. User yang sudah login**
-- e,f,g,h
+- Menambahkan ke dalam wishlist
+- Meninjau detail produk
+- Memanfaatkan fitur Comparison Tool untuk membandingkan produk
+- Membuat appointment dengan service center
+- Meninjau, memulai, dan berkontribusi dalam forum diskusi
+- Berkomunikasi dengan Customer Service
 
 **3. Admin**
-- k.l.m.n
-
+- Mengakses Dashboard untuk insert, edit, dan delete produk dalam database
+- Menanggapi chat user dalam bagian Customer Service
+- Menambahkan artikel dalam aplikasi
 
 ## 🌐 Tautan Deployment Aplikasi 🌐
 Tautan aplikasi PWS: [http://anthony-edbert-jaket.pbp.cs.ui.ac.id](http://anthony-edbert-jaket.pbp.cs.ui.ac.id)

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block meta %}
+    <title>Register</title>
+{% endblock meta %}
+{% block content %}
+{% load static %}
+    <main class="flex items-center justify-center w-screen px-5 h-screen bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] via-[#2E29A6] to-[#7FADD0]">
+        <div class="shadow-xl bg-opacity-75 p-5 sm:p-10 rounded-3xl flex flex-col gap-10 items-center border-[2px] border-4 border-white/50 w-full max-w-md">
+            <img src="{% static 'image/LO GO.png' %}" alt="Logo">
+            <h2 class="font-bold text-xl sm:text-2xl text-center text-white">Create a new account</h2>
+            
+            <form class="space-y-4 w-full" method="POST" action="">
+                {% csrf_token %}
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-white">Username</label>
+                        <input id="username" name="username" type="text" required aria-label="Username" aria-required="true"
+                               class="mt-1 appearance-none rounded-2xl relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Enter your username">
+                    </div>
+
+                    <div>
+                        <label for="password1" class="block text-sm font-medium text-white">Password</label>
+                        <input id="password1" name="password1" type="password" required aria-label="Password" aria-required="true"
+                               class="mt-1 appearance-none rounded-2xl relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Enter your password">
+                    </div>
+                    
+                    <div>
+                        <label for="password2" class="block text-sm font-medium text-white">Confirm Password</label>
+                        <input id="password2" name="password2" type="password" required aria-label="Confirm Password" aria-required="true"
+                               class="mt-1 appearance-none rounded-2xl relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Confirm your password">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="text-xl mt-7 group relative w-full flex justify-center py-2 px-2 border border-transparent text-sm rounded-3xl text-white bg-[#6D0CC9] hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                        Register
+                    </button>
+                </div>
+            </form>
+
+            {% if messages %}
+            <div class="mt-4 w-full">
+                {% for message in messages %}
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">{{ message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <p class="text-sm text-black">
+                    Already have an account? 
+                    <a href="{% url 'Authenticate:login' %}" class="font-medium text-[#2E29A6] hover:text-[#3F39E7] transition duration-150 ease-in-out">
+                        Login Now
+                    </a>
+                </p>
+            </div>
+        </div>
+    </main>
+{% endblock content %}

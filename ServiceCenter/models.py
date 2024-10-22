@@ -1,9 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from Authenticate.models import UserData
 import uuid
 
 class ServiceCenter(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(UserData, on_delete=models.CASCADE, null=True, blank=True)
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     name = models.CharField(max_length=255)
     address = models.TextField()

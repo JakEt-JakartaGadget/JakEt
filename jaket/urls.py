@@ -21,5 +21,6 @@ from jaket import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('authenticate/', include('Authenticate.urls')),
-
+    path('tiket/', include('Tiket.urls')),
+    path('service-center/', include('ServiceCenter.urls')),
 ]

@@ -131,22 +131,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-<<<<<<< HEAD
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
-=======
-STATIC_URL = 'static/'
-if DEBUG:
-    STATICFILES_DIRS = [
-        BASE_DIR / 'static' # merujuk ke /static root project pada mode development
-    ]
-else:
-    STATIC_ROOT = BASE_DIR / 'static' # merujuk ke /static root project pada mode production
->>>>>>> 113b1fe09ce2d00f9e0c3337ef326bd87c9f0378
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

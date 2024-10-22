@@ -4,8 +4,9 @@
 {% endblock meta %}
 {% block content %}
 {% load static %}
-    <main class="flex items-center justify-center w-screen px-5 h-screen bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] via-[#2E29A6] to-[#7FADD0]">
-        <div class="shadow-xl bg-opacity-75 p-5 sm:p-10 rounded-3xl flex flex-col gap-10 items-center border-[2px] border-4 border-white/50 w-full max-w-md">
+    <body class="relative flex items-center justify-center w-screen px-5 h-screen bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] via-[#2E29A6] to-[#7FADD0]">
+        <div class="relative shadow-xl bg-opacity-75 p-5 sm:p-10 rounded-3xl flex flex-col gap-10 items-center border-[3px] border-4 border-white/50 w-full max-w-xl"> <!-- Ubah max-w-md ke max-w-xl -->
+            <img src="{% static 'image/decorator.png' %}" alt="decorator" class="absolute -top-12 -right-12 w-20 h-20 sm:w-28 sm:h-28 z-10">
             <img src="{% static 'image/LO GO.png' %}" alt="Logo">
             <h2 class="font-bold text-xl sm:text-2xl text-center text-white">Login to your account</h2>
             
@@ -17,13 +18,13 @@
                     <div>
                         <label for="username" class="block text-sm font-medium text-white">Username</label>
                         <input id="username" name="username" type="text" required aria-label="Username" aria-required="true"
-                               class="mt-1 appearance-none rounded-2xl relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Enter your username">
+                            class="mt-1 appearance-none rounded-2xl relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Enter your username">
                     </div>
 
                     <div>
                         <label for="password" class="block text-sm font-medium text-white">Password</label>
                         <input id="password" name="password" type="password" required aria-label="Password" aria-required="true"
-                               class="mt-1 appearance-none rounded-2xl relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Enter your password">
+                            class="mt-1 appearance-none rounded-2xl relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Enter your password">
                     </div>
                 </div>
 
@@ -63,5 +64,5 @@
                 </p>
             </div>
         </div>
-    </main>
+    </body>
 {% endblock content %}

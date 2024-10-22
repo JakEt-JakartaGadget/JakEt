@@ -8,7 +8,7 @@ from .forms import FirstDataForm, RegisterForm
 from django.contrib.auth.models import User
 from .models import UserData
 import datetime
-
+from django.views.decorators.csrf import csrf_exempt
 # @login_required
 # def first_time_login(request):
 #     # Periksa apakah pengguna sudah memiliki profil
@@ -29,26 +29,47 @@ import datetime
         
 #         return render(request, 'first_time_login.html', {'form': form})
 
+# def register(request):
+#     if request.method == "POST":
+#         username = request.POST['username']
+#         pass1 = request.POST['password1']
+#         pass2 = request.POST['password2']
 
+#         if pass1 != pass2:
+#             messages.error(request, "Password yang dimasukkan tidak cocok. Silakan coba lagi.")
+#         elif User.objects.filter(username=username).exists():
+#             messages.error(request, "Username telah digunakan oleh pengguna lain.")
+#         else:
+#             user = User.objects.create_user(username=username, password=pass1)
+#             user.save()
+#             messages.success(request, 'Akun Anda berhasil dibuat! Silakan login.')
+#             return redirect('Authenticate:login') 
+
+#     return render(request, 'register.html')
+
+@csrf_exempt
 def register(request):
     if request.method == "POST":
-        username = request.POST['username']
-        pass1 = request.POST['password1']
-        pass2 = request.POST['password2']
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
 
-        if pass1 != pass2:
-            messages.error(request, "Password yang dimasukkan tidak cocok. Silakan coba lagi.")
-        elif User.objects.filter(username=username).exists():
-            messages.error(request, "Username telah digunakan oleh pengguna lain.")
+            if User.objects.filter(username=username).exists():
+                messages.error(request, "Username telah digunakan oleh pengguna lain.")
+            else:
+                user = User.objects.create_user(username=username, password=password)
+                user.save()
+                messages.success(request, 'Akun Anda berhasil dibuat! Silakan login.')
+                return redirect('Authenticate:login')
         else:
-            user = User.objects.create_user(username=username, password=pass1)
-            user.save()
-            messages.success(request, 'Akun Anda berhasil dibuat! Silakan login.')
-            return redirect('Authenticate:login') 
+            messages.error(request, "Form tidak valid. Silakan cek kembali.")
+    else:
+        form = RegisterForm()
 
-    return render(request, 'register.html')
+    return render(request, 'register.html', {'form': form})
 
-
+@csrf_exempt
 def log_in(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -61,7 +82,7 @@ def log_in(request):
             # if not UserData.objects.filter(user=user).exists():
             #     return redirect('first_time_login')  
             
-            response = HttpResponseRedirect(reverse("Homepage:home")) 
+            response = HttpResponseRedirect(reverse("Homepage:home_section")) 
             response.set_cookie('last_login', str(datetime.datetime.now()))  
             return response
         else:

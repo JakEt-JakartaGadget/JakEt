@@ -9,7 +9,6 @@
 {% include 'navbar.html' %}
 
 <div class="manrope overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-white flex flex-col">
-  
   <div class="flex justify-between items-center mb-6 mt-20">
     <h2 class="text-2xl font-bold text-black ml-2">Your Booked Schedule</h2>
   </div>
@@ -41,7 +40,7 @@
         <!-- Sort Dropdown -->
         <div class="relative inline-block text-left">
           <select id="sortOptions" style="background: linear-gradient(to right, #cb94ff 0%, #9794ff 58%, #93C9F1 100%);" class="text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105" onchange="sortServiceCenters()">
-            <option style="background-color: #9794ff;" value="alphabet-asc">Alphabetical (A-Z)</option>
+            <option style="background-color: #9794ff;" value="alphabet-asc" selected>Alphabetical (A-Z)</option>
             <option style="background-color: #9794ff;" value="alphabet-desc">Alphabetical (Z-A)</option>
             <option style="background-color: #9794ff;" value="best-rating">Best Rating</option>
             <option style="background-color: #9794ff;" value="most-reviews">Most Reviews</option>
@@ -106,6 +105,7 @@
 </div>
 
 <script>
+  // SERVICE CENTERS
   async function getServiceEntries(){
       return fetch("{% url 'ServiceCenter:show_json' %}").then((res) => res.json())
   }
@@ -174,9 +174,9 @@
                                 <p class="font-bold text-gray-800 mb-2">Contact</p>
                                 <p class="text-gray-600">${item.fields.contact}</p>
                                 <br>
-                                <!-- Push Schedule button to the bottom -->
+                                <!-- Schedule Button -->
                                 <div class="mt-auto">
-                                  <button style="background: linear-gradient(to right, #cb94ff 0%, #9794ff 58%, #93C9F1 100%);" class="hover:slate-900 hover:opacity-80 w-full text-white font-bold py-3 rounded-full transition duration-300 ease-in-out flex items-center justify-center transform hover:scale-105">
+                                  <button onclick="window.location.href='{% url 'Tiket:create_tiket' %}?service_center_id={{ item.pk }}'" style="background: linear-gradient(to right, #cb94ff 0%, #9794ff 58%, #93C9F1 100%);" class="hover:slate-900 hover:opacity-80 w-full text-white font-bold py-3 rounded-full transition duration-300 ease-in-out flex items-center justify-center transform hover:scale-105">
                                     <i class="far fa-calendar-alt mr-2"></i> Schedule Appointment
                                   </button>
                                 </div>
@@ -257,6 +257,106 @@
 
   document.getElementById("cancelServiceButton").addEventListener("click", hideServiceModal);
   document.getElementById("closeServiceModalBtn").addEventListener("click", hideServiceModal);
+
+  // TIKET IMPLEMENTATION
+  async function getTicketEntries() {
+    return fetch("{% url 'Tiket:show_json' %}").then((res) => res.json());
+  }
+
+  let ticketEntries = [];
+
+  async function refreshTicketEntries() {
+      ticketEntries = await getTicketEntries();
+      displayTicketEntries(ticketEntries);
+  }
+
+  function displayTicketEntries(entries) {
+    let htmlString = "";
+    let classNameString = "";
+
+    if (entries.length === 0) {
+        classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+        htmlString = `<div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                          <p class="text-center text-black mt-4">No bookings scheduled yet.</p>
+                      </div>`;
+    } else {
+        classNameString = "flex flex-wrap justify-start gap-12 w-full";
+        entries.forEach((item) => {
+            const timeLeft = calculateTimeLeft(item.service_date, item.service_time);
+            htmlString += ` <div class="manrope relative break-inside-avoid w-full max-w-md flex flex-col">
+                              <div style="background: linear-gradient(to right, #cb94ff 0%, #9794ff 58%, #93C9F1 100%);" class="shadow-lg rounded-xl mb-6 p-6 flex flex-col h-full">
+                                <h1 class="text-3xl font-bold mb-2">${item.service_center.name}</h1>
+                                <hr style="border-width: 1.3px;" class="border-black mb-4">
+                                <div class="flex items-center justify-between mb-4">
+                                  <span class="text-black font-bold"><i class="fas fa-calendar-alt mr-1"></i> ${formatDate(item.service_date)}</span>
+                                  <span class="ml-2 text-black font-bold"><i class="fas fa-clock mr-1"></i> ${formatTime(item.service_time)}</span>
+                                </div>
+                                <div class="mb-4">
+                                  <span class="text-black font-bold"><i class="fas fa-clock-rotate-left mr-1"></i> Time remaining until appointment:</span>
+                                  <br>
+                                  <span class="text-black font-bold">${timeLeft}</span>
+                                </div>
+                                <hr style="border-width: 1.3px;" class="border-black mb-4">
+                                <p class="font-bold text-black mb-2">Location</p>
+                                <p class="text-black mb-4">${item.service_center.address}</p>
+                                <p class="font-bold text-black mb-2">Contact</p>
+                                <p class="text-black mb-4">${item.service_center.contact}</p>
+                                <hr style="border-width: 1.3px;" class="border-black mb-4">
+                                <p class="font-bold text-black mb-2">Specific Problems</p> 
+                                <p class="text-black mb-4">${item.specific_problems}</p>
+
+                                <hr style="border-width: 1.3px;" class="border-black mb-4"> 
+                                <!-- Cancel and Reschedule Buttons -->
+                                <div class="flex justify-center space-x-4 mt-auto">
+                                  <a href="/tiket/cancel-appointment/${item.id}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-full text-sm transition duration-300 shadow-md transform hover:scale-105">
+                                      <i class="fas fa-times mr-1"></i> Cancel
+                                  </a>
+                                  <a href="/tiket/reschedule-appointment/${item.id}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-full text-sm transition duration-300 shadow-md transform hover:scale-105">
+                                      <i class="fas fa-calendar-alt mr-1"></i> Re-schedule
+                                  </a>
+                                </div>
+                              </div>
+                            </div>`;
+        });
+    }
+    document.getElementById("booked_schedule_cards").className = classNameString;
+    document.getElementById("booked_schedule_cards").innerHTML = htmlString;
+  }
+
+
+  refreshTicketEntries();
+
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  function formatTime(timeStr) {
+      const time = new Date(`1970-01-01T${timeStr}Z`); 
+      const hours = String(time.getUTCHours()).padStart(2, '0');
+      const minutes = String(time.getUTCMinutes()).padStart(2, '0');
+      return `${hours}:${minutes}`;
+  }
+
+  function calculateTimeLeft(serviceDate, serviceTime) {
+    const appointmentDateTime = new Date(`${serviceDate}T${serviceTime}Z`);
+    const currentTime = new Date();
+
+    const timeDifference = appointmentDateTime - currentTime; 
+
+    if (timeDifference < 0) {
+        return 'Appointment has passed';
+    }
+
+    const daysLeft = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); 
+    const hoursLeft = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
+    const minutesLeft = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60)); 
+
+    return `${daysLeft} days, ${hoursLeft} hours, and ${minutesLeft} minutes`;
+  }
 </script>
 
 {% endblock content %}

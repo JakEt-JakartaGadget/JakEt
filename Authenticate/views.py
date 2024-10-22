@@ -41,7 +41,7 @@ def register(request):
             messages.success(request, 'Your account has been successfully created!')
             return redirect('/login')
     context = {'form':form}
-    return render(request, 'register-next.html', context)
+    return render(request, 'register.html', context)
 
 def log_in(request):
     if request.method == 'POST':
@@ -56,7 +56,7 @@ def log_in(request):
         else:
             messages.info(request, 'Sorry, incorrect username or password. Please try again.')
     context = {}
-    return render(request, 'login-next.html', context)
+    return render(request, 'login.html', context)
 
 
 def log_out(request):

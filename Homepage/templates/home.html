@@ -2,13 +2,103 @@
 {% block meta %}
     <title>Home</title>
 {% endblock meta %}
+
 {% block content %}
 {% load static %}
-<body class="relative flex items-center justify-center w-screen px-5 h-screen bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] via-[#2E29A6] to-[#7FADD0]">
+<body class="w-full min-h-screen overflow-x-hidden">
     {% include 'components/navbar.html' %}
+    
+    <section class="relative flex items-center justify-center w-full h-screen initial-gradient">
+        <h1 class="text-white text-4xl font-bold">This is the first section</h1>
+    </section>
+
+    <section class="relative flex flex-col items-center w-full h-screen bg-white">
+        <h1 class="pt-10 text-black text-4xl font-bold">Today's Article</h1>
+        <div class="flex flex-col items-center w-full max-w-7xl mt-10 space-y-4">
+            <div class="w-full h-96 bg-gray-200 rounded-lg shadow-lg flex items-center justify-center">
+                <img src="https://via.placeholder.com/1200x500" alt="Article Image" class="w-full h-full object-cover rounded-lg">
+            </div>
+    
+            <div class="flex w-full space-x-4">
+                <div class="w-1/2 h-48 bg-gray-300 rounded-lg shadow-lg flex items-center justify-center">
+                    <div class="flex items-center space-x-4">
+                        <p class="text-5xl font-bold px-10">Comparison</p>
+                        <img src="{% static 'image/VS.png' %}" alt="VS">
+                    </div>
+                </div>
+                
+    
+                <div class="w-1/2 h-48 bg-gray-300 rounded-lg shadow-lg flex items-center justify-center px-6">
+                    <div class="flex items-center space-x-6">
+                        <div class="flex flex-col space-y-2">
+                            <p class="text-5xl font-bold">Join the forum</p>
+                            <p class="text-5xl font-bold">discussion</p>
+                        </div>
+                        <img src="{% static 'image/chat.png' %}" alt="chat"">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <section class="relative flex items-center justify-center w-full h-screen bg-white">
+        <h1 class="text-black text-4xl font-bold">This is the third section</h1>
+    </section>
+    
+
+    <style>
+        #navbar {
+            transition: all 0.3s ease-in-out;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        .initial-gradient {
+            background: linear-gradient(
+                to right, 
+                rgba(127, 173, 208, 0.8), 
+                rgba(109, 12, 201, 0.8), 
+                rgba(187, 137, 236, 0.8), 
+                rgba(46, 41, 166, 0.8),
+                rgba(127, 173, 208, 0.8)
+            );
+        }
+    </style>
+
+    <script>
+        function handleNavbarColorChange() {
+            const navbar = document.getElementById('navbar');
+            const sections = document.querySelectorAll('section');
+            const secondSection = sections[1];
+            const scrollPosition = window.scrollY;
+            const triggerPosition = secondSection.offsetTop - 50;
+
+            if (!navbar.timeout) {
+                navbar.timeout = setTimeout(() => {
+                    if (scrollPosition >= triggerPosition) {
+                        navbar.classList.remove('initial-gradient');
+                        navbar.classList.add('bg-gradient-to-r', 'from-[#6D0CC9]', 'to-[#93C9F1]');
+                    } else {
+                        // Gradient awal saat di section pertama
+                        navbar.classList.remove('bg-gradient-to-r', 'from-[#6D0CC9]', 'to-[#93C9F1]');
+                        navbar.classList.add('initial-gradient');
+                    }
+                    navbar.timeout = null;
+                }, 10);
+            }
+        }
+
+        window.addEventListener('scroll', handleNavbarColorChange, { passive: true });
+        window.addEventListener('load', handleNavbarColorChange);
+        document.addEventListener('DOMContentLoaded', handleNavbarColorChange);
+
+        window.addEventListener('unload', () => {
+            window.removeEventListener('scroll', handleNavbarColorChange);
+            clearTimeout(navbar.timeout);
+        });
+    </script>
 </body>
-
-
-
-
 {% endblock content %}

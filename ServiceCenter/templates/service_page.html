@@ -148,11 +148,12 @@
       } else {
           classNameString = "flex flex-wrap justify-start gap-12 w-full"
           entries.forEach((item) => {
+            let serviceid = "{% url 'Tiket:create_tiket' id='1819b55a-9d48-4789-a802-6ec9188626a5' %}".replace("1819b55a-9d48-4789-a802-6ec9188626a5", item.pk)
             htmlString += `<div class="manrope relative break-inside-avoid w-full max-w-xs flex flex-col">
                               <div class="bg-white shadow-lg rounded-lg mb-6 p-6 flex flex-col h-full">
                                 <div class="relative">
-                                  <!-- Placeholder for an image -->
-                                  <div class="bg-gray-200 h-48 mb-4"></div>
+                                  <img src="/media/${item.fields.image}" alt="Grey Box Placeholder" class="h-48 mb-4 w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                  <div class="bg-gray-200 h-48 mb-4" style="display:none;"></div>
                                   <button class="absolute top-4 right-4 bg-blue-100 rounded-full p-2">
                                     <i class="far fa-heart text-purple-600"></i>
                                   </button>
@@ -176,9 +177,9 @@
                                 <br>
                                 <!-- Schedule Button -->
                                 <div class="mt-auto">
-                                  <button onclick="window.location.href='{% url 'Tiket:create_tiket' %}?service_center_id={{ item.pk }}'" style="background: linear-gradient(to right, #cb94ff 0%, #9794ff 58%, #93C9F1 100%);" class="hover:slate-900 hover:opacity-80 w-full text-white font-bold py-3 rounded-full transition duration-300 ease-in-out flex items-center justify-center transform hover:scale-105">
+                                  <a href="${serviceid}" style="background: linear-gradient(to right, #cb94ff 0%, #9794ff 58%, #93C9F1 100%);" class="hover:slate-900 hover:opacity-80 w-full text-white font-bold py-3 rounded-full transition duration-300 ease-in-out flex items-center justify-center transform hover:scale-105">
                                     <i class="far fa-calendar-alt mr-2"></i> Schedule Appointment
-                                  </button>
+                                  </a>
                                 </div>
                               </div>
                             </div>`;
@@ -332,13 +333,13 @@
     const month = String(date.getMonth() + 1).padStart(2, '0'); 
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
-  }
+}
 
   function formatTime(timeStr) {
-      const time = new Date(`1970-01-01T${timeStr}Z`); 
-      const hours = String(time.getUTCHours()).padStart(2, '0');
-      const minutes = String(time.getUTCMinutes()).padStart(2, '0');
-      return `${hours}:${minutes}`;
+    const time = new Date(`1970-01-01T${timeStr}Z`); 
+    const hours = String(time.getUTCHours()).padStart(2, '0');
+    const minutes = String(time.getUTCMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
   }
 
   function calculateTimeLeft(serviceDate, serviceTime) {

@@ -13,9 +13,8 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="space-y-6">
           <!-- Left Column with grey box and info -->
-          <div class="bg-gray-200 rounded-lg h-64">
-            <!-- Placeholder for image/map -->
-          </div>
+          <img src="{{ form.instance.service_center.image.url }}" alt="Grey Box Placeholder" class="rounded-lg h-64 w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <div class="bg-gray-200 rounded-lg h-64" style="display:none;"></div>
           <div class="flex flex-col space-y-4">
             <div>
               <h2 class="text-2xl font-bold mb-2">Location</h2>

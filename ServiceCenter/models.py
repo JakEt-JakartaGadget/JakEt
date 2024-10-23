@@ -5,6 +5,7 @@ import uuid
 class ServiceCenter(models.Model):
     user = models.ForeignKey(UserData, on_delete=models.CASCADE, null=True, blank=True)
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
     name = models.CharField(max_length=255)
     address = models.TextField()
     contact = models.CharField(max_length=100)

@@ -12,6 +12,7 @@ from django.views.decorators.http import require_POST
 import json
 import os
 from jaket.settings import BASE_DIR
+from django.core.files import File
 
 
 def show_service_page(request):
@@ -27,7 +28,8 @@ def show_service_page(request):
                             'address': entry['Address'],
                             'contact': entry['Contact'],
                             'rating': entry['Reviews'],
-                            'total_reviews': entry['Total Reviews']
+                            'total_reviews': entry['Total Reviews'],
+                            'image': File(open(entry['Image'], "rb"))
                         }
                     )
 
@@ -62,6 +64,7 @@ def add_service_center_ajax(request):
     contact = request.POST.get("contact")
     rating = request.POST.get("rating")
     total_reviews = request.POST.get("total_reviews")
+    image = request.FILES.get("image")
     if request.user.is_authenticated:
         user = request.user
     else:
@@ -70,7 +73,7 @@ def add_service_center_ajax(request):
     new_service_center = ServiceCenter(
         name=name, address=address,
         contact=contact, rating=rating, total_reviews=total_reviews,
-        user=user
+        user=user, image=image
     )
     new_service_center.save()
 

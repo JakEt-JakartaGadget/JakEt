@@ -7,18 +7,14 @@ from django.urls import reverse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from ServiceCenter.models import ServiceCenter
 
 
-def create_tiket(request):
+def create_tiket(request, id):
     # Get the service center ID from the URL or request
-    service_center_id = request.GET.get('service_center_id')
-    if service_center_id:
-        service_center = get_object_or_404(ServiceCenter, pk=service_center_id)
-    else:
-        service_center = None
+    # service_center_id = request.GET.get(ServiceCenter, id)
+    service_center = get_object_or_404(ServiceCenter, pk=id)
 
     if request.method == "POST":
         form = TiketForm(request.POST)
@@ -34,33 +30,6 @@ def create_tiket(request):
 
     context = {'form': form, 'service_center': service_center}
     return render(request, "make_appointment.html", context)
-
-@csrf_exempt
-@require_POST
-def add_tiket_ajax(request):
-    service_center_id = request.POST.get("service_center_id")
-    service_date = request.POST.get("service_date")
-    service_time = request.POST.get("service_time")
-    specific_problems = request.POST.get("specific_problems")
-
-    service_center = ServiceCenter.objects.get(pk=service_center_id)
-
-    if request.user.is_authenticated:
-        user = request.user
-    else:
-        user = None 
-
-    # Create the new Tiket entry
-    new_tiket = Tiket(
-        service_center=service_center,
-        service_date=service_date,
-        service_time=service_time,
-        specific_problems=specific_problems,
-        user=user
-    )
-    new_tiket.save()
-
-    return HttpResponse(b"CREATED", status=201)
 
 def reschedule_appointment(request, id):
     # Get tiket berdasarkan id

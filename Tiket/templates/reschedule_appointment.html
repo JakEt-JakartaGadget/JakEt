@@ -26,12 +26,11 @@
             </div>
           </div>
         </div>
-        <!-- Right Column -->
         <div class="space-y-6">
           <h1 class="text-3xl font-bold text-black">{{ form.instance.service_center.name }}</h1>
           <form method="POST" class="space-y-6">
             {% csrf_token %}
-            {{ form.service_center.as_hidden }} <!-- Keep service center as hidden input -->
+            {{ form.service_center.as_hidden }}
             <div class="flex flex-col">
               <label for="{{ form.service_date.id_for_label }}" class="mb-2 font-semibold text-black">
                 {{ form.service_date.label }}

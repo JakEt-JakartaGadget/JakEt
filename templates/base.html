@@ -12,8 +12,25 @@
     {% block meta %} {% endblock meta %}
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'css/global.css' %}"/>
+    <script>
+      tailwind.config = {
+          theme: {
+                  extend: {
+                      fontFamily: {
+                          'Manrope': ['Manrope', 'sans-serif'],
+                          'Poppins': ['Poppins', 'sans-serif'],
+                          'Inter': ['Inter', 'sans-serif'],
+                      },
+              }
+          }
+      }
+  </script>
   </head>
   <body>
-    {% block content %} {% endblock content %}
+    <main class="pt-16 font-inter flex flex-col justify-between">
+    {% block content %} 
+    <p>Tes</p>
+    {% endblock content %}
+    </main>
   </body>
 </html>

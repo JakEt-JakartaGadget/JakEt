@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'Tiket',
     'UserForum',
     'Wishlist',
-    'Authenticate'
+    'Authenticate',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

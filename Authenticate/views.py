@@ -47,7 +47,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 #     return render(request, 'register.html')
 
-@csrf_exempt
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -69,7 +68,6 @@ def register(request):
 
     return render(request, 'register.html', {'form': form})
 
-@csrf_exempt
 def log_in(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -93,6 +91,6 @@ def log_in(request):
 
 def log_out(request):
     logout(request)
-    response = HttpResponseRedirect(reverse('Authenticate:login'))  
+    response = HttpResponseRedirect(reverse('Homepage:home_section'))  
     response.delete_cookie('last_login')  
     return response

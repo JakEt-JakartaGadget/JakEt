@@ -7,14 +7,13 @@
 {% load static %}
 <body class="w-full min-h-screen overflow-x-hidden">
     {% include 'components/navbar.html' %}
-    
     <section class="relative w-full h-screen overflow-hidden bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6]">
         <div id="slide-container" class="relative flex transition-transform duration-500 ease-in-out w-full h-full">
             <div class="min-w-full flex items-center justify-between h-full px-[200px]">
                 <div class="flex flex-col items-start justify-center w-1/2">
                     <img src="{% static 'image/home/section1/apple.png' %}" alt="Apple Logo" class="mb-10 w-max h-max">
                     <h1 class="text-white text-4xl font-bold mb-5">Latest Release</h1>
-                    <a href="#" class="mb-10 px-6 py-3 bg-[#B0D5F2] text-white rounded-lg hover:bg-white hover:text-black transition duration-300 font-poppins font-bold text-lg">View Product</a>
+                    <a href="#" class="mb-10 px-6 py-3 bg-[#A2D2DF] text-white rounded-lg hover:bg-white hover:text-black transition duration-300 font-poppins font-bold text-lg">View Product</a>
                 </div>
                 <div class="w-1/2 flex items-center justify-center">
                     <img src="{% static 'image/home/section1/iphone.png' %}" alt="iPhone" class="max-w-full h-auto">
@@ -25,7 +24,7 @@
                 <div class="w-full flex flex-col items-center justify-center">
                     <img src="{% static 'image/home/section2/flip_samsung.png' %}" alt="Samsung Flip" class="w-[1000px] h-auto mb-2">
                     <h1 class="text-white text-4xl font-bold mb-5">Best Choice</h1>
-                    <a href="#" class="px-6 py-3 bg-[#B0D5F2] text-white rounded-lg hover:bg-white hover:text-black transition duration-300 font-poppins font-bold text-lg">View Product</a>
+                    <a href="#" class="px-6 py-3 bg-[#A2D2DF] text-white rounded-lg hover:bg-white hover:text-black transition duration-300 font-poppins font-bold text-lg">View Product</a>
                 </div>
             </div>
 
@@ -33,7 +32,7 @@
                 <div class="w-full flex flex-col items-center justify-center">
                     <img src="{% static 'image/home/section3/galaxy.png' %}" alt="Galaxy" class="max-w-[1000px] h-max mb-2">
                     <h1 class="text-white text-4xl font-bold mb-5">New Arrival</h1>
-                    <a href="#" class="px-6 py-3 bg-[#B0D5F2] text-white rounded-lg hover:bg-white hover:text-black transition duration-300 font-poppins font-bold text-lg">View Product</a>
+                    <a href="#" class="px-6 py-3 bg-[#A2D2DF] text-white rounded-lg hover:bg-white hover:text-black transition duration-300 font-poppins font-bold text-lg">View Product</a>
                 </div>
             </div>
         </div>
@@ -77,6 +76,19 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+
+    <section class="relative flex flex-col items-center w-full bg-white py-10">
+        <h1 class="text-black text-4xl font-bold mb-10">Products</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for product in phones %}
+                {% include 'card_product.html' %}
+            {% empty %}
+                <p>No products available.</p> >
+            {% endfor %}
         </div>
     </section>
 

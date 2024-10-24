@@ -38,7 +38,6 @@ class Command(BaseCommand):
             print(f"{field_name} is empty or None.")
             return None
         try:
-            # Hapus koma jika ada
             value_cleaned = value.strip().replace(',', '')
             integer_value = int(value_cleaned)
             print(f"Converted {field_name}: {integer_value}")
@@ -49,9 +48,9 @@ class Command(BaseCommand):
 
     def load_csv_to_database(self, file_path, model_class):
         """
-        Memuat data dari CSV ke database.
+        Memuat data dari CSV ke database, menangani BOM, dan menyimpan secara benar.
         """
-        with open(file_path, newline='', encoding='utf-8') as csvfile:
+        with open(file_path, newline='', encoding='utf-8-sig') as csvfile:
             reader = csv.DictReader(csvfile)
             print(f"CSV Headers: {reader.fieldnames}")
             for row_number, row in enumerate(reader, start=1):
@@ -77,8 +76,7 @@ class Command(BaseCommand):
                     print(f"Invalid screen size: '{screen_size_str}', setting to 0.0")
                     screen_size = 0.0
 
-            
-                brand = row.get('Brand', '').strip()
+                brand = row.get('Brand', '').strip()  # Ensure brand is properly read
                 model = row.get('Model', '').strip()
                 storage = row.get('Storage ', '').strip()  
                 ram = row.get('RAM ', '').strip()         
@@ -105,3 +103,4 @@ class Command(BaseCommand):
                     print(f"ValidationError saving {model}: {e}")
                 except Exception as e:
                     print(f"Unexpected error saving {model}: {e}")
+

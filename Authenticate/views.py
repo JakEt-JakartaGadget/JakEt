@@ -91,6 +91,6 @@ def log_in(request):
 
 def log_out(request):
     logout(request)
-    response = HttpResponseRedirect(reverse('Authenticate:login'))  
+    response = HttpResponseRedirect(reverse('Homepage:home_section'))  
     response.delete_cookie('last_login')  
     return response

@@ -12,6 +12,7 @@ class Phone(models.Model):
     battery_capacity_mAh = models.IntegerField()   
     price_usd = models.DecimalField(max_digits=10, decimal_places=2) 
     price_inr = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)  # Contoh: 999 * 15600 = 15,600,000
+    is_favorite = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.brand} {self.model}"

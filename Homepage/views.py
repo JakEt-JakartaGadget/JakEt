@@ -9,7 +9,37 @@ from django.contrib.auth.models import User
 from Authenticate.models import UserData
 import datetime
 from django.views.decorators.csrf import csrf_exempt
+from .models import Phone
+import uuid
+from django.core.exceptions import ValidationError
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 def home_section(request):
-    context={}
-    return render(request,'home.html',context)
+    phones = Phone.objects.all()
+    context = {
+        'phones': phones
+    }
+    return render(request, 'home.html', context)
+
+# @csrf_exempt
+# def toggle_favorite(request):
+#     if request.method == 'POST':
+#         product_id = request.POST.get('product_id')
+#         product = get_object_or_404(Phone, id=product_id)
+#         is_favorite = not product.is_favorite  # Contoh atribut 'is_favorite'
+#         product.is_favorite = is_favorite
+#         product.save()
+        
+#         return JsonResponse({'is_favorite': is_favorite})
+
+# @csrf_exempt
+# def rate_product(request):
+#     if request.method == 'POST':
+#         product_id = request.POST.get('product_id')
+#         rating = int(request.POST.get('rating'))
+#         product = get_object_or_404(Phone, id=product_id)
+#         product.rating = rating
+#         product.save()
+        
+#         return JsonResponse({'success': True})

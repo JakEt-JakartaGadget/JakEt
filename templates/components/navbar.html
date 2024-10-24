@@ -29,13 +29,33 @@
                     class="pl-10 py-2 w-64 text-sm text-white bg-transparent border-b border-gray-300 focus:outline-none focus:border-white">
             </div>
 
-            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110">
-                <img src="{% static 'image/navbar/User.png' %}" alt="User" class="w-6 h-6">
-            </a>
+            {% if user.is_authenticated %}
+                <div class="relative group">
+                    <button id="user-menu-button" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110 focus:outline-none">
+                        <img src="{% static 'image/navbar/User.png' %}" alt="User" class="w-6 h-6">
+                    </button>
+                    <div id="user-menu-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 hidden group-hover:block transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                        <div class="px-4 py-2 text-gray-800 border-b border-gray-200">
+                            Hai, {{ user.username }}
+                        </div>
+                        <a href="{% url 'Homepage:home_section' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">View Profile</a>
+                        <form method="post" action="{% url 'Authenticate:logout' %}" class="px-4 py-2">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full text-left text-gray-800 hover:bg-gray-100 transition duration-200">Logout</button>
+                        </form>
+                    </div>
+                </div>
 
-            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110">
-                <img src="{% static 'image/navbar/heart.png' %}" alt="Wishlist" class="w-6 h-6">
-            </a>
+                <!-- Tombol Wishlist (Heart) -->
+                <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110">
+                    <img src="{% static 'image/navbar/heart.png' %}" alt="Wishlist" class="w-6 h-6">
+                </a>
+            {% else %}
+                <!-- Tombol Login -->
+                <a href="{% url 'Authenticate:login' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
+                    Login
+                </a>
+            {% endif %}
         </div>
     </div>
 </nav>
@@ -57,16 +77,59 @@
             padding-right: 16px;
         }
     }
+
+    /* Dropdown styles */
+    #user-menu-dropdown {
+        min-width: 150px;
+    }
+
+    #user-menu-dropdown a,
+    #user-menu-dropdown button {
+        color: #1a202c; 
+    }
+
+    #user-menu-dropdown a:hover,
+    #user-menu-dropdown button:hover {
+        background-color: #f7fafc;
+    }
+
+    #user-menu-dropdown div {
+        font-size: 0.875rem; 
+    }
+
+    #user-menu-dropdown a,
+    #user-menu-dropdown button {
+        font-size: 0.875rem; 
+    }
 </style>
 
 <script>
     const navBar = document.querySelector('nav');
+    const userMenuButton = document.getElementById('user-menu-button');
+    const userMenuDropdown = document.getElementById('user-menu-dropdown');
 
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
             navBar.classList.add('bg-opacity-90');
         } else {
             navBar.classList.remove('bg-opacity-90');
+        }
+    });
+
+    if (userMenuButton) {
+        userMenuButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            userMenuDropdown.classList.toggle('hidden');
+            userMenuDropdown.classList.toggle('block');
+        });
+    }
+
+    window.addEventListener('click', (e) => {
+        if (userMenuButton && userMenuDropdown) {
+            if (!userMenuButton.contains(e.target) && !userMenuDropdown.contains(e.target)) {
+                userMenuDropdown.classList.add('hidden');
+                userMenuDropdown.classList.remove('block');
+            }
         }
     });
 </script>

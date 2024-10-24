@@ -13,6 +13,7 @@ import json
 import os
 from jaket.settings import BASE_DIR
 from django.core.files import File
+from Authenticate.models import UserData
 
 
 def show_service_page(request):
@@ -34,8 +35,6 @@ def show_service_page(request):
                     )
 
     context = { 
-        'user': request.user.username,
-        'last_login': request.COOKIES['last_login'],
         'service_centers': ServiceCenter.objects.all() 
     }
 
@@ -43,18 +42,18 @@ def show_service_page(request):
 
 def create_service_center(request):
     form = ServiceForm(request.POST or None)
-
     if form.is_valid() and request.method == "POST":
-        service_entry= form.save(commit=False)
+        service_entry = form.save(commit=False)
         if request.user.is_authenticated:
-            service_entry.user = request.user
+            user_data = UserData.objects.get(user=request.user)
+            service_entry.user = user_data
         else:
             service_entry.user = None
         service_entry.save()
         return redirect('ServiceCenter:show_service_page')
-
     context = {'form': form}
     return render(request, "create_service_center.html", context)
+
 
 @csrf_exempt
 @require_POST

@@ -6,15 +6,18 @@
 {% endblock meta %}
 
 {% block content %}
-{% include 'navbar.html' %}
+{% include 'components/navbar.html' %}
+
 <div class="manrope flex flex-col min-h-screen bg-slate-100">
   <div class="container mx-auto px-4 py-8 mt-20 max-w-4xl">
     <div class="bg-white rounded-lg shadow-lg p-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="space-y-6">
-          <!-- Left Column with grey box and info -->
-          <img src="{{ form.instance.service_center.image.url }}" alt="Grey Box Placeholder" class="rounded-lg h-64 w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div class="bg-gray-200 rounded-lg h-64" style="display:none;"></div>
+          {% if form.instance.service_center.image %}
+            <img src="{{ form.instance.service_center.image.url }}" alt="Service Center Image" class="rounded-lg h-64 w-full object-cover">
+          {% else %}
+            <div class="bg-gray-200 rounded-lg h-64"></div>
+          {% endif %}
           <div class="flex flex-col space-y-4">
             <div>
               <h2 class="text-2xl font-bold mb-2">Location</h2>

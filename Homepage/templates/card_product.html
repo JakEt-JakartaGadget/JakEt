@@ -90,13 +90,12 @@
     </style>
 
     <script>
-        let clickedRating = {{ product.rating }};  // Menyimpan nilai rating yang dipilih
+        let clickedRating = {{ product.rating }};  
 
         function highlightStars(productId, value) {
             const rating = document.getElementById(`rating-${productId}`);
             const stars = rating.getElementsByClassName('star');
             
-            // Highlight sementara saat hover
             for (let i = 0; i < stars.length; i++) {
                 if (i < value) {
                     stars[i].classList.add('selected');
@@ -110,7 +109,6 @@
             const rating = document.getElementById(`rating-${productId}`);
             const stars = rating.getElementsByClassName('star');
             
-            // Reset bintang ke nilai rating yang tersimpan
             for (let i = 0; i < stars.length; i++) {
                 if (i < clickedRating) {
                     stars[i].classList.add('selected');
@@ -122,7 +120,7 @@
 
         function rateProduct(productId, ratingValue) {
             if (ratingValue === clickedRating) {
-                ratingValue = 0;  // Batalkan rating jika klik dua kali bintang yang sama
+                ratingValue = 0;  
             }
 
             const formData = new FormData();
@@ -139,8 +137,8 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    clickedRating = ratingValue;  // Update clickedRating sesuai nilai baru
-                    resetStars(productId);  // Reset bintang setelah rating
+                    clickedRating = ratingValue;  
+                    resetStars(productId);  
                 }
             })
             .catch(error => console.error('Error:', error));

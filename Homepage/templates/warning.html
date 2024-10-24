@@ -1,11 +1,10 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Warning</title>
     <style>
-        /* Style for the modal (background and container) */
         .modal {
             display: block;
             position: fixed;
@@ -17,7 +16,6 @@
             background-color: rgba(0, 0, 0, 0.5);
         }
         
-        /* Style for the modal content */
         .modal-content {
             position: relative;
             background-color: white;
@@ -29,7 +27,6 @@
             border-radius: 10px;
         }
 
-        /* Style for the close button */
         .close {
             position: absolute;
             top: 10px;
@@ -39,7 +36,6 @@
             cursor: pointer;
         }
 
-        /* Style for the login button */
         .login-btn {
             display: inline-block;
             background-color: #007bff;
@@ -69,18 +65,11 @@
 </div>
 
 <script>
-    // Get the modal
     var modal = document.getElementById("myModal");
-
-    // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal.style.display = "none";
     }
-
-    // Close the modal if the user clicks outside of the modal
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
@@ -89,4 +78,4 @@
 </script>
 
 </body>
-</html> -->
+</html>

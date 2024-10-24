@@ -22,6 +22,42 @@ def home_section(request):
     }
     return render(request, 'home.html', context)
 
+@login_required
+def list_products(request):
+    phones = Phone.objects.all()
+    
+    # Get unique values for filtering options
+    brands = Phone.objects.values_list('brand', flat=True).distinct()
+    storages = Phone.objects.values_list('storage', flat=True).distinct()
+    rams = Phone.objects.values_list('ram', flat=True).distinct()
+    
+    # Apply filters if specified
+    brand_filter = request.GET.get('brand')
+    storage_filter = request.GET.get('storage')
+    ram_filter = request.GET.get('ram')
+    price_sort = request.GET.get('sort_price')
+
+    if brand_filter:
+        phones = phones.filter(brand=brand_filter)
+    if storage_filter:
+        phones = phones.filter(storage=storage_filter)
+    if ram_filter:
+        phones = phones.filter(ram=ram_filter)
+    
+    # Sorting logic
+    if price_sort == 'high_to_low':
+        phones = phones.order_by('-price_inr')
+    elif price_sort == 'low_to_high':
+        phones = phones.order_by('price_inr')
+
+    context = {
+        'phones': phones,
+        'brands': brands,
+        'storages': storages,
+        'rams': rams
+    }
+    return render(request, 'list_product.html', context)
+
 
 @csrf_exempt
 @login_required

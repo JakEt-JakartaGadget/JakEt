@@ -1,0 +1,182 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: white; /* Background menjadi putih */
+}
+
+.comparison-container {
+    text-align: center;
+    padding: 50px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Memastikan konten ada di tengah secara vertikal */
+    align-items: center; /* Memastikan konten di tengah secara horizontal */
+}
+
+.comparison-title {
+    font-family: 'Inter', sans-serif;
+    color: #6D0CC9;
+    font-size: 128px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.device-dropdown option[disabled] {
+    color: #cccccc; /* Warna abu-abu untuk teks placeholder */
+}
+
+.device-dropdown {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    width: 985px;
+    height: 55px;
+    border-radius: 28px; /* Rounded shape */
+    border: 1px solid #ccc;
+    padding-left: 10px;
+    background-color: #f0f0f0;
+    display: block;
+    margin: 0 auto; /* Membuat dropdown berada di tengah */
+    text-align: center; /* Membuat teks berada di tengah */
+    appearance: none; /* Menghilangkan default dropdown arrow */
+    background-image: url('{% static "path/to/arrow-icon.png" %}'); /* Tambahkan custom arrow icon jika diperlukan */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.device-dropdown option {
+    text-align: center; /* Opsi lainnya tetap rata kiri */
+}
+
+#comparisonResults {
+    display: flex;
+    justify-content: space-around; /* Membuat jarak antara cards */
+    flex-wrap: nowrap; /* Mencegah cards jatuh ke bawah */
+    gap: 20px; /* Jarak antar cards */
+    margin-top: 20px;
+    align-items: flex-start;
+}
+
+.device-card {
+    position: relative;
+    top: 100px; 
+    background-color: #F3F3FF;
+    width: 618px;
+    min-height: 1155px;
+    border-radius: 28px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center; /* Ini memastikan semua elemen di dalam card, termasuk gambar, berada di tengah */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 20px;
+}
+
+/* Tambahkan media query untuk responsif */
+@media (max-width: 1280px) {
+    #comparisonResults {
+        flex-wrap: wrap; /* Pada layar lebih kecil, cards akan jatuh ke bawah */
+        justify-content: center; /* Tetap sejajarkan di tengah */
+    }
+
+    .device-card {
+        width: 100%; /* Membuat card mengambil seluruh lebar pada layar kecil */
+    }
+}
+
+
+.device-card h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.device-card img {
+    width: 395px;
+    height: 395px;
+    margin-bottom: 20px;
+    display: block;
+    object-fit: contain; /* Untuk memastikan gambar tetap proporsional */
+}
+
+.device-card h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.device-card p {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.vs-text {
+    font-family: 'Inter', sans-serif;
+    color: #2E29A6;
+    font-size: 96px;
+    font-weight: bold;
+    margin: 30px 0;
+    display: block;
+}
+
+.compare-button {
+    position: relative;
+    top: 50px; 
+    width: 320px;
+    height: 57px;
+    background-color: #6D0CC9;
+    color: white;
+    border: none;
+    border-radius: 28px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+    margin: 0 auto; /* Membuat tombol berada di tengah */
+}
+
+.compare-button:hover {
+    background-color: #5a08a3;
+}
+
+.view-button {
+    background-color: #6D0CC9;
+    width: 480px;
+    height: 57px;
+    border-radius: 28px;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 57px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.wishlist-button {
+    display: inline-block;
+    width: 50px; /* Pastikan lebar dan tinggi sama */
+    height: 50px;
+    background-color: #6D0CC9;
+    border-radius: 50%;
+    text-align: center; /* Agar gambar berada di tengah secara horizontal */
+    line-height: 50px; /* Agar gambar berada di tengah secara vertikal */
+    position: relative; /* Ini akan memungkinkan Anda untuk memposisikan gambar secara absolut */
+}
+
+.wishlist-button img {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    top: 11px; /* Geser gambar secara vertikal */
+    left: 13px; /* Geser gambar secara horizontal */
+}

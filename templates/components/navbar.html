@@ -1,0 +1,72 @@
+{% load static %}
+<nav id="navbar" class="fixed top-0 left-0 z-40 w-full transition-all duration-300 ease-in-out bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6]">
+    <div class="flex justify-start max-w-7xl mx-auto px-4 sm:px-6 h-16 w-full">
+        <div class="flex justify-start">
+            <a href="{% url 'Homepage:home_section' %}" class="flex items-center mr-[25px]">
+                <img src="{% static 'image/navbar/JaKet.png' %}" alt="JaKet" class="w-max h-max"> 
+            </a>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-8">
+            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
+                Home
+            </a>
+            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
+                Product
+            </a>
+            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
+                Article
+            </a>
+            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
+                Support
+            </a>
+        </div>
+
+        <div class="flex justify-end items-center space-x-6 w-full">
+            <div class="ml-50 relative text-gray-600 focus-within:text-gray-400">
+                <img src="{% static 'image/navbar/search.png' %}" alt="Search Icon" class="absolute left-2 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500">
+                <input type="search" name="search" placeholder="Search"
+                    class="pl-10 py-2 w-64 text-sm text-white bg-transparent border-b border-gray-300 focus:outline-none focus:border-white">
+            </div>
+
+            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110">
+                <img src="{% static 'image/navbar/User.png' %}" alt="User" class="w-6 h-6">
+            </a>
+
+            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110">
+                <img src="{% static 'image/navbar/heart.png' %}" alt="Wishlist" class="w-6 h-6">
+            </a>
+        </div>
+    </div>
+</nav>
+
+<style>
+    nav {
+        background-color: rgba(0, 0, 0, 0.3); 
+        backdrop-filter: blur(10px);
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .bg-opacity-90 {
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    @media (min-width: 768px) {
+        .space-x-8 > a {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+    }
+</style>
+
+<script>
+    const navBar = document.querySelector('nav');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navBar.classList.add('bg-opacity-90');
+        } else {
+            navBar.classList.remove('bg-opacity-90');
+        }
+    });
+</script>

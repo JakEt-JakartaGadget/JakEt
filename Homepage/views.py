@@ -10,7 +10,6 @@ from Authenticate.models import UserData
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt
 def home_section(request):
     context={}
     return render(request,'home.html',context)

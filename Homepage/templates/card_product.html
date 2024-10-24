@@ -10,21 +10,38 @@
         </div>
         
         <div>
-            <button class="favorite-button relative w-9 h-8 bg-white rounded-full border border-[#001A72] flex items-center justify-center focus:outline-none">
-                <img class="mt-2 heart-icon w-6 h-6" src="{% static 'image/like/shape.png' %}" alt="Favorite">
-            </button>            
+            {% if user.is_authenticated %}
+                <button id="favorite-button-{{ product.id }}" 
+                        class="favorite-button relative w-9 h-8 bg-white rounded-full border border-[#001A72] flex items-center justify-center focus:outline-none {% if product.is_favorite %}active{% endif %}" 
+                        onclick="toggleFavorite('{{ product.id }}')">
+                    <img class="mt-2 heart-icon w-6 h-6" src="{% static 'image/like/shape.png' %}" alt="Favorite">
+                </button>
+            {% else %}
+                <button class="favorite-button relative w-9 h-8 bg-white rounded-full border border-[#001A72] flex items-center justify-center focus:outline-none" 
+                        onclick="alert('Silakan login terlebih dahulu untuk menambahkan ke favorit.')">
+                    <img class="mt-2 heart-icon w-6 h-6" src="{% static 'image/like/shape.png' %}" alt="Favorite">
+                </button>
+            {% endif %}
         </div>
     </div>
 
     <p class="text-gray-700 text-base mb-4 px-6">{{ product.description|truncatewords:20 }}</p>
 
     <div class="px-6">
-        <div class="rating flex items-center mb-4">
-            <span class="star" data-value="1">&#9733;</span>
-            <span class="star" data-value="2">&#9733;</span>
-            <span class="star" data-value="3">&#9733;</span>
-            <span class="star" data-value="4">&#9733;</span>
-            <span class="star" data-value="5">&#9733;</span>
+        <div class="rating flex items-center mb-4" id="rating-{{ product.id }}">
+            {% if user.is_authenticated %}
+                {% for i in "12345" %}
+                    <span class="star {% if product.rating >= forloop.counter %}selected{% endif %}" 
+                        data-value="{{ forloop.counter }}" 
+                        onmouseover="highlightStars('{{ product.id }}', {{ forloop.counter }})" 
+                        onmouseout="resetStars('{{ product.id }}')" 
+                        onclick="rateProduct('{{ product.id }}', {{ forloop.counter }})">&#9733;</span>
+                {% endfor %}
+            {% else %}
+                {% for i in "12345" %}
+                    <span class="star {% if product.rating >= forloop.counter %}selected{% endif %}">&#9733;</span>
+                {% endfor %}
+            {% endif %}
         </div>
 
         <div class="flex items-center justify-between">
@@ -45,19 +62,22 @@
             color: #001A72;
             cursor: pointer;
             transition: color 0.2s;
+            padding: 0 2px;
         }
     
         .star.selected {
-            color: yellow;
+            color: #FFD700;
         }
     
+        .star:hover,
         .star:hover ~ .star {
-            color: #001A72;
+            color: #FFD700;
         }
 
         .favorite-button {
             background-color: #ffffff;
             border: 1px solid #001A72;
+            transition: all 0.3s ease;
         }
 
         .favorite-button.active {
@@ -70,29 +90,83 @@
     </style>
 
     <script>
-        document.querySelectorAll('.rating').forEach((ratingContainer) => {
-            const stars = ratingContainer.querySelectorAll('.star');
-            stars.forEach((star, index) => {
-                star.addEventListener('click', function() {
-                    stars.forEach((s, i) => {
-                        s.classList.toggle('selected', i <= index); 
-                    });
-                    console.log('Rating:', index + 1);
-                });
-            });
-        });
+        let clickedRating = {{ product.rating }};  // Menyimpan nilai rating yang dipilih
 
-    
-        document.querySelectorAll('.favorite-button').forEach((favoriteButton) => {
-            const heartIcon = favoriteButton.querySelector('.heart-icon');
-            favoriteButton.addEventListener('click', function() {
-                this.classList.toggle('active');
-                if (this.classList.contains('active')) {
-                    heartIcon.src = "{% static 'image/like/shape.png' %}";
+        function highlightStars(productId, value) {
+            const rating = document.getElementById(`rating-${productId}`);
+            const stars = rating.getElementsByClassName('star');
+            
+            // Highlight sementara saat hover
+            for (let i = 0; i < stars.length; i++) {
+                if (i < value) {
+                    stars[i].classList.add('selected');
                 } else {
-                    heartIcon.src = "{% static 'image/like/shape.png' %}";
+                    stars[i].classList.remove('selected');
                 }
-            });
-        });
+            }
+        }
+
+        function resetStars(productId) {
+            const rating = document.getElementById(`rating-${productId}`);
+            const stars = rating.getElementsByClassName('star');
+            
+            // Reset bintang ke nilai rating yang tersimpan
+            for (let i = 0; i < stars.length; i++) {
+                if (i < clickedRating) {
+                    stars[i].classList.add('selected');
+                } else {
+                    stars[i].classList.remove('selected');
+                }
+            }
+        }
+
+        function rateProduct(productId, ratingValue) {
+            if (ratingValue === clickedRating) {
+                ratingValue = 0;  // Batalkan rating jika klik dua kali bintang yang sama
+            }
+
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            formData.append('rating', ratingValue);
+
+            fetch('/rate_product/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    clickedRating = ratingValue;  // Update clickedRating sesuai nilai baru
+                    resetStars(productId);  // Reset bintang setelah rating
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function toggleFavorite(productId) {
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            
+            fetch('/toggle_favorite/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const button = document.getElementById(`favorite-button-${productId}`);
+                if (data.is_favorite) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
     </script>
 </div>

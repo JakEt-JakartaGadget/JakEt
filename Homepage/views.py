@@ -22,24 +22,24 @@ def home_section(request):
     }
     return render(request, 'home.html', context)
 
-# @csrf_exempt
-# def toggle_favorite(request):
-#     if request.method == 'POST':
-#         product_id = request.POST.get('product_id')
-#         product = get_object_or_404(Phone, id=product_id)
-#         is_favorite = not product.is_favorite  # Contoh atribut 'is_favorite'
-#         product.is_favorite = is_favorite
-#         product.save()
-        
-#         return JsonResponse({'is_favorite': is_favorite})
 
-# @csrf_exempt
-# def rate_product(request):
-#     if request.method == 'POST':
-#         product_id = request.POST.get('product_id')
-#         rating = int(request.POST.get('rating'))
-#         product = get_object_or_404(Phone, id=product_id)
-#         product.rating = rating
-#         product.save()
-        
-#         return JsonResponse({'success': True})
+@csrf_exempt
+@login_required
+def toggle_favorite(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        product = get_object_or_404(Phone, id=product_id)
+        product.is_favorite = not product.is_favorite
+        product.save()
+        return JsonResponse({'is_favorite': product.is_favorite})
+
+@csrf_exempt
+@login_required
+def rate_product(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        rating = int(request.POST.get('rating'))
+        product = get_object_or_404(Phone, id=product_id)
+        product.rating = rating
+        product.save()
+        return JsonResponse({'success': True})

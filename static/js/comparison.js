@@ -71,7 +71,7 @@ document.getElementById('comparisonForm').addEventListener('submit', function(ev
                     <h3>Specification</h3>
                     <p>Brand: ${data.device1.brand}</p>
                     <p>Battery: ${data.device1.battery_capacity_mAh} mAh</p>
-                    <p>Price: ${data.device1.price_inr}</p>
+                    <p>Harga Rilis (IDR): ${data.device1.price_idr}</p> <!-- Tambahkan harga dalam IDR -->
                     <p>Camera: ${data.device1.camera}</p>
                     <p>Processor: ${data.device1.processor}</p>
                     <p>Display: ${data.device1.screen_size}"</p>
@@ -88,7 +88,7 @@ document.getElementById('comparisonForm').addEventListener('submit', function(ev
                     <h3>Specification</h3>
                     <p>Brand: ${data.device2.brand}</p>
                     <p>Battery: ${data.device2.battery_capacity_mAh} mAh</p>
-                    <p>Price: ${data.device2.price_inr}</p>
+                    <p>Harga Rilis (IDR): ${data.device2.price_idr}</p> <!-- Tambahkan harga dalam IDR -->
                     <p>Camera: ${data.device2.camera}</p>
                     <p>Processor: ${data.device2.processor}</p>
                     <p>Display: ${data.device2.screen_size}"</p>

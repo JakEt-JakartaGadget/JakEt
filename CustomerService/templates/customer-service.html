@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Support Center | JakEt</title>
+{% endblock meta %}
+
+{% block content %}
+<body>
+    {% include 'components/navbar.html' %}
+
+    <!-- Main content area -->
+    <div class="relative flex flex-col justify-between h-screen bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6] p-5">
+        <!-- Chat area -->
+        <div id="chat-area" class="flex flex-col space-y-4 mt-16 ml-8 overflow-y-auto">
+            {% for message in messages %}
+            <div class="bg-white p-3 rounded-xl shadow-md w-max {% if message.user == request.user %}self-end{% endif %}">
+                {{ message.message }}
+                <div class="text-xs text-gray-500 mt-1">{{ message.time_sent|time:"H:i" }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Input box at the bottom -->
+        <div class="relative flex justify-center items-center p-6">
+            <input type="text" id="chat-input" placeholder="Type your message..." 
+                class="w-full max-w-2xl px-4 py-2 text-lg rounded-full shadow-md focus:outline-none"/>
+            <button id="send-button" class="ml-4 bg-blue-600 text-white px-6 py-2 rounded-full text-lg hover:bg-blue-700">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to add a new message to the chat area
+        function addMessageToChatArea(message, time) {
+            const chatArea = document.getElementById('chat-area');
+            const newBubble = document.createElement('div');
+            newBubble.className = 'bg-white p-3 rounded-xl shadow-md w-max self-end';
+            
+            const messageText = document.createElement('div');
+            messageText.textContent = message;
+            
+            const timeText = document.createElement('div');
+            timeText.className = 'text-xs text-gray-500 mt-1';
+            timeText.textContent = time;
+            
+            newBubble.appendChild(messageText);
+            newBubble.appendChild(timeText);
+            chatArea.appendChild(newBubble);
+            
+            // Scroll to the bottom
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // Function to send message using AJAX
+        async function sendMessage(message) {
+            try {
+                const response = await fetch('/chat/send/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    addMessageToChatArea(data.message.message, data.message.time);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Event listeners
+        document.getElementById('send-button').addEventListener('click', function() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (message) {
+                sendMessage(message);
+                input.value = '';
+            }
+        });
+
+        document.getElementById('chat-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                document.getElementById('send-button').click();
+            }
+        });
+
+        // Poll for new messages every 5 seconds
+        let lastMessageTime = null;
+        
+        async function pollNewMessages() {
+            try {
+                const response = await fetch(`/chat/messages/?after=${lastMessageTime || ''}`);
+                const data = await response.json();
+                
+                data.messages.forEach(message => {
+                    if (!document.querySelector(`[data-message-id="${message.id}"]`)) {
+                        addMessageToChatArea(message.message, message.time);
+                    }
+                    lastMessageTime = message.time;
+                });
+            } catch (error) {
+                console.error('Error polling messages:', error);
+            }
+        }
+
+        setInterval(pollNewMessages, 5000);
+    </script>
+</body>
+{% endblock content %}

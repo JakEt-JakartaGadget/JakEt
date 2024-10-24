@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Article',
     'Comparison',
+    'CustomerService',
     'Dashboard',
     'DetailProduct',
     'Homepage',

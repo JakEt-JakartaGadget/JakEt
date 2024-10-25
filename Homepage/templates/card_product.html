@@ -53,6 +53,7 @@
     <p class="text-base mb-4 px-6">Storage : {{ product.storage|truncatewords:20 }} dan Memory : {{ product.ram|truncatewords:20 }}</p>
 
     <div class="px-6">
+        <span class="text-gray-500 font-bold">{{ product.avg_rating|floatformat:2 }}/5</span>
         <div class="rating flex items-center mb-4">
             {% with full_stars=product.avg_rating|floatformat:"0" %}
                 {% for i in "12345" %}
@@ -74,7 +75,6 @@
             
             <span class="ml-2 text-gray-500">({{ product.total_respondents|intcomma }}+)</span>
         </div>
-
         <div class="flex items-center justify-between">
             <span class="text-xl font-bold text-indigo-600">Rp.{{ product.price_inr|intcomma }}</span>
             <a href="{% url 'DetailProduct:detail_page' product.id %}" class="text-indigo-600 hover:text-indigo-800 font-bold text-sm transition duration-300 ease-in-out">

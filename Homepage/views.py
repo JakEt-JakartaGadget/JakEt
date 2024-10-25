@@ -59,7 +59,7 @@ def list_products(request):
         'brands': brands,
         'storages': storages,
         'rams': rams,
-        'user_favorites': user_favorites  # Pass this to the template
+        'user_favorites': user_favorites  
     }
     return render(request, 'list_product.html', context)
 

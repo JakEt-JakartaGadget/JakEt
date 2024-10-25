@@ -22,4 +22,5 @@ urlpatterns = [
     path('authenticate/', include('Authenticate.urls')),
     path('', include("Homepage.urls")),
     path('detail/', include("DetailProduct.urls")),
+    path('wishlist/', include("Wishlist.urls"))
 ]

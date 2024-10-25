@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'DetailProduct',
     'Homepage',
     'Profile',
-    'Review',
     'ServiceCenter',
     'Tiket',
     'UserForum',

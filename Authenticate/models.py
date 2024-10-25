@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from Homepage.models import *
 
 class UserData(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='auth')
+    favorite_phones = models.ManyToManyField(Phone, blank=True, related_name='favorited_by')
     profile_name = models.CharField(max_length=255)
     username = models.CharField(max_length=255)
     profile_picture = models.TextField(blank=True,null=True)

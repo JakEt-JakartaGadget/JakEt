@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block meta %}
+<title>Favorite phones</title>
+{% endblock meta %}
+{% load static %}
+{% block content %}
+{% include 'components/navbar.html' %}
+
+<div class="pb-8 min-h-screen flex flex-col bg-[#453229] w-full">
+    <section class="mb-12">
+        <h1 class="text-2xl text-white font-bold mb-6 text-left pl-5">Your Favorite phones</h1>
+        <div class="flex flex-wrap justify-center gap-20">
+            {% for favorite in favorites %}
+                <!-- Menggunakan tampilan dari main.html -->
+                <div class="bg-white shadow-lg rounded-2xl overflow-hidden w-[25%] h-30 flex-shrink-0 flex flex-col transition duration-500 hover:scale-105 hover:shadow-2xl mt-5 mb-5 ml-5">
+                    {% if favorite.phone.image %}
+                        <img src="{{ favorite.phone.imageUrl }}" alt="{{ favorite.phone.model }}" class="rounded-2xl h-[180px] object-cover mr-5">
+                    {% else %}
+                        <img src="{% static 'image/default_phone.webp' %}" alt="{{ favorite.phone.model }}" class="rounded-2xl bg-slate-200 h-[180px] object-cover">
+                    {% endif %}
+                    <div class="flex flex-col ml-3">
+                        <div class="flex items-center justify-between mt-2">
+                            <h3 class="text-lg font-bold text-gray-800">{{ favorite.phone.name }}</h3>
+                            <div class="flex items-start mr-2">
+                                <form action="{% url 'Wishlist:remove_favorite' favorite.phone.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="favorite-button w-6 h-6 bg-red-500 text-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors duration-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-1 truncate">{{ favorite.phone.location }}</p>
+                        <div class="flex flex-row">
+                            <img src="{% static 'image/star.png' %}" alt="Rating" class="mr-1 w-[17px] h-[17px] object-cover rounded-lg">
+                            <p class="text-sm text-gray-600 mb-3">{{ favorite.phone.rating }}/5</p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-white text-lg">You have no favorite phones yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+{% endblock content %}

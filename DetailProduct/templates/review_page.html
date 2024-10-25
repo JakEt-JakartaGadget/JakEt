@@ -1,0 +1,13 @@
+{% load static %}
+<h1>Reviews for {{ product.model }}</h1>
+<div class="mt-4">
+    {% for review in reviews %}
+        <div class="p-4 bg-gray-100 rounded-lg shadow mb-4">
+            <p>{{ review.content }}</p>
+            <p>Rating: {{ review.rating }}/5</p>
+            <small>By {{ review.user.username }} on {{ review.date_added }}</small>
+        </div>
+    {% empty %}
+        <p>No reviews available.</p>
+    {% endfor %}
+</div>

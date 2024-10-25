@@ -13,43 +13,71 @@
         </div>
         
         <div>
-            {% if user.is_authenticated %}
-                <button id="favorite-button-{{ product.id }}" 
-                        class="favorite-button relative w-9 h-8 bg-white rounded-full border border-[#001A72] flex items-center justify-center focus:outline-none {% if product.is_favorite %}active{% endif %}" 
-                        onclick="toggleFavorite('{{ product.id }}')">
-                    <img class="mt-2 heart-icon w-6 h-6" src="{% static 'image/like/shape.png' %}" alt="Favorite">
-                </button>
-            {% else %}
-                <button class="favorite-button relative w-9 h-8 bg-white rounded-full border border-[#001A72] flex items-center justify-center focus:outline-none" 
-                        onclick="alert('Silakan login terlebih dahulu untuk menambahkan ke favorit.')">
-                    <img class="mt-2 heart-icon w-6 h-6" src="{% static 'image/like/shape.png' %}" alt="Favorite">
-                </button>
+            <div>
+                {% if request.user.is_authenticated %}
+                            <form id="favorite-form-{{ product.id }}" data-product-id="{{ product.id }}" action="{% url 'Homepage:toggle_favorite' product.id %}" method="post">
+                                {% csrf_token %}
+                                {% if product.id in user_favorites %}
+                                    <button type="button" 
+                                    class="favorite-button w-6 h-6 bg-red-500 text-white border border-gray-300 rounded-full flex items-center justify-center transition-colors duration-300" 
+                                    onclick="toggleFavorite('{{ product.id }}')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+                                        </svg>
+                                    </button>
+                                {% else %}
+                                    <button  type="button" 
+                                    class="favorite-button w-6 h-6 bg-white text-gray-600 border border-gray-300 rounded-full flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors duration-300" 
+                                    onclick="toggleFavorite('{{ product.id }}')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+                                        </svg>
+                                    </button>
+                                {% endif %}
+                            </form>
+                {% else %}
+                    <button 
+                        class="w-6 h-6 mr-1 bg-white text-gray-600 border border-gray-300 rounded-full flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors duration-300"
+                        onclick="alert('Silakan login terlebih dahulu untuk menambahkan ke favorit.');"
+                        aria-label="Love"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+                        </svg>
+                    </button>
             {% endif %}
+            </div>            
         </div>
     </div>
 
     <p class="text-base mb-4 px-6">Storage : {{ product.storage|truncatewords:20 }} dan Memory : {{ product.ram|truncatewords:20 }}</p>
 
     <div class="px-6">
-        <div class="rating flex items-center mb-4" id="rating-{{ product.id }}">
-            {% if user.is_authenticated %}
+        <div class="rating flex items-center mb-4">
+            {% with full_stars=product.avg_rating|floatformat:"0" %}
                 {% for i in "12345" %}
-                    <span class="star {% if product.rating >= forloop.counter %}selected{% endif %}" 
-                        data-value="{{ forloop.counter }}" 
-                        onmouseover="highlightStars('{{ product.id }}', {{ forloop.counter }})" 
-                        onmouseout="resetStars('{{ product.id }}')" 
-                        onclick="rateProduct('{{ product.id }}', {{ forloop.counter }})">&#9733;</span>
+                    {% if forloop.counter <= full_stars %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 .587l3.668 7.431 8.2 1.194-5.934 5.782L19.336 24 12 19.856 4.664 24l1.402-8.006L.132 9.212l8.2-1.194L12 .587z"/>
+                        </svg>
+                    {% elif forloop.counter == full_stars|add:"1" and product.avg_rating|floatformat:"1"|slice:"-1" == "5" %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 .587l3.668 7.431 8.2 1.194-5.934 5.782L19.336 24 12 19.856V.587z"/>
+                        </svg>
+                    {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 .587l3.668 7.431 8.2 1.194-5.934 5.782L19.336 24 12 19.856 4.664 24l1.402-8.006L.132 9.212l8.2-1.194L12 .587z"/>
+                        </svg>
+                    {% endif %}
                 {% endfor %}
-            {% else %}
-                {% for i in "12345" %}
-                    <span class="star {% if product.rating >= forloop.counter %}selected{% endif %}">&#9733;</span>
-                {% endfor %}
-            {% endif %}
+            {% endwith %}
+            
+            <span class="ml-2 text-gray-500">({{ product.total_respondents|intcomma }}+)</span>
         </div>
 
         <div class="flex items-center justify-between">
             <span class="text-xl font-bold text-indigo-600">Rp.{{ product.price_inr|intcomma }}</span>
-            <a href="{% url 'DetailProduct:detail_page' %}" class="text-indigo-600 hover:text-indigo-800 font-bold text-sm transition duration-300 ease-in-out">
+            <a href="{% url 'DetailProduct:detail_page' product.id %}" class="text-indigo-600 hover:text-indigo-800 font-bold text-sm transition duration-300 ease-in-out">
                 See Details
             </a>
         </div>
@@ -75,16 +103,6 @@
         .star:hover,
         .star:hover ~ .star {
             color: #FFD700;
-        }
-
-        .favorite-button {
-            background-color: #ffffff;
-            border: 1px solid #001A72;
-            transition: all 0.3s ease;
-        }
-
-        .favorite-button.active {
-            background-color: #F48789;
         }
 
         .pb-6 {
@@ -147,27 +165,34 @@
             .catch(error => console.error('Error:', error));
         }
 
-        function toggleFavorite(productId) {
-            const formData = new FormData();
-            formData.append('product_id', productId);
-            
-            fetch('/toggle_favorite/', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                const button = document.getElementById(`favorite-button-${productId}`);
-                if (data.is_favorite) {
-                    button.classList.add('active');
+        function toggleFavorite(phoneId) {
+        const form = document.getElementById('favorite-form-' + phoneId);
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            }
+        }).then(response => {
+            if (response.ok) {
+                const button = form.querySelector('.favorite-button');
+                const isActive = button.classList.contains('bg-red-500');
+                if (isActive) {
+                    button.classList.remove('bg-red-500', 'text-white');
+                    button.classList.add('bg-white', 'text-gray-600');
                 } else {
-                    button.classList.remove('active');
+                    button.classList.remove('bg-white', 'text-gray-600');
+                    button.classList.add('bg-red-500', 'text-white');
                 }
-            })
-            .catch(error => console.error('Error:', error));
-        }
+            } else {
+                console.error('Failed to toggle favorite.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
     </script>
 </div>

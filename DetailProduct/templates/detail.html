@@ -1,4 +1,259 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'components/navbar.html' %}
+{% load static %}
+{% load humanize %}
+
+<div class="container mx-auto p-5">
+    <div class="flex flex-col md:flex-row">
+        <div class="w-full md:w-1/2">
+            <img class="w-full h-auto object-cover object-center rounded-lg shadow-lg" 
+                 src="{{ product.image_url }}" 
+                 alt="{{ product.model }}">
+            <div class="mt-5 text-xl font-bold">Specifications</div>
+            <div class="grid grid-cols-2 gap-2 text-gray-800 mt-3">
+                <div>Storage:</div><div>{{ product.storage }}</div>
+                <div>RAM:</div><div>{{ product.ram }}</div>
+                <div>Screen Size:</div><div>{{ product.screen_size_inches }}"</div>
+                <div>Camera:</div><div>{{ product.camera_mp }}</div>
+                <div>Battery:</div><div>{{ product.battery_capacity_mAh }} mAh</div>
+            </div>
+        </div>
+
+        <div class="w-full md:w-1/2 md:pl-10 mt-6 md:mt-0">
+            <h1 class="text-2xl font-bold">{{ product.brand }} {{ product.model }}</h1>
+            
+            <div class="flex items-center mt-4 space-x-4">
+                <button id="favorite-button" 
+                        class="favorite-button relative w-9 h-8 bg-white rounded-full border border-[#001A72] flex items-center justify-center focus:outline-none transition-colors duration-300 {% if is_favorite %}active{% endif %}"
+                        onclick="toggleFavorite('{{ product.id }}')">
+                    <img src="{% static 'image/like/shape.png' %}" alt="Favorite" class="w-5 h-5">
+                </button>
+
+                <!-- Star Rating -->
+                <div class="rating" id="rating-{{ product.id }}">
+                    {% for i in "12345" %}
+                        <span class="star {% if product.rating >= forloop.counter %}selected{% endif %}"
+                              data-value="{{ forloop.counter }}"
+                              onmouseover="highlightStars({{ forloop.counter }})"
+                              onmouseout="resetStars()"
+                              onclick="rateProduct('{{ product.id }}', {{ forloop.counter }})">★</span>
+                    {% endfor %}
+                    <span class="ml-2 text-gray-700" id="current-rating">{{ product.rating }}/5</span>
+                </div>
+            </div>
+
+            <div class="mt-4 text-2xl font-bold text-indigo-600">
+                Rp.{{ product.price_inr|intcomma }}
+            </div>
+
+            <div class="text-gray-700 mt-5">
+                {{ product.brand }} {{ product.model }} with {{ product.ram }} RAM and {{ product.storage }} storage.
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-10">
+        <h2 class="text-xl font-bold">User Reviews</h2>
+        <button class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors duration-300"
+                onclick="toggleReviewForm()">
+            Write a Review
+        </button>
+
+        <div id="review-form" class="mt-4 hidden">
+            <textarea id="review-content"
+                class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                rows="4"
+                placeholder="Write your review here..."></textarea>
+            
+            <div class="mt-2 flex items-center">
+                <span class="mr-2">Your Rating:</span>
+                <div id="review-rating" class="rating">
+                    {% for i in "12345" %}
+                        <span class="star"
+                            data-value="{{ forloop.counter }}"
+                            onmouseover="highlightReviewStars({{ forloop.counter }})"
+                            onmouseout="resetReviewStars()"
+                            onclick="setReviewRating({{ forloop.counter }})">★</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button onclick="submitReview('{{ product.id }}')"
+                    class="mt-3 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors duration-300">
+                Submit Review
+            </button>
+        </div>
+
+        <div id="reviews" class="mt-6 space-y-4">
+            {% for review in reviews %}
+                <div class="border-b border-gray-200 pb-4">
+                    <div class="flex items-center justify-between">
+                        <strong>{{ review.user.username }}</strong>
+                        <div class="rating">
+                            {% for i in "12345" %}
+                                <span class="star {% if review.rating >= forloop.counter %}selected{% endif %}">★</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <p class="mt-2 text-gray-600">{{ review.content }}</p>
+                    <span class="text-sm text-gray-500">{{ review.date_added|date:"F d, Y" }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .rating {
+        display: flex;
+        align-items: center;
+    }
+
+    .star {
+        font-size: 24px;
+        color: #001A72;
+        cursor: pointer;
+        transition: color 0.2s;
+        padding: 0 2px;
+    }
+
+    .star.selected {
+        color: #FFD700;
+    }
+
+    .favorite-button {
+        transition: all 0.3s ease;
+    }
+
+    .favorite-button.active {
+        background-color: #F48789;
+    }
+
+    .favorite-button:hover {
+        transform: scale(1.1);
+    }
+</style>
+
+<script>
+    let currentRating = {{ product.rating }};
+    let reviewRating = 0;
+    
+    function toggleReviewForm() {
+        const form = document.getElementById('review-form');
+        form.classList.toggle('hidden');
+    }
+
+    function highlightStars(value) {
+        const stars = document.querySelectorAll('#rating-{{ product.id }} .star');
+        stars.forEach((star, index) => {
+            star.classList.toggle('selected', index < value);
+        });
+    }
+
+    function resetStars() {
+        highlightStars(currentRating);
+    }
+
+    function highlightReviewStars(value) {
+        const stars = document.querySelectorAll('#review-rating .star');
+        stars.forEach((star, index) => {
+            star.classList.toggle('selected', index < value);
+        });
+    }
+
+    function resetReviewStars() {
+        highlightReviewStars(reviewRating);
+    }
+
+    function setReviewRating(rating) {
+        reviewRating = rating;
+        highlightReviewStars(rating);
+    }
+
+    function rateProduct(productId, rating) {
+        fetch(`/detail/${productId}/rate_product/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ rating: rating })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                currentRating = rating;
+                document.getElementById('current-rating').textContent = `${rating}/5`;
+                highlightStars(rating);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function submitReview(productId) {
+        const content = document.getElementById('review-content').value;
+        if (!content || !reviewRating) {
+            alert('Please provide both a review and a rating');
+            return;
+        }
+
+        fetch(`/detail/${productId}/submit_review/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                content: content,
+                rating: reviewRating
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const reviewsContainer = document.getElementById('reviews');
+                const newReview = document.createElement('div');
+                newReview.className = 'border-b border-gray-200 pb-4';
+                newReview.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <strong>${data.review.user}</strong>
+                        <div class="rating">
+                            ${Array(5).fill(0).map((_, i) => 
+                                `<span class="star ${i < data.review.rating ? 'selected' : ''}">★</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    <p class="mt-2 text-gray-600">${data.review.content}</p>
+                    <span class="text-sm text-gray-500">${data.review.date_added}</span>
+                `;
+                reviewsContainer.insertBefore(newReview, reviewsContainer.firstChild);
+                
+                document.getElementById('review-content').value = '';
+                reviewRating = 0;
+                resetReviewStars();
+                toggleReviewForm();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function toggleFavorite(productId) {
+        fetch(`/detail/${productId}/toggle_favorite/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const button = document.getElementById('favorite-button');
+                button.classList.toggle('active', data.is_favorite);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
 {% endblock content %}

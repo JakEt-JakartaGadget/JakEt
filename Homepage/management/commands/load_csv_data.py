@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'Load smartphone data from CSV files into the database'
 
     def handle(self, *args, **kwargs):
-        file_path = 'dataset/product/mobile_phone_link.csv' 
+        file_path = 'dataset/product/realistic_dataset.csv' 
         self.load_csv_to_database(file_path, Phone)
 
     def clean_price(self, price_str):
@@ -62,7 +62,6 @@ class Command(BaseCommand):
                     print(f"Skipping row {row_number} due to invalid price: '{price_str}'")
                     continue
 
-
                 battery_str = row.get('Battery Capacity (mAh)', '').strip()
                 battery_capacity = self.clean_integer_field(battery_str, 'battery_capacity_mAh')
                 if battery_capacity is None:
@@ -75,6 +74,13 @@ class Command(BaseCommand):
                 except ValueError:
                     print(f"Invalid screen size: '{screen_size_str}', setting to 0.0")
                     screen_size = 0.0
+
+                # Extract and clean rating data for each star level
+                one_star = self.clean_integer_field(row.get('1 Star', '').strip(), '1 Star')
+                two_star = self.clean_integer_field(row.get('2 Star', '').strip(), '2 Star')
+                three_star = self.clean_integer_field(row.get('3 Star', '').strip(), '3 Star')
+                four_star = self.clean_integer_field(row.get('4 Star', '').strip(), '4 Star')
+                five_star = self.clean_integer_field(row.get('5 Star', '').strip(), '5 Star')
 
                 brand = row.get('Brand', '').strip()  
                 model = row.get('Model', '').strip()
@@ -93,7 +99,12 @@ class Command(BaseCommand):
                     'battery_capacity_mAh': battery_capacity,
                     'price_usd': Decimal(price_str.replace('$', '').replace(',', '')), 
                     'price_inr': price_inr,
-                    'image_url':image_url,
+                    'image_url': image_url,
+                    'one_star': one_star or 0,
+                    'two_star': two_star or 0,
+                    'three_star': three_star or 0,
+                    'four_star': four_star or 0,
+                    'five_star': five_star or 0,
                 }
 
                 print(f"Model data prepared for saving: {model_data}")
@@ -101,9 +112,7 @@ class Command(BaseCommand):
                 try:
                     model_instance.save()
                     print(f"Saved: {model}")
-                    print(f"Prepared model instance with image_url: {model_instance.image_url}")
                 except ValidationError as e:
                     print(f"ValidationError saving {model}: {e}")
                 except Exception as e:
                     print(f"Unexpected error saving {model}: {e}")
-

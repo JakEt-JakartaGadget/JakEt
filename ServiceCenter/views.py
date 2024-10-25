@@ -84,15 +84,12 @@ def add_service_center_ajax(request):
 
 def edit_service_center(request, id):
     # Get service_center berdasarkan id
-    service_center = ServiceCenter.objects.get(pk = id)
-
-    form = ServiceForm(request.POST or None, instance=service_center)
-
+    service_center = ServiceCenter.objects.get(pk=id)
+    form = ServiceForm(request.POST or None, request.FILES or None, instance=service_center)
     if form.is_valid() and request.method == "POST":
         # Simpan form dan kembali ke halaman awal
         form.save()
         return HttpResponseRedirect(reverse('ServiceCenter:show_service_page'))
-
     context = {'form': form}
     return render(request, "edit_service_center.html", context)
 

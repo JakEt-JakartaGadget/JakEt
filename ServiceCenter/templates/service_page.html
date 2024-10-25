@@ -170,7 +170,7 @@
                                 <div class="relative">
                                   <img src="/media/${item.fields.image}" alt="Grey Box Placeholder" class="h-48 mb-4 w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                   <div class="bg-gray-200 h-48 mb-4" style="display:none;"></div>
-                                  <button class="absolute top-4 right-4 bg-blue-100 rounded-full p-2">
+                                  <button class="absolute top-4 right-4 bg-blue-200 rounded-full p-2 hover:bg-blue-400 transition duration-300 ease-in-out">
                                     <i class="far fa-heart text-purple-600"></i>
                                   </button>
                                 </div>
@@ -195,6 +195,18 @@
                                 <div class="mt-auto">
                                   ${scheduleButtonHTML}
                                 </div>
+                                {% if user.is_authenticated and user.is_superuser %}
+                                <div class="absolute top-[15%] right-[-5px] transform translate-x-1/2 -translate-y-1/2 flex flex-col space-y-1">
+                                    <a href="/servicecenter/edit-service-center/${item.pk}" 
+                                      class="bg-violet-500 hover:bg-violet-800 text-white p-2 rounded-md transition duration-300 shadow-md h-10 w-10 flex items-center justify-center">
+                                      <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="/servicecenter/delete-service-center/${item.pk}" 
+                                      class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-md transition duration-300 shadow-md h-10 w-10 flex items-center justify-center">
+                                      <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                                {% endif %}
                               </div>
                             </div>`;
           });

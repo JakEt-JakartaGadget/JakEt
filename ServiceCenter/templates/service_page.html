@@ -9,7 +9,7 @@
 {% include 'components/navbar.html' %}
 
 <div class="manrope overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-white flex flex-col">
-  <div class="flex justify-between items-center mb-6 mt-20">
+  <div class="flex justify-between items-center mb-6 mt-3">
     <h2 class="text-2xl font-bold text-black ml-2">Your Booked Schedule</h2>
   </div>
 
@@ -21,14 +21,16 @@
 
   <div class="flex justify-between items-center mb-6 mt-20">
     <h2 class="text-2xl font-bold text-black ml-2">Service Centers</h2>
-    <div class="flex space-x-5">
-      <a href="{% url 'ServiceCenter:create_service_center' %}" style="background: linear-gradient(to right, #cb94ff 0%, #9794ff 58%, #93C9F1 100%);" class="hover:bg-slate-700 hover:opacity-80 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
-        <i class="fas fa-plus mr-2"></i>Add New Service Center
-      </a>
-      <button data-modal-target="serviceModal" data-modal-toggle="serviceModal" style="background: linear-gradient(to right, #cb94ff 0%, #9794ff 58%, #93C9F1 100%);" class="btn hover:bg-slate-700 hover:opacity-80 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105" onclick="showServiceModal();">
-        <i class="fas fa-plus mr-2"></i>Add New Service Center by AJAX
-      </button>
-    </div>
+    {% if user.is_authenticated and user.is_superuser %}
+      <div class="flex space-x-5">
+        <a href="{% url 'ServiceCenter:create_service_center' %}" style="background: linear-gradient(to right, #cb94ff 0%, #9794ff 58%, #93C9F1 100%);" class="hover:bg-slate-700 hover:opacity-80 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+          <i class="fas fa-plus mr-2"></i>Add New Service Center
+        </a>
+        <button data-modal-target="serviceModal" data-modal-toggle="serviceModal" style="background: linear-gradient(to right, #cb94ff 0%, #9794ff 58%, #93C9F1 100%);" class="btn hover:bg-slate-700 hover:opacity-80 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105" onclick="showServiceModal();">
+          <i class="fas fa-plus mr-2"></i>Add New Service Center by AJAX
+        </button>
+      </div>
+    {% endif %}
   </div>
   
   <div class="container mx-auto bg-slate-200 rounded-xl w-full max-w-full">
@@ -56,7 +58,7 @@
     
     <!-- Service Center Modal -->
     <div id="serviceModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
-        <div id="serviceModalContent" class="relative bg-slate-200 rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+        <div id="serviceModalContent" class="relative bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6] rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
           <!-- Modal header -->
           <div class="flex items-center justify-between p-4 border-b rounded-t">
             <h3 class="text-xl font-semibold text-black">
@@ -290,7 +292,7 @@
     if (entries.length === 0) {
         classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
         htmlString = `<div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-                          <img src="{% static 'Tiket/images/booked.png' %}" alt="No Booking" class="w-64 h-64 mb-4"/>
+                          <img src="{% static 'Tiket/images/booked.png' %}" alt="No Booking" class="w-80 h-64"/>
                           <p class="text-center text-black mt-4">No bookings scheduled yet.</p>
                       </div>`;
     } else {

@@ -40,17 +40,20 @@ def show_service_page(request):
 
     return render(request, "service_page.html", context)
 
+@login_required(login_url='/authenticate/login')
 def create_service_center(request):
-    form = ServiceForm(request.POST or None)
-    if form.is_valid() and request.method == "POST":
-        service_entry = form.save(commit=False)
-        if request.user.is_authenticated:
-            user_data = UserData.objects.get(user=request.user)
-            service_entry.user = user_data
-        else:
-            service_entry.user = None
-        service_entry.save()
-        return redirect('ServiceCenter:show_service_page')
+    if request.method == "POST":
+        form = ServiceForm(request.POST, request.FILES)
+        if form.is_valid():
+            service_entry = form.save(commit=False)
+            if request.user.is_authenticated:
+                user_data = UserData.objects.get(user=request.user)
+                service_entry.user = user_data
+            service_entry.save()
+            return redirect('ServiceCenter:show_service_page')
+    else:
+        form = ServiceForm()
+    
     context = {'form': form}
     return render(request, "create_service_center.html", context)
 
@@ -64,19 +67,20 @@ def add_service_center_ajax(request):
     rating = request.POST.get("rating")
     total_reviews = request.POST.get("total_reviews")
     image = request.FILES.get("image")
+    
     if request.user.is_authenticated:
-        user = request.user
+        user_data = UserData.objects.get(user=request.user)
     else:
-        user = None 
-        
+        return HttpResponse(b"Unauthorized", status=401) 
+
     new_service_center = ServiceCenter(
         name=name, address=address,
         contact=contact, rating=rating, total_reviews=total_reviews,
-        user=user, image=image
+        user=user_data, image=image
     )
     new_service_center.save()
-
     return HttpResponse(b"CREATED", status=201)
+
 
 def edit_service_center(request, id):
     # Get service_center berdasarkan id

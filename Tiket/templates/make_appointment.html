@@ -8,7 +8,7 @@
 {% block content %}
 {% include 'components/navbar.html' %}
 
-<div class="manrope flex flex-col min-h-screen bg-slate-300">
+<div class="manrope flex flex-col min-h-screen bg-slate-200">
   <div class="container mx-auto px-4 py-8 mt-20 max-w-4xl">
     <div class="bg-white rounded-lg shadow-lg p-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -36,7 +36,7 @@
             {{ form.service_center.as_hidden }} 
             <div class="flex flex-col">
               <label for="{{ form.service_date.id_for_label }}" class="mb-2 font-semibold text-black">{{ form.service_date.label }}</label>
-              <div class="w-full">
+              <div class="w-full border border-gray-400 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-700">
                 {{ form.service_date }}
               </div>
               {% if form.service_date.help_text %}
@@ -48,7 +48,7 @@
             </div>
             <div class="flex flex-col">
               <label for="{{ form.service_time.id_for_label }}" class="mb-2 font-semibold text-black">{{ form.service_time.label }}</label>
-              <div class="w-full">
+              <div class="w-full border border-gray-400 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-700">
                 {{ form.service_time }}
               </div>
               {% if form.service_time.help_text %}
@@ -60,9 +60,7 @@
             </div>
             <div class="flex flex-col">
               <label for="{{ form.specific_problems.id_for_label }}" class="mb-2 font-semibold text-black">Specific Problems</label>
-              <div class="w-full">
-                {{ form.specific_problems }}
-              </div>
+              <textarea name="{{ form.specific_problems.html_name }}" class="border border-gray-400 rounded-lg p-2 w-full h-52 focus:outline-none focus:ring-2 focus:ring-gray-700">No specific problems mentioned</textarea>
               {% if form.specific_problems.help_text %}
                 <p class="mt-1 text-sm text-gray-500">{{ form.specific_problems.help_text }}</p>
               {% endif %}

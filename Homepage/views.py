@@ -21,7 +21,6 @@ def home_section(request):
     }
     return render(request, 'home.html', context)
 
-@login_required(login_url='/authenticate/login')
 def list_products(request):
     phones = Phone.objects.all()
     brands = Phone.objects.values_list('brand', flat=True).distinct()

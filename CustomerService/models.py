@@ -10,6 +10,7 @@ class Chat(models.Model):
     message = models.TextField()
     time_sent = models.TimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
+    sent_by_user = [True if user == User else False]
 
     def mark_as_read(self):
         self.read = True
@@ -21,4 +22,5 @@ class DailyCustomerService(models.Model):
 
     @property
     def messages(self):
-        return Chat.objects.filter(date=self.date, user=self.user)
+        # Fetch messages for this user on the same date
+        return Chat.objects.filter(date=self.date, user=self.user).order_by('time_sent')

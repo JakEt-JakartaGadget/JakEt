@@ -7,6 +7,7 @@ from .models import Chat, DailyCustomerService
 import json
 from django.core import serializers
 from django.utils import timezone
+from django.db.models import Count
 
 @login_required
 def customer_service(request):
@@ -15,15 +16,21 @@ def customer_service(request):
         user=request.user,
         date=timezone.now().date()
     )
+
+    # Fetch distinct chat dates and associated messages
+    daily_chats = Chat.objects.filter(user=request.user).order_by('date', 'time_sent')
+    grouped_chats = {}
     
-    # Get recent messages
-    messages = Chat.objects.filter(
-        user=request.user
-    ).order_by('date', 'time_sent')[:50]  # Limit to last 50 messages
-    
+    for chat in daily_chats:
+        if chat.date not in grouped_chats:
+            grouped_chats[chat.date] = []
+        grouped_chats[chat.date].append(chat)
+
     context = {
-        'messages': messages
+        'grouped_chats': grouped_chats,
+        'today': timezone.now().date(),  # Pass grouped chats to the template
     }
+
     return render(request, 'customer-service.html', context)
 
 @login_required

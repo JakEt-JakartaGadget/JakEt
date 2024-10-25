@@ -2,7 +2,29 @@
 {% load static %}
 
 {% block meta %}
-<title>Support Center | JakEt</title>
+<title>Customer Service | JakEt</title>
+<style>
+    /* Custom scrollbar styles */
+    #chat-area::-webkit-scrollbar {
+        width: 12px;
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
+
+    #chat-area:hover::-webkit-scrollbar {
+        opacity: 1;
+    }
+
+    #chat-area::-webkit-scrollbar-track {
+        background: #7FADD0;
+        border-radius: 10px;
+    }
+
+    #chat-area::-webkit-scrollbar-thumb {
+        background: white;
+        border-radius: 10px;
+    }
+</style>
 {% endblock meta %}
 
 {% block content %}
@@ -10,14 +32,30 @@
     {% include 'components/navbar.html' %}
 
     <!-- Main content area -->
-    <div class="relative flex flex-col justify-between h-screen bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6] p-5">
+    <div class="relative flex flex-col justify-between h-[calc(100vh-4rem)] bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6] p-5">
+        <div class="flex justify-center items-center h-16">
+            <h1 class="text-white text-3xl font-bold">Customer Service</h1>
+        </div>
         <!-- Chat area -->
-        <div id="chat-area" class="flex flex-col space-y-4 mt-16 ml-8 overflow-y-auto">
-            {% for message in messages %}
-            <div class="bg-white p-3 rounded-xl shadow-md w-max {% if message.user == request.user %}self-end{% endif %}">
-                {{ message.message }}
-                <div class="text-xs text-gray-500 mt-1">{{ message.time_sent|time:"H:i" }}</div>
-            </div>
+        <div id="chat-area" class="flex flex-col space-y-2 overflow-y-auto flex-grow p-3 mx-1 md:mx-20">
+            {% for date, messages in grouped_chats.items %}
+                <!-- diplay the date of the chat -->
+                <div class="flex justify-center items-center h-16 mt-4">
+                    <h2 class="text-white text-xl font-bold">
+                        {% if date == today %}
+                            Today
+                        {% else %}
+                            {{ date|date:"F j, Y" }}
+                        {% endif %}
+                    </h2>
+                </div>
+                
+                {% for message in messages %}
+                    <div class="bg-white p-3 rounded-xl shadow-md w-max {% if message.user == request.user %}self-end{% else %}self-start{% endif %}">
+                        {{ message.message }}
+                        <div class="text-xs text-gray-500 mt-1">{{ message.time_sent|time:"H:i" }}</div>
+                    </div>
+                {% endfor %}
             {% endfor %}
         </div>
 
@@ -54,7 +92,7 @@
         // Function to send message using AJAX
         async function sendMessage(message) {
             try {
-                const response = await fetch('/chat/send/', {
+                const response = await fetch('send/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -67,6 +105,9 @@
                 
                 if (data.status === 'success') {
                     addMessageToChatArea(data.message.message, data.message.time);
+                    for (const [key, value] of Object.entries(data.message)) {
+                        console.log(`${key}: ${value}`);
+                    }
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -104,13 +145,10 @@
                 document.getElementById('send-button').click();
             }
         });
-
-        // Poll for new messages every 5 seconds
-        let lastMessageTime = null;
         
         async function pollNewMessages() {
             try {
-                const response = await fetch(`/chat/messages/?after=${lastMessageTime || ''}`);
+                const response = await fetch(`messages/?after=${lastMessageTime || ''}`);
                 const data = await response.json();
                 
                 data.messages.forEach(message => {
@@ -124,7 +162,11 @@
             }
         }
 
-        setInterval(pollNewMessages, 5000);
+        // Scroll to the bottom of the chat area on page load
+        window.onload = function() {
+            const chatArea = document.getElementById('chat-area');
+            chatArea.scrollTop = chatArea.scrollHeight;
+        };
     </script>
 </body>
 {% endblock content %}

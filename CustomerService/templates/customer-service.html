@@ -105,9 +105,6 @@
                 
                 if (data.status === 'success') {
                     addMessageToChatArea(data.message.message, data.message.time);
-                    for (const [key, value] of Object.entries(data.message)) {
-                        console.log(`${key}: ${value}`);
-                    }
                 }
             } catch (error) {
                 console.error('Error:', error);

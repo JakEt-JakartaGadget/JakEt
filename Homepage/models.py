@@ -15,6 +15,7 @@ class Phone(models.Model):
     price_inr = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
     rating = models.IntegerField(default=0) 
     is_favorite = models.BooleanField(default=False)
+    image_url = models.URLField(max_length=500, blank=True, null=True)
     
 class PhoneRating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

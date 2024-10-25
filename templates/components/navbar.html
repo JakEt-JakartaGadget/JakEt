@@ -11,7 +11,7 @@
             <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
                 Home
             </a>
-            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
+            <a href="{% url 'Homepage:list_product' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
                 Product
             </a>
             <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
@@ -46,12 +46,11 @@
                     </div>
                 </div>
 
-                <!-- Tombol Wishlist (Heart) -->
                 <a href="{% url 'Homepage:home_section' %}" class="mb-2 text-white hover:text-gray-300 transition duration-300 transform hover:scale-110">
                     <img src="{% static 'image/navbar/heart.png' %}" alt="Wishlist" class="w-6 h-6">
                 </a>
             {% else %}
-                <!-- Tombol Login -->
+
                 <a href="{% url 'Authenticate:login' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
                     Login
                 </a>
@@ -78,7 +77,6 @@
         }
     }
 
-    /* Dropdown styles */
     #user-menu-dropdown {
         min-width: 150px;
     }

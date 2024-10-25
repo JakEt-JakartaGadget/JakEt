@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'Load smartphone data from CSV files into the database'
 
     def handle(self, *args, **kwargs):
-        file_path = 'dataset/product/mobile_phone_price.csv' 
+        file_path = 'dataset/product/mobile_phone_link.csv' 
         self.load_csv_to_database(file_path, Phone)
 
     def clean_price(self, price_str):
@@ -76,11 +76,12 @@ class Command(BaseCommand):
                     print(f"Invalid screen size: '{screen_size_str}', setting to 0.0")
                     screen_size = 0.0
 
-                brand = row.get('Brand', '').strip()  # Ensure brand is properly read
+                brand = row.get('Brand', '').strip()  
                 model = row.get('Model', '').strip()
                 storage = row.get('Storage ', '').strip()  
                 ram = row.get('RAM ', '').strip()         
                 camera_mp = row.get('Camera (MP)', '').strip()
+                image_url = row.get('ImageURL', '').strip()
 
                 model_data = {
                     'brand': brand,
@@ -90,8 +91,9 @@ class Command(BaseCommand):
                     'screen_size_inches': screen_size,
                     'camera_mp': camera_mp,
                     'battery_capacity_mAh': battery_capacity,
-                    'price_usd': Decimal(price_str.replace('$', '').replace(',', '')),  # Simpan USD jika diperlukan
+                    'price_usd': Decimal(price_str.replace('$', '').replace(',', '')), 
                     'price_inr': price_inr,
+                    'image_url':image_url,
                 }
 
                 print(f"Model data prepared for saving: {model_data}")

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+    <title>Profile</title>
+{% endblock meta %}
+
+{% block content %}
+{% include 'components/navbar.html' %}
+
+<div class="min-h-screen flex flex-col items-center bg-gray-100">
+    <div class="container mx-auto px-4 py-10 max-w-4xl">
+        <!-- Profile Header -->
+        <div class="flex items-center space-x-6 mb-8">
+            <img src="{{ profile_picture.url if profile_picture else static 'path_to_default_picture.jpg' }}" alt="Profile Picture" class="rounded-full w-32 h-32">
+            <div class="flex flex-col">
+                <h1 class="text-3xl font-bold">Profile</h1>
+                <h2 class="text-5xl font-bold mt-2">Hello <span class="text-purple-600">{{ profile_name }}</span>!</h2>
+            </div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-4">Personal Information</h3>
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <p class="font-semibold">Profile Name</p>
+                    <p class="text-gray-600">{{ profile_name }}</p>
+                </div>
+                <div>
+                    <p class="font-semibold">Phone</p>
+                    <p class="text-gray-600">{{ phone }}</p>
+                </div>
+                <div>
+                    <p class="font-semibold">Username</p>
+                    <p class="text-gray-600">{{ username }}</p>
+                </div>
+                <div>
+                    <p class="font-semibold">Email</p>
+                    <p class="text-gray-600">{{ email }}</p>
+                </div>
+                <div class="col-span-2">
+                    <p class="font-semibold">About me</p>
+                    <p class="text-gray-600">{{ about }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Profile Button -->
+        <div class="mt-8 text-center">
+            <a href="{% url 'edit_profile' %}" class="bg-blue-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 transition duration-200">Edit Profile</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

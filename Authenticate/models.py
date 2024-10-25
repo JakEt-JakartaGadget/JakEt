@@ -5,7 +5,7 @@ class UserData(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='auth')
     profile_name = models.CharField(max_length=255)
     username = models.CharField(max_length=255)
-    profile_picture = models.TextField(blank=True,null=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     about = models.TextField(blank=True)
     location = models.CharField(max_length=255)
     phone = models.CharField(max_length=15,blank=True,null=True)

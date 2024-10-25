@@ -1,122 +1,122 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from DetailProduct.forms import ReviewForm
 from Homepage.models import Phone
 from .models import Review
 import json
 from django.db.models import Avg
+from Wishlist.models import Favorite
+from collections import defaultdict
 
 @login_required(login_url='/authenticate/login')
 def product_detail(request, product_id):
     product = get_object_or_404(Phone, id=product_id)
     reviews = Review.objects.filter(product=product)
-    
-    user_has_review = reviews.filter(user=request.user).exists() if request.user.is_authenticated else False
+    user_has_review = reviews.filter(user=request.user).exists()
     user_review = reviews.filter(user=request.user).first() if user_has_review else None
-
+    user_favorites = []
+    if request.user.is_authenticated:
+        user_favorites = Favorite.objects.filter(user=request.user).values_list('phone_id', flat=True)
+    star_counts = [
+        (5, product.five_star),
+        (4, product.four_star),
+        (3, product.three_star),
+        (2, product.two_star),
+        (1, product.one_star),
+    ]
+    
     context = {
         'product': product,
         'reviews': reviews,
         'user_has_review': user_has_review,
         'user_review': user_review,
+        'user_favorites': user_favorites,  
+        'star_counts': star_counts, 
     }
     return render(request, 'detail.html', context)
 
-
-@login_required
-@require_POST
-def submit_review(request, product_id):
-    try:
-        data = json.loads(request.body)
-        content = data.get('content')
-        rating = data.get('rating', 5)
-        product = get_object_or_404(Phone, id=product_id)
-        
-        review, created = Review.objects.update_or_create(
-            user=request.user,
-            product=product,
-            defaults={
-                'content': content,
-                'rating': rating
-            }
-        )
-        
-        avg_rating = Review.objects.filter(product=product).aggregate(Avg('rating'))['rating__avg']
-        product.rating = round(avg_rating) if avg_rating else 0
-        product.save()
-        
-        return JsonResponse({
-            'success': True,
-            'review': {
-                'user': review.user.username,
-                'content': review.content,
-                'rating': review.rating,
-                'date_added': review.date_added.strftime('%Y-%m-%d %H:%M')
-            }
-        })
-    except Exception as e:
-        return JsonResponse({'success': False, 'error': str(e)})
+@csrf_exempt
+@login_required(login_url='/authenticate/login')
+def toggle_favorite(request, phone_id):
+    phone = get_object_or_404(Phone, id=phone_id)
+    favorite, created = Favorite.objects.get_or_create(user=request.user, phone=phone)
+    if not created:
+        favorite.delete() 
+        is_favorite = False
+    else:
+        is_favorite = True
+    return JsonResponse({'is_favorite': is_favorite})
 
 @csrf_exempt
-@login_required
-def toggle_favorite(request, product_id):
-    if request.method == 'POST':
-        product = get_object_or_404(Phone, id=product_id)
-        if hasattr(request.user, 'userdata'):
-            is_favorite = request.user.userdata.favorite_phones.filter(id=product.id).exists()
-            if is_favorite:
-                request.user.userdata.favorite_phones.remove(product)
-                is_favorite = False
-            else:
-                request.user.userdata.favorite_phones.add(product)
-                is_favorite = True
-            return JsonResponse({'success': True, 'is_favorite': is_favorite})
-    return JsonResponse({'success': False}, status=400)
+@login_required(login_url='/authenticate/login')
+def add_review_ajax(request, product_id):
+    product = get_object_or_404(Phone, id=product_id)
 
-@login_required
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.product = product
+            review.save()
+            
+            response_data = {
+                'reviewer': review.user.username,
+                'content': review.content, 
+                'rating': review.rating
+            }
+            return JsonResponse(response_data)
+
+    return JsonResponse({'error': 'Invalid form'}, status=400)
+
 @csrf_exempt
-def rate_product(request, product_id):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            rating = int(data.get('rating'))
-            product = get_object_or_404(Phone, id=product_id)
-            
-            review, created = Review.objects.update_or_create(
-                user=request.user,
-                product=product,
-                defaults={'rating': rating}
-            )
-            
-            avg_rating = Review.objects.filter(product=product).aggregate(Avg('rating'))['rating__avg']
-            product.rating = round(avg_rating) if avg_rating else 0
-            product.save()
-            
-            return JsonResponse({'success': True, 'new_rating': product.rating})
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-    return JsonResponse({'success': False}, status=400)
+@login_required(login_url='/authenticate/login')
+def delete_review(request, id):
+    review = get_object_or_404(Review, pk=id)
+    product_id = review.product.id
+    review.delete()
+    return HttpResponseRedirect(reverse('DetailProduct:review_page', kwargs={'product_id': product_id}))
 
-@login_required
-def edit_review(request, review_id):
+@csrf_exempt
+@login_required(login_url='/authenticate/login')
+def edit_review_ajax(request):
     if request.method == 'POST':
+        review_id = request.POST.get('review_id')
         review = get_object_or_404(Review, id=review_id, user=request.user)
-        data = json.loads(request.body)
-        
-        review.content = data['content']
-        review.rating = data['rating']
+        review.rating = request.POST.get('rating')
+        review.content = request.POST.get('content')
         review.save()
-        
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False}, status=400)
+        return JsonResponse({
+            'id': review.id,
+            'rating': review.rating,
+            'content': review.content,
+            'username': review.user.username, 
+        })
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
-@login_required
-def delete_review(request, review_id):
-    if request.method == 'POST':
-        review = get_object_or_404(Review, id=review_id, user=request.user)
-        review.delete()
-        
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False}, status=400)
+@csrf_exempt
+@login_required(login_url='/authenticate/login')
+def review_page(request, product_id):
+    product = get_object_or_404(Phone, id=product_id)
+    user_reviews = Review.objects.filter(product=product)
+    form = ReviewForm(request.POST or None)
+    review_counts = defaultdict(int)
+    for review in user_reviews:
+        review_counts[review.rating] += 1
+    if request.method == 'POST' and form.is_valid():
+        new_review = form.save(commit=False)
+        new_review.user = request.user
+        new_review.product = product
+        new_review.save()
+        return HttpResponseRedirect(reverse('DetailProduct:review_page', args=[product_id]))
+    context = {
+        'product': product,
+        'reviews': user_reviews,
+        'form': form,
+        'review_counts': review_counts,
+    }
+    return render(request, 'review_page.html', context)

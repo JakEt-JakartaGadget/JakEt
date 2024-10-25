@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'Load smartphone data from CSV files into the database'
 
     def handle(self, *args, **kwargs):
-        file_path = 'dataset/product/realistic_dataset.csv' 
+        file_path = 'dataset/product/cleaned_dataset.csv' 
         self.load_csv_to_database(file_path, Phone)
 
     def clean_price(self, price_str):

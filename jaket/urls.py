@@ -16,10 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from jaket import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('authenticate/', include('Authenticate.urls')),
-
+    path('profile/', include('Profile.urls')),
+    path('', include("Homepage.urls")),
 ]

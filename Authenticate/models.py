@@ -11,6 +11,7 @@ class UserData(models.Model):
     phone = models.CharField(max_length=15,blank=True,null=True)
     email = models.CharField(max_length=50,blank=True,null=True)
     password = models.CharField(max_length=255,blank=False,null=False)
+    
 
 
     def lst_data(self):

@@ -1,0 +1,173 @@
+{% load static %}
+{% load humanize %}
+
+<div class="max-w-sm rounded overflow-hidden shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out pb-6">
+    <img class="w-full h-48 object-cover object-center" 
+    src="{% if product.image_url %}{{ product.image_url }}{% else %} https://via.placeholder.com/300x200 {% endif %}" 
+    alt="{{ product.model }}">
+
+    
+    <div class="mt-[20px] px-6 py-4 flex justify-between items-center">
+        <div>
+            <div class="font-bold text-xl mb-2 text-gray-800">{{ product.brand }} {{ product.model }}</div>
+        </div>
+        
+        <div>
+            {% if user.is_authenticated %}
+                <button id="favorite-button-{{ product.id }}" 
+                        class="favorite-button relative w-9 h-8 bg-white rounded-full border border-[#001A72] flex items-center justify-center focus:outline-none {% if product.is_favorite %}active{% endif %}" 
+                        onclick="toggleFavorite('{{ product.id }}')">
+                    <img class="mt-2 heart-icon w-6 h-6" src="{% static 'image/like/shape.png' %}" alt="Favorite">
+                </button>
+            {% else %}
+                <button class="favorite-button relative w-9 h-8 bg-white rounded-full border border-[#001A72] flex items-center justify-center focus:outline-none" 
+                        onclick="alert('Silakan login terlebih dahulu untuk menambahkan ke favorit.')">
+                    <img class="mt-2 heart-icon w-6 h-6" src="{% static 'image/like/shape.png' %}" alt="Favorite">
+                </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <p class="text-base mb-4 px-6">Storage : {{ product.storage|truncatewords:20 }} dan Memory : {{ product.ram|truncatewords:20 }}</p>
+
+    <div class="px-6">
+        <div class="rating flex items-center mb-4" id="rating-{{ product.id }}">
+            {% if user.is_authenticated %}
+                {% for i in "12345" %}
+                    <span class="star {% if product.rating >= forloop.counter %}selected{% endif %}" 
+                        data-value="{{ forloop.counter }}" 
+                        onmouseover="highlightStars('{{ product.id }}', {{ forloop.counter }})" 
+                        onmouseout="resetStars('{{ product.id }}')" 
+                        onclick="rateProduct('{{ product.id }}', {{ forloop.counter }})">&#9733;</span>
+                {% endfor %}
+            {% else %}
+                {% for i in "12345" %}
+                    <span class="star {% if product.rating >= forloop.counter %}selected{% endif %}">&#9733;</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="flex items-center justify-between">
+            <span class="text-xl font-bold text-indigo-600">Rp.{{ product.price_inr|intcomma }}</span>
+            <a href="{% url 'DetailProduct:detail_page' %}" class="text-indigo-600 hover:text-indigo-800 font-bold text-sm transition duration-300 ease-in-out">
+                See Details
+            </a>
+        </div>
+    </div>
+
+    <style>
+        .rating {
+            display: flex;
+        }
+    
+        .star {
+            font-size: 24px;
+            color: #001A72;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0 2px;
+        }
+    
+        .star.selected {
+            color: #FFD700;
+        }
+    
+        .star:hover,
+        .star:hover ~ .star {
+            color: #FFD700;
+        }
+
+        .favorite-button {
+            background-color: #ffffff;
+            border: 1px solid #001A72;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-button.active {
+            background-color: #F48789;
+        }
+
+        .pb-6 {
+            padding-bottom: 1.5rem;
+        }
+    </style>
+
+    <script>
+        let clickedRating = {{ product.rating }};  
+
+        function highlightStars(productId, value) {
+            const rating = document.getElementById(`rating-${productId}`);
+            const stars = rating.getElementsByClassName('star');
+            
+            for (let i = 0; i < stars.length; i++) {
+                if (i < value) {
+                    stars[i].classList.add('selected');
+                } else {
+                    stars[i].classList.remove('selected');
+                }
+            }
+        }
+
+        function resetStars(productId) {
+            const rating = document.getElementById(`rating-${productId}`);
+            const stars = rating.getElementsByClassName('star');
+            
+            for (let i = 0; i < stars.length; i++) {
+                if (i < clickedRating) {
+                    stars[i].classList.add('selected');
+                } else {
+                    stars[i].classList.remove('selected');
+                }
+            }
+        }
+
+        function rateProduct(productId, ratingValue) {
+            if (ratingValue === clickedRating) {
+                ratingValue = 0;  
+            }
+
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            formData.append('rating', ratingValue);
+
+            fetch('/rate_product/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    clickedRating = ratingValue;  
+                    resetStars(productId);  
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function toggleFavorite(productId) {
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            
+            fetch('/toggle_favorite/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const button = document.getElementById(`favorite-button-${productId}`);
+                if (data.is_favorite) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</div>

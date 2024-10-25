@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.urls import reverse
-# from .forms import FirstDataForm, RegisterForm
 from django.contrib.auth.models import User
 from Authenticate.models import UserData
 import datetime
@@ -22,16 +21,13 @@ def home_section(request):
     }
     return render(request, 'home.html', context)
 
-@login_required
+@login_required(login_url='/authenticate/login')
 def list_products(request):
     phones = Phone.objects.all()
-    
-    # Get unique values for filtering options
     brands = Phone.objects.values_list('brand', flat=True).distinct()
     storages = Phone.objects.values_list('storage', flat=True).distinct()
     rams = Phone.objects.values_list('ram', flat=True).distinct()
     
-    # Apply filters if specified
     brand_filter = request.GET.get('brand')
     storage_filter = request.GET.get('storage')
     ram_filter = request.GET.get('ram')
@@ -44,7 +40,6 @@ def list_products(request):
     if ram_filter:
         phones = phones.filter(ram=ram_filter)
     
-    # Sorting logic
     if price_sort == 'high_to_low':
         phones = phones.order_by('-price_inr')
     elif price_sort == 'low_to_high':
@@ -60,7 +55,7 @@ def list_products(request):
 
 
 @csrf_exempt
-@login_required
+@login_required(login_url='/authenticate/login')
 def toggle_favorite(request):
     if request.method == 'POST':
         product_id = request.POST.get('product_id')
@@ -70,7 +65,7 @@ def toggle_favorite(request):
         return JsonResponse({'is_favorite': product.is_favorite})
 
 @csrf_exempt
-@login_required
+@login_required(login_url='/authenticate/login')
 def rate_product(request):
     if request.method == 'POST':
         product_id = request.POST.get('product_id')

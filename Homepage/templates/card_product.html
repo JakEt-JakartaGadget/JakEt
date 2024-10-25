@@ -2,13 +2,12 @@
 {% load humanize %}
 
 <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out pb-6">
-    <img class="w-full h-max object-cover object-center" 
-    src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-card-40-iphone16prohero-202409?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1725567335931" 
+    <img class="w-full h-48 object-cover object-center" 
+    src="{% if product.image_url %}{{ product.image_url }}{% else %} https://via.placeholder.com/300x200 {% endif %}" 
     alt="{{ product.model }}">
 
-
     
-    <div class="px-6 py-4 flex justify-between items-center">
+    <div class="mt-[20px] px-6 py-4 flex justify-between items-center">
         <div>
             <div class="font-bold text-xl mb-2 text-gray-800">{{ product.brand }} {{ product.model }}</div>
         </div>
@@ -29,7 +28,7 @@
         </div>
     </div>
 
-    <p class="text-gray-700 text-base mb-4 px-6">{{ product.description|truncatewords:20 }}</p>
+    <p class="text-base mb-4 px-6">Storage : {{ product.storage|truncatewords:20 }} dan Memory : {{ product.ram|truncatewords:20 }}</p>
 
     <div class="px-6">
         <div class="rating flex items-center mb-4" id="rating-{{ product.id }}">

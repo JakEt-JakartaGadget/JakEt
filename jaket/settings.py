@@ -145,3 +145,4 @@ else:
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://anthony-edbert-jaket.pbp.cs.ui.ac.id/", "https://anthony-edbert-jaket.pbp.cs.ui.ac.id/"]
+LOGIN_URL = '/authenticate/login/'

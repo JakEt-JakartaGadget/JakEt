@@ -101,6 +101,7 @@ class Command(BaseCommand):
                 try:
                     model_instance.save()
                     print(f"Saved: {model}")
+                    print(f"Prepared model instance with image_url: {model_instance.image_url}")
                 except ValidationError as e:
                     print(f"ValidationError saving {model}: {e}")
                 except Exception as e:

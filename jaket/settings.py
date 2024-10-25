@@ -29,6 +29,8 @@ DEBUG = not PRODUCTION
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "anthony-edbert-jaket.pbp.cs.ui.ac.id"]
 
+LOGIN_URL = '/authenticate/login/'
+
 
 # Application definition
 

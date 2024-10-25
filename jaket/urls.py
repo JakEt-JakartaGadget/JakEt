@@ -22,4 +22,5 @@ urlpatterns = [
     path('authenticate/', include('Authenticate.urls')),
     path('profile/', include('Profile.urls')),
     path('', include("Homepage.urls")),
+    path('artikel/', include('Article.urls')),
 ]

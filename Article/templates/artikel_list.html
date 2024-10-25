@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Daftar Artikel</title>
+{% endblock meta %}
+
+{% block content %}
+{% include 'components/navbar.html' %}
+
+<div class="flex flex-col min-h-screen bg-gray-100">
+  <div class="container mx-auto px-4 py-8 mt-16 max-w-6xl">
+    <h1 class="text-4xl font-bold text-center mb-8 text-black">Article List</h1>
+
+    <div class="grid grid-cols-1 gap-6">
+      {% for artikel in artikels %}
+      <div class="bg-white shadow-md rounded-lg p-6 flex">
+        <!-- Display Image -->
+        <img class="w-24 h-24 object-cover rounded-lg mr-6" src="{{ artikel.image.url }}" alt="{{ artikel.title }}">
+        
+        <!-- Article Info -->
+        <div>
+          <!-- Judul artikel yang bisa diklik -->
+          <a href="{% url 'artikel_detail' artikel.id %}" class="text-xl font-semibold text-black hover:underline">{{ artikel.title }}</a>
+          <p class="text-gray-600 text-sm mt-2">{{ artikel.content|truncatewords:20 }}</p>
+          <span class="text-gray-400 text-xs">{{ artikel.published_date|date:"d M Y" }}</span>
+          <p class="text-sm text-blue-500 mt-2">{{ artikel.source }}</p>
+
+          <!-- Read More Button -->
+          <a href="{% url 'artikel_detail' artikel.id %}" class="text-blue-500 hover:underline mt-2 inline-block">Read More</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

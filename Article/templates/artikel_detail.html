@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>{{ article.title }}</title>
+{% endblock meta %}
+
+{% block content %}
+{% include 'components/navbar.html' %}
+
+<div class="flex flex-col min-h-screen bg-gray-100">
+  <div class="container mx-auto px-4 py-8 mt-16 max-w-4xl">
+    <h1 class="text-4xl font-bold text-center mb-8 text-black">{{ article.title }}</h1>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <!-- Article Image -->
+      <div class="flex justify-center mb-8">
+        <img class="w-full h-auto rounded-lg" src="{{ article.image.url }}" alt="{{ article.title }}">
+      </div>
+
+      <!-- Article Content -->
+      <p class="text-gray-800 text-lg mb-6">{{ article.content }}</p>
+
+      <!-- Article Metadata -->
+      <div class="flex justify-between items-center text-sm text-gray-500">
+        <span>Published on {{ article.published_date|date:"d M Y" }}</span>
+        <span>Source: {{ article.source }}</span>
+      </div>
+
+      <!-- Back Button -->
+      <div class="flex justify-end mt-6">
+        <a href="{% url 'artikel_list' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg">Back to Articles</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

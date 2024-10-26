@@ -113,11 +113,17 @@ def search_results(request):
     storages = Phone.objects.values_list('storage', flat=True).distinct()
     rams = Phone.objects.values_list('ram', flat=True).distinct()
 
+    user_favorites = []
+    if request.user.is_authenticated:
+        user_favorites = Favorite.objects.filter(user=request.user).values_list('phone_id', flat=True)
+
     context = {
         'phones': phones,
         'brands': brands,
         'storages': storages,
         'rams': rams,
+        'user_favorites': user_favorites,
+        'query': query,  
     }
 
     return render(request, 'search_results.html', context)

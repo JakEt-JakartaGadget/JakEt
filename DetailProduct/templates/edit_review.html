@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'components/navbar.html' %}
+
+<div class="pb-8 min-h-screen flex flex-col w-full" style="padding-top: 80px;">
+    <section class="mb-12 max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Edit Review</h1>
+
+        {% if messages %}
+        <div class="messages mb-6">
+            {% for message in messages %}
+            <div class="p-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+            <div class="flex items-center">
+                <label class="block text-lg font-medium text-gray-700 mr-2">Rating:</label>
+                <div id="star-rating" class="flex space-x-1 text-gray-300">
+                    {% for i in "12345" %}
+                        <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}" class="hidden" {% if review.rating == forloop.counter %}checked{% endif %}>
+                        <label for="star{{ i }}" class="cursor-pointer star" data-value="{{ i }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 fill-current transition-colors duration-200 hover:text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 .587l3.668 7.451L24 9.75l-6 5.847 1.421 8.302L12 18.899 4.579 23.899 6 15.597 0 9.75l8.332-1.712z"/>
+                            </svg>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {{ form.content }}
+
+            <div class="flex space-x-4">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg">
+                    Simpan Perubahan
+                </button>
+                <a href="{% url 'DetailProduct:review_page' product_id=product_id %}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">
+                    Batal
+                </a>
+            </div>
+        </form>
+    </section>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const stars = document.querySelectorAll(".star");
+        let selectedRating = {{ review.rating }};  
+
+        function updateStars(rating) {
+            stars.forEach((star, index) => {
+                const svg = star.querySelector("svg");
+                if (index < rating) {
+                    svg.classList.add("text-yellow-400");
+                    svg.classList.remove("text-gray-300");
+                } else {
+                    svg.classList.add("text-gray-300");
+                    svg.classList.remove("text-yellow-400");
+                }
+            });
+        }
+
+        stars.forEach(star => {
+            const starValue = parseInt(star.getAttribute("data-value"));
+            star.addEventListener("click", function() {
+                selectedRating = starValue;
+                document.getElementById(`star${selectedRating}`).checked = true;
+                updateStars(selectedRating);
+            });
+            star.addEventListener("mouseover", () => updateStars(starValue));
+            star.addEventListener("mouseleave", () => updateStars(selectedRating));
+        });
+        updateStars(selectedRating);
+    });
+</script>
+{% endblock %}

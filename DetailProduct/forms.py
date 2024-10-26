@@ -7,17 +7,10 @@ class ReviewForm(ModelForm):
         model = Review
         fields = ['rating', 'content']
         widgets = {
+            'rating': forms.Select(attrs={
+                'class': 'w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
+            }),
             'content': forms.Textarea(attrs={'placeholder': 'Tulis review Anda di sini...'}),
         }
 
-    rating_choices = [
-        (1, '★ 1'),
-        (2, '★ 2'),
-        (3, '★ 3'),
-        (4, '★ 4'),
-        (5, '★ 5'),
-    ]
-    rating = forms.ChoiceField(
-        choices=rating_choices,
-        widget=forms.RadioSelect(attrs={'class': 'star-rating'})
-    )
+        

@@ -1,6 +1,7 @@
+from datetime import timezone
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -11,6 +12,8 @@ import json
 from django.db.models import Avg
 from Wishlist.models import Favorite
 from collections import defaultdict
+from django.contrib import messages
+from django.utils import timezone
 
 @login_required(login_url='/authenticate/login')
 def product_detail(request, product_id):
@@ -51,72 +54,71 @@ def toggle_favorite(request, phone_id):
         is_favorite = True
     return JsonResponse({'is_favorite': is_favorite})
 
-@csrf_exempt
-@login_required(login_url='/authenticate/login')
-def add_review_ajax(request, product_id):
-    product = get_object_or_404(Phone, id=product_id)
-
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.user = request.user
-            review.product = product
-            review.save()
-            
-            response_data = {
-                'reviewer': review.user.username,
-                'content': review.content, 
-                'rating': review.rating
-            }
-            return JsonResponse(response_data)
-
-    return JsonResponse({'error': 'Invalid form'}, status=400)
-
-@csrf_exempt
-@login_required(login_url='/authenticate/login')
-def delete_review(request, id):
-    review = get_object_or_404(Review, pk=id)
-    product_id = review.product.id
-    review.delete()
-    return HttpResponseRedirect(reverse('DetailProduct:review_page', kwargs={'product_id': product_id}))
-
-@csrf_exempt
-@login_required(login_url='/authenticate/login')
-def edit_review_ajax(request):
-    if request.method == 'POST':
-        review_id = request.POST.get('review_id')
-        review = get_object_or_404(Review, id=review_id, user=request.user)
-        review.rating = request.POST.get('rating')
-        review.content = request.POST.get('content')
-        review.save()
-        return JsonResponse({
-            'id': review.id,
-            'rating': review.rating,
-            'content': review.content,
-            'username': review.user.username, 
-        })
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
-@csrf_exempt
 @login_required(login_url='/authenticate/login')
 def review_page(request, product_id):
     product = get_object_or_404(Phone, id=product_id)
     user_reviews = Review.objects.filter(product=product)
     form = ReviewForm(request.POST or None)
     review_counts = defaultdict(int)
+    user_has_reviewed = Review.objects.filter(product=product, user=request.user).exists()
+    
     for review in user_reviews:
         review_counts[review.rating] += 1
-    if request.method == 'POST' and form.is_valid():
-        new_review = form.save(commit=False)
-        new_review.user = request.user
-        new_review.product = product
-        new_review.save()
-        return HttpResponseRedirect(reverse('DetailProduct:review_page', args=[product_id]))
+
+    if request.method == 'POST':
+        if form.is_valid():
+            if user_has_reviewed:
+                messages.error(request, "Anda sudah memberikan review untuk produk ini")
+                return redirect('DetailProduct:review_page', product_id=product_id)
+            
+            review = form.save(commit=False)
+            review.user = request.user
+            review.product = product
+            review.save()
+            messages.success(request, "Review berhasil ditambahkan!")
+            return redirect('DetailProduct:review_page', product_id=product_id)
+
     context = {
         'product': product,
         'reviews': user_reviews,
         'form': form,
         'review_counts': review_counts,
+        'user_has_reviewed': user_has_reviewed
     }
     return render(request, 'review_page.html', context)
+
+@login_required(login_url='/authenticate/login')
+def edit_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    product_id = str(review.product.id)
+    if review.user != request.user:
+        return redirect('DetailProduct:review_page', product_id=product_id)
+        
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.last_edited = timezone.now()
+            review.save()
+            messages.success(request, "Review berhasil diperbarui!")
+            return redirect('DetailProduct:review_page', product_id=product_id)
+    else:
+        form = ReviewForm(instance=review)
+    
+    context = {
+        'form': form,
+        'review': review,
+        'product_id': product_id
+    }
+    return render(request, 'edit_review.html', context)
+
+@login_required(login_url='/authenticate/login')
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    product_id = review.product.id 
+    if review.user != request.user:
+        return redirect('DetailProduct:review_page', product_id=product_id)
+        
+    review.delete()
+    messages.success(request, "Review berhasil dihapus!")
+    return redirect('DetailProduct:review_page', product_id=product_id)

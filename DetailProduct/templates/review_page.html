@@ -6,7 +6,7 @@
 {% include 'components/navbar.html' %}
 
 <div class="pb-8 min-h-screen flex flex-col  w-full" style="padding-top: 80px;">
-  <section class="mb-12">
+    <section class="mb-12">
     <div class="p-6 bg-white rounded-lg shadow-lg max-w-4xl mx-auto">
         <h3 class="text-xl text-gray-800 font-bold mt-6">Tambahkan Review</h3>
         <form id="review-form" method="POST">
@@ -54,7 +54,7 @@
     </div>
   </section>
 
-  <!-- Modal for Editing Review -->
+
   <div id="editReviewModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
       <div class="bg-white p-6 rounded-lg max-w-md w-full">
           <h2 class="text-lg font-bold mb-4">Edit Review</h2>
@@ -120,13 +120,12 @@
           });
       });
 
-      // Open edit modal
       $(document).on('click', '.edit-review', function(event) {
           event.preventDefault();
           const reviewItem = $(this).closest('li');
           const reviewId = reviewItem.data('review-id');
           const reviewComment = reviewItem.find('.review-comment').text();
-          const reviewRating = reviewItem.find('.font-bold').text().split('/')[0]; // Extract rating
+          const reviewRating = reviewItem.find('.font-bold').text().split('/')[0];
 
           $('#edit-review-id').val(reviewId);
           $('#edit-review-comment').val(reviewComment);
@@ -134,12 +133,10 @@
           $('#editReviewModal').removeClass('hidden');
       });
 
-      // Close modal
       $('#close-modal').on('click', function() {
           $('#editReviewModal').addClass('hidden');
       });
 
-      // Submit edit review form
       $('#edit-review-form').on('submit', function(event){
         event.preventDefault();
         $.ajax({

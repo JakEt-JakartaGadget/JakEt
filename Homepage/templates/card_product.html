@@ -1,6 +1,6 @@
 {% load static %}
 {% load humanize %}
-
+{% load custom_filters %}
 <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out pb-6">
     <img class="w-full h-48 object-cover object-center" 
     src="{% if product.image_url %}{{ product.image_url }}{% else %} https://via.placeholder.com/300x200 {% endif %}" 
@@ -54,27 +54,22 @@
 
     <div class="px-6">
         <span class="text-gray-500 font-bold">{{ product.avg_rating|floatformat:2 }}/5</span>
-        <div class="rating flex items-center mb-4">
-            {% with full_stars=product.avg_rating|floatformat:"0" %}
-                {% for i in "12345" %}
-                    {% if forloop.counter <= full_stars %}
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 .587l3.668 7.431 8.2 1.194-5.934 5.782L19.336 24 12 19.856 4.664 24l1.402-8.006L.132 9.212l8.2-1.194L12 .587z"/>
-                        </svg>
-                    {% elif forloop.counter == full_stars|add:"1" and product.avg_rating|floatformat:"1"|slice:"-1" == "5" %}
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 .587l3.668 7.431 8.2 1.194-5.934 5.782L19.336 24 12 19.856V.587z"/>
-                        </svg>
-                    {% else %}
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 .587l3.668 7.431 8.2 1.194-5.934 5.782L19.336 24 12 19.856 4.664 24l1.402-8.006L.132 9.212l8.2-1.194L12 .587z"/>
-                        </svg>
-                    {% endif %}
-                {% endfor %}
-            {% endwith %}
+        <div class="rating flex items-center space-x-1 mb-4">
+            {% for i in "12345" %}
+                {% if forloop.counter <= product.avg_rating %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 .587l3.668 7.431 8.2 1.194-5.934 5.782L19.336 24 12 19.856 4.664 24l1.402-8.006L.132 9.212l8.2-1.194L12 .587z"/>
+                </svg>
+                {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 .587l3.668 7.431 8.2 1.194-5.934 5.782L19.336 24 12 19.856 4.664 24l1.402-8.006L.132 9.212l8.2-1.194L12 .587z"/>
+                </svg>
+                {% endif %}
+            {% endfor %}
             
-            <span class="ml-2 text-gray-500">({{ product.total_respondents|intcomma }}+)</span>
+            <span class="ml-2 text-gray-500">({{ product.total_respondents }}+)</span>
         </div>
+        
         <div class="flex items-center justify-between">
             <span class="text-xl font-bold text-indigo-600">Rp.{{ product.price_inr|intcomma }}</span>
             <a href="{% url 'DetailProduct:detail_page' product.id %}" class="text-indigo-600 hover:text-indigo-800 font-bold text-sm transition duration-300 ease-in-out">

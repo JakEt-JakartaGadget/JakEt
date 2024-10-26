@@ -92,7 +92,7 @@
 
     <script>
         // Function to add a new message to the chat area
-        function addMessageToChatArea(messageData) {
+        function addReplyToReplyArea(messageData) {
             const chatArea = document.getElementById('reply-area');
             const newBubble = document.createElement('div');
             newBubble.className = 'bg-gray-800 p-3 rounded-xl shadow-md max-w-[85%] self-start';
@@ -117,7 +117,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
                                 </svg>
-                                <span>${messageData.time}</span>
+                                <span>${messageData.replied}</span>
                             </div>
                         </div>
                         <div class="text-white mt-2 break-words">
@@ -160,7 +160,7 @@
                 const data = await response.json();
                 
                 if (data.status === 'success') {
-                    addMessageToChatArea(data.message);
+                    addReplyToReplyArea(data.message);
                 } else {
                     throw new Error(data.message);
                 }

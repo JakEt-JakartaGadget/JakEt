@@ -47,7 +47,7 @@ def delete_discussion(request, discussion_id):
 @login_required
 def discussion_view(request, id):
     discussion = Discussion.objects.get(id=id)
-    replies =  Reply.objects.filter(discussion=discussion).order_by('-replied')
+    replies = Reply.objects.filter(discussion=discussion).order_by('replied')
     context = {
         'discussion': discussion,
         'replies': replies,

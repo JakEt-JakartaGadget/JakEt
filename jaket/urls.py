@@ -25,5 +25,7 @@ urlpatterns = [
     path('authenticate/', include('Authenticate.urls')),
     path('servicecenter/', include('ServiceCenter.urls')),
     path('tiket/', include('Tiket.urls')),
+    path('dashboard/', include("Dashboard.urls")),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'components/navbar.html' %}
+<div class="container mx-auto px-4 py-8">
+  <h2 class="text-3xl font-bold mb-12 text-center">Dashboard Appointments</h2>
+  <ul class="space-y-8">
+      {% for user in users %}
+      <li class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-bold mb-4">{{ user.user }}</h3>
+          <ul class="space-y-4">
+              {% for appointment in user.appointments %}
+              <li class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
+                  <span>{{ appointment.service_center.name }} - {{ appointment.service_date }} - {{ appointment.service_time }}</span>
+                  <a href="{% url 'Dashboard:cancel_appointment' appointment.id %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-full transition duration-300">Cancel</a>
+              </li>
+              {% endfor %}
+          </ul>
+      </li>
+      {% endfor %}
+  </ul>
+</div>
+{% endblock %}

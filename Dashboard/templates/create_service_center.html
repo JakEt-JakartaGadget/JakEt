@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>Add Service Center</title>
+{% endblock meta %}
+{% block content %}
+{% include 'components/navbar.html' %}
+<div class="manrope flex flex-col min-h-screen bg-slate-200">
+  <div class="container mx-auto px-4 py-8 mt-10 max-w-xl">
+    <div class="bg-white shadow-md rounded-lg p-6 form-style">
+      <h1 class="text-3xl font-bold text-center mb-8 mt-3 text-black">Add Service Center</h1>
+      <form method="POST" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        <div class="flex flex-col">
+          <label for="{{ form.image.id_for_label }}" class="mb-2 font-semibold text-black">
+            {{ form.image.label }}
+          </label>
+          <input type="file" name="{{ form.image.html_name }}" class="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-600">
+          {% for error in form.image.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div class="flex flex-col">
+          <label for="{{ form.name.id_for_label }}" class="mb-2 font-semibold text-black">
+            {{ form.name.label }}
+          </label>
+          <input type="text" name="{{ form.name.html_name }}" placeholder="Enter service center name" class="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-600">
+          {% for error in form.name.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div class="flex flex-col">
+          <label for="{{ form.address.id_for_label }}" class="mb-2 font-semibold text-black">
+            {{ form.address.label }}
+          </label>
+          <input type="text" name="{{ form.address.html_name }}" placeholder="Enter service center location" class="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-600">
+          {% for error in form.address.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div class="flex flex-col">
+          <label for="{{ form.contact.id_for_label }}" class="mb-2 font-semibold text-black">
+            {{ form.contact.label }}
+          </label>
+          <input type="text" name="{{ form.contact.html_name }}" placeholder="Enter service center contact" class="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-600">
+          {% for error in form.contact.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div class="flex flex-col">
+          <label for="{{ form.rating.id_for_label }}" class="mb-2 font-semibold text-black">
+            {{ form.rating.label }}
+          </label>
+          <input type="number" step="0.1" min="0" max="5" name="{{ form.rating.html_name }}" placeholder="1 - 5" class="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-600">
+          {% for error in form.rating.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div class="flex flex-col">
+          <label for="{{ form.total_reviews.id_for_label }}" class="mb-2 font-semibold text-black">
+            {{ form.total_reviews.label }}
+          </label>
+          <input type="number" min="0" name="{{ form.total_reviews.html_name }}" placeholder="Enter total reviews" class="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-600">
+          {% for error in form.total_reviews.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div class="flex justify-center mt-6">
+          <button type="submit" class="text-white font-semibold px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-950 hover:opacity-80 transition duration-300 ease-in-out w-full">
+            Add Service Center
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

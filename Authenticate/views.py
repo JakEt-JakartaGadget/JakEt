@@ -38,7 +38,12 @@ def log_in(request):
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            login(request, user)          
+            login(request, user)   
+            if user.is_staff:
+                response = HttpResponseRedirect(reverse("Dashboard:main_dashboard"))
+                response.set_cookie('last_login', str(datetime.datetime.now()))  
+                return response
+
             response = HttpResponseRedirect(reverse("Homepage:home_section")) 
             response.set_cookie('last_login', str(datetime.datetime.now()))  
             return response

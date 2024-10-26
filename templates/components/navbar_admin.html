@@ -1,0 +1,41 @@
+{% load static %}
+<nav id="navbar" class="fixed top-0 left-0 z-40 w-full transition-all duration-300 ease-in-out bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6]">
+    <div class="flex justify-between max-w-7xl mx-auto px-4 sm:px-6 h-16 w-full">
+        <div class="flex justify-start">
+            <a href="{% url 'Homepage:home_section' %}" class="flex items-center mr-[25px]">
+                <img src="{% static 'image/navbar/JaKet.png' %}" alt="JaKet" class="w-max h-max"> 
+            </a>
+        </div>
+        <div class="flex items-center">
+            {% if user.is_authenticated %}
+                <div class="relative group">
+                    <button id="user-menu-button" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110 focus:outline-none">
+                        <img src="{% static 'image/navbar/User.png' %}" alt="User" class="w-6 h-6">
+                    </button>
+                    <div id="user-menu-dropdown" class="absolute right-0 w-48 bg-white rounded-md shadow-lg py-2 hidden group-hover:block transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                        <div class="px-4 py-2 text-gray-800 border-b border-gray-200">
+                            Hai, {{ user.username }}
+                        </div>
+                        <form method="post" action="{% url 'Authenticate:logout' %}" class="px-4 py-2">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full text-left text-gray-800 hover:bg-gray-100 transition duration-200">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'Authenticate:login' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<style>
+    nav {
+        background-color: rgba(0, 0, 0, 0.3); 
+        backdrop-filter: blur(10px);
+        transition: background-color 0.3s ease-in-out;
+    }
+    .bg-opacity-90 { 
+        background-color: rgba(0, 0, 0, 0.9); 
+    }
+</style>

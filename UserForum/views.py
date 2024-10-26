@@ -58,35 +58,31 @@ def discussion_view(request, id):
 @login_required
 @csrf_exempt
 def send_reply(request, id):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            message = data.get('message', '').strip()
-            
-            if message:
-                discussion = Discussion.objects.get(id=id)
-                reply = Reply.objects.create(
-                    discussion=discussion,
-                    sender=request.user,
-                    message=message,
-                )
-                
-                return JsonResponse({
-                    'status': 'success',
-                    'message': {
-                        'id': str(reply.id),
-                        'message': reply.message,
-                        'time': reply.replied.strftime("%H:%M"),
-                        'sender': {
-                            'username': reply.sender.username,
-                            'profile_picture': reply.sender.profile_picture.url if hasattr(reply.sender, 'profile_picture') and reply.sender.profile_picture else '',
-                        }
-                    }
-                })
-            
-        except Discussion.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': 'Discussion not found'}, status=404)
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-    
-    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+    try:
+        discussion = Discussion.objects.get(id=id)
+    except Discussion.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Discussion not found'}, status=404)
+
+    # Parse the JSON data from the request
+    data = json.loads(request.body)
+    message = data.get('message', '').strip()
+
+    # Check if the message is empty
+    if not message:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+    # If the discussion exists and the message is valid, save the reply
+    reply = Reply.objects.create(discussion=discussion, sender=request.user, message=message)
+    return JsonResponse({
+        'status': 'success',
+        'message': {
+            'message': reply.message,
+            'sender': {'username': reply.sender.username}
+        }
+    })
+
+    new_reply = Reply.objects.latest('created_at')
+    return JsonResponse({'message': {
+        'message': new_reply.message,
+        'sender': {'username': new_reply.sender.username, 'profile_picture': new_reply.sender.profile_picture.url}
+    }})

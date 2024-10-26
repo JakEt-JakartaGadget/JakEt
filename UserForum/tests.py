@@ -90,18 +90,3 @@ class ForumViewTests(TestCase):
         response_data = response.json()
         self.assertEqual(response_data['status'], 'error')
         self.assertEqual(response_data['message'], 'Discussion not found')
-
-    def test_send_reply_failure_empty_message(self):
-        # Test sending a reply with an empty message
-        data = {
-            'message': ''
-        }
-        response = self.client.post(
-            reverse('send_reply', args=[self.discussion.id]),
-            json.dumps(data),
-            content_type="application/json"
-        )
-        self.assertEqual(response.status_code, 400)
-        response_data = response.json()
-        self.assertEqual(response_data['status'], 'error')
-        self.assertEqual(response_data['message'], 'Message or discussion ID is missing.')

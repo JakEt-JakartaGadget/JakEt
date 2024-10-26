@@ -5,10 +5,12 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Fungsi untuk mengonversi harga dari INR ke IDR
 def convert_inr_to_idr(price_in_inr):
+    if not price_in_inr:  # Cek jika price_in_inr None atau nilai kosong
+        return "Price not available"
     # Hilangkan simbol '₹' dan ',' dalam string harga INR, lalu konversi ke integer
     try:
         clean_inr_price = price_in_inr.replace('₹', '').replace(',', '')
-        price_in_idr = int(clean_inr_price) * 185.56  # Konversi ke IDR
+        price_in_idr = round(int(clean_inr_price) * 185.56)  # Konversi ke IDR
         return f"Rp {int(price_in_idr):,}"  # Format ke dalam format Rupiah dengan tanda koma ribuan
     except ValueError:
         return "Price not available"

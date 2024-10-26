@@ -1,34 +1,32 @@
 {% load static %}
 <nav id="navbar" class="fixed top-0 left-0 z-40 w-full transition-all duration-300 ease-in-out bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6]">
     <div class="flex justify-start max-w-7xl mx-auto px-4 sm:px-6 h-16 w-full">
+        <!-- Logo and Navigation Links -->
         <div class="flex justify-start">
             <a href="{% url 'Homepage:home_section' %}" class="flex items-center mr-[25px]">
                 <img src="{% static 'image/navbar/JaKet.png' %}" alt="JaKet" class="w-max h-max"> 
             </a>
         </div>
-
         <div class="hidden md:flex items-center space-x-8">
-            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
-                Home
-            </a>
-            <a href="{% url 'Homepage:list_product' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
-                Product
-            </a>
-            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
-                Article
-            </a>
-            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
-                Support
-            </a>
+            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Home</a>
+            <a href="{% url 'Homepage:list_product' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Product</a>
+            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Article</a>
+            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Support</a>
         </div>
 
+        <!-- Search Form and User Controls -->
         <div class="flex justify-end items-center space-x-6 w-full">
-            <div class="ml-50 relative text-gray-600 focus-within:text-gray-400">
-                <img src="{% static 'image/navbar/search.png' %}" alt="Search Icon" class="absolute left-2 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500">
-                <input type="search" name="search" placeholder="Search"
-                    class="pl-10 py-2 w-64 text-sm text-white bg-transparent border-b border-gray-300 focus:outline-none focus:border-white">
-            </div>
-
+            <form id="searchForm" class="relative" action="{% url 'Homepage:search_results' %}" method="get">
+                <div class="ml-50 relative text-gray-600 focus-within:text-gray-400">
+                    <img src="{% static 'image/navbar/search.png' %}" alt="Search Icon" class="absolute left-2 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500">
+                    <input id="searchInput" type="search" name="q" placeholder="Search by brand or model"
+                        class="pl-10 py-2 w-64 text-sm text-white bg-transparent border-b border-gray-300 focus:outline-none focus:border-white">
+                </div>
+                <dl id="suggestions" class="absolute max-w-md text-gray-900 divide-y divide-gray-200 bg-gray-800 text-white rounded-md mt-1 shadow-lg w-64 hidden">
+                    <!-- Suggestions will be dynamically added here -->
+                </dl>
+            </form>
+            
             {% if user.is_authenticated %}
                 <div class="relative group">
                     <button id="user-menu-button" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110 focus:outline-none">
@@ -45,15 +43,11 @@
                         </form>
                     </div>
                 </div>
-
                 <a href="{% url 'Wishlist:favorite_list' %}" class="mb-2 text-white hover:text-gray-300 transition duration-300 transform hover:scale-110">
                     <img src="{% static 'image/navbar/heart.png' %}" alt="Wishlist" class="w-6 h-6">
                 </a>
             {% else %}
-
-                <a href="{% url 'Authenticate:login' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
-                    Login
-                </a>
+                <a href="{% url 'Authenticate:login' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Login</a>
             {% endif %}
         </div>
     </div>
@@ -65,69 +59,68 @@
         backdrop-filter: blur(10px);
         transition: background-color 0.3s ease-in-out;
     }
-
-    .bg-opacity-90 {
-        background-color: rgba(0, 0, 0, 0.9);
-    }
-
-    @media (min-width: 768px) {
-        .space-x-8 > a {
-            padding-left: 16px;
-            padding-right: 16px;
-        }
-    }
-
-    #user-menu-dropdown {
-        min-width: 150px;
-    }
-
-    #user-menu-dropdown a,
-    #user-menu-dropdown button {
-        color: #1a202c; 
-    }
-
-    #user-menu-dropdown a:hover,
-    #user-menu-dropdown button:hover {
-        background-color: #f7fafc;
-    }
-
-    #user-menu-dropdown div {
-        font-size: 0.875rem; 
-    }
-
-    #user-menu-dropdown a,
-    #user-menu-dropdown button {
-        font-size: 0.875rem; 
-    }
+    .bg-opacity-90 { background-color: rgba(0, 0, 0, 0.9); }
+    #suggestions div { padding: 0.5rem; }
+    #suggestions div:hover { background-color: #374151; }
+    #suggestions dt { color: #9CA3AF; }
 </style>
 
 <script>
-    const navBar = document.querySelector('nav');
-    const userMenuButton = document.getElementById('user-menu-button');
-    const userMenuDropdown = document.getElementById('user-menu-dropdown');
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsBox = document.getElementById('suggestions');
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navBar.classList.add('bg-opacity-90');
+    searchInput.addEventListener('input', function() {
+        const query = searchInput.value.trim();
+        if (query.length > 1) {  
+            fetch(`/search-suggestions/?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestionsBox.innerHTML = ''; 
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            const suggestionItem = document.createElement('div');
+                            suggestionItem.classList.add('flex', 'flex-col', 'p-3', 'cursor-pointer', 'hover:bg-gray-700');
+
+                            const dt = document.createElement('dt');
+                            dt.classList.add('text-gray-500', 'md:text-lg', 'dark:text-gray-400');
+                            dt.textContent = item.brand;
+                            
+                            const dd = document.createElement('dd');
+                            dd.classList.add('text-lg', 'font-semibold');
+                            dd.textContent = item.model;
+                            
+                            suggestionItem.appendChild(dt);
+                            suggestionItem.appendChild(dd);
+
+                            suggestionItem.addEventListener('click', () => {
+                                searchInput.value = `${item.brand} ${item.model}`;
+                                suggestionsBox.classList.add('hidden'); 
+                                searchForm.submit();  
+                            });
+
+                            suggestionsBox.appendChild(suggestionItem);
+                        });
+                        suggestionsBox.classList.remove('hidden'); 
+                    } else {
+                        suggestionsBox.classList.add('hidden'); 
+                    }
+                })
+                .catch(error => console.error('Error fetching suggestions:', error));
         } else {
-            navBar.classList.remove('bg-opacity-90');
+            suggestionsBox.classList.add('hidden');  
         }
     });
 
-    if (userMenuButton) {
-        userMenuButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            userMenuDropdown.classList.toggle('hidden');
-            userMenuDropdown.classList.toggle('block');
-        });
-    }
+    searchForm.addEventListener('submit', function(e) {
+        if (!suggestionsBox.classList.contains('hidden')) {
+            suggestionsBox.classList.add('hidden');
+        }
+    });
 
-    window.addEventListener('click', (e) => {
-        if (userMenuButton && userMenuDropdown) {
-            if (!userMenuButton.contains(e.target) && !userMenuDropdown.contains(e.target)) {
-                userMenuDropdown.classList.add('hidden');
-                userMenuDropdown.classList.remove('block');
-            }
+    document.addEventListener('click', (e) => {
+        if (!searchForm.contains(e.target)) {
+            suggestionsBox.classList.add('hidden');
         }
     });
 </script>

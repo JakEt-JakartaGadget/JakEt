@@ -86,3 +86,47 @@ def rate_product(request):
         product.rating = rating
         product.save()
         return JsonResponse({'success': True})
+
+
+def search_results(request):
+    query = request.GET.get('q')
+    brand_filter = request.GET.get('brand')
+    storage_filter = request.GET.get('storage')
+    ram_filter = request.GET.get('ram')
+    price_sort = request.GET.get('sort_price')
+    phones = Phone.objects.all()
+    if query:
+        phones = phones.filter(brand__icontains=query) | phones.filter(model__icontains=query)
+    if brand_filter:
+        phones = phones.filter(brand=brand_filter)
+    if storage_filter:
+        phones = phones.filter(storage=storage_filter)
+    if ram_filter:
+        phones = phones.filter(ram=ram_filter)
+
+    if price_sort == 'high_to_low':
+        phones = phones.order_by('-price_inr')
+    elif price_sort == 'low_to_high':
+        phones = phones.order_by('price_inr')
+
+    brands = Phone.objects.values_list('brand', flat=True).distinct()
+    storages = Phone.objects.values_list('storage', flat=True).distinct()
+    rams = Phone.objects.values_list('ram', flat=True).distinct()
+
+    context = {
+        'phones': phones,
+        'brands': brands,
+        'storages': storages,
+        'rams': rams,
+    }
+
+    return render(request, 'search_results.html', context)
+
+def search_suggestions(request):
+    query = request.GET.get('q', '')
+    if query:
+        suggestions = Phone.objects.filter(brand__icontains=query) | Phone.objects.filter(model__icontains=query)
+        suggestions = suggestions.distinct()[:3]  
+        results = [{'brand': phone.brand, 'model': phone.model} for phone in suggestions]
+        return JsonResponse(results, safe=False)
+    return JsonResponse([], safe=False)

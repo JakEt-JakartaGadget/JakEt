@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block meta %}
-<title>Discussion | JakEt</title>
+<title>Forum | JakEt</title>
 {% endblock meta %}
 
 {% block content %}
@@ -69,9 +69,9 @@
                 </div>
                 
                 <div class="flex gap-2">
-                    <button class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors duration-200">
+                    <a href="{% url 'discussion_view' discussion.id %}" class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors duration-200">
                         Reply
-                    </button>
+                    </a>
                 </div>
             </div>
             {% empty %}

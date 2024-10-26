@@ -1,7 +1,6 @@
 {% load static %}
 <nav id="navbar" class="fixed top-0 left-0 z-40 w-full transition-all duration-300 ease-in-out bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6]">
     <div class="flex justify-start max-w-7xl mx-auto px-4 sm:px-6 h-16 w-full">
-        <!-- Logo and Navigation Links -->
         <div class="flex justify-start">
             <a href="{% url 'Homepage:home_section' %}" class="flex items-center mr-[25px]">
                 <img src="{% static 'image/navbar/JaKet.png' %}" alt="JaKet" class="w-max h-max"> 
@@ -14,7 +13,6 @@
             <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Support</a>
         </div>
 
-        <!-- Search Form and User Controls -->
         <div class="flex justify-end items-center space-x-6 w-full">
             <form id="searchForm" class="relative" action="{% url 'Homepage:search_results' %}" method="get">
                 <div class="ml-50 relative text-gray-600 focus-within:text-gray-400">
@@ -23,7 +21,6 @@
                         class="pl-10 py-2 w-64 text-sm text-white bg-transparent border-b border-gray-300 focus:outline-none focus:border-white">
                 </div>
                 <dl id="suggestions" class="absolute max-w-md text-gray-900 divide-y divide-gray-200 bg-gray-800 text-white rounded-md mt-1 shadow-lg w-64 hidden">
-                    <!-- Suggestions will be dynamically added here -->
                 </dl>
             </form>
             
@@ -94,9 +91,7 @@
                             suggestionItem.appendChild(dd);
 
                             suggestionItem.addEventListener('click', () => {
-                                searchInput.value = `${item.brand} ${item.model}`;
-                                suggestionsBox.classList.add('hidden'); 
-                                searchForm.submit();  
+                                window.location.href = `/detail/${item.product_id}/`;
                             });
 
                             suggestionsBox.appendChild(suggestionItem);
@@ -123,4 +118,5 @@
             suggestionsBox.classList.add('hidden');
         }
     });
+
 </script>

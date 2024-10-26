@@ -126,7 +126,7 @@ def search_suggestions(request):
     query = request.GET.get('q', '')
     if query:
         suggestions = Phone.objects.filter(brand__icontains=query) | Phone.objects.filter(model__icontains=query)
-        suggestions = suggestions.distinct()[:3]  
-        results = [{'brand': phone.brand, 'model': phone.model} for phone in suggestions]
+        suggestions = suggestions.distinct()[:4] 
+        results = [{'product_id': str(phone.id), 'brand': phone.brand, 'model': phone.model} for phone in suggestions]
         return JsonResponse(results, safe=False)
     return JsonResponse([], safe=False)

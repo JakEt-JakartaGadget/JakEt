@@ -12,4 +12,5 @@ class Tiket(models.Model):
     specific_problems = models.TextField(default="No specific problems mentioned")
 
     def __str__(self):
-        return self.name
+        user_name = self.user.user if self.user else self.user
+        return f"{user_name} - {self.service_center.name} - {self.service_date}"

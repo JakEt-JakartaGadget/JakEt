@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block meta %}
-    <title>Profile</title>
+<title>Profile</title>
 {% endblock meta %}
 
 {% block content %}
@@ -10,9 +10,17 @@
 
 <div class="min-h-screen flex flex-col items-center bg-gray-100">
     <div class="container mx-auto px-4 py-10 max-w-4xl">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success bg-green-500 text-white p-4 rounded mb-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <!-- Profile Header -->
         <div class="flex items-center space-x-6 mb-8">
-            <img src="{{ profile_picture.url if profile_picture else static 'path_to_default_picture.jpg' }}" alt="Profile Picture" class="rounded-full w-32 h-32">
+            <img src="{% if profile_picture %}{{ profile_picture.url }}{% else %}{% static 'image/blank-profile.jpg' %}{% endif %}" alt="Profile Picture" class="w-24 h-24 rounded-full border border-gray-300">
             <div class="flex flex-col">
                 <h1 class="text-3xl font-bold">Profile</h1>
                 <h2 class="text-5xl font-bold mt-2">Hello <span class="text-purple-600">{{ profile_name }}</span>!</h2>
@@ -48,7 +56,7 @@
 
         <!-- Edit Profile Button -->
         <div class="mt-8 text-center">
-            <a href="{% url 'edit_profile' %}" class="bg-blue-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 transition duration-200">Edit Profile</a>
+            <a href="{% url 'Profile:edit_profile' %}" class="bg-blue-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 transition duration-200">Edit Profile</a>
         </div>
     </div>
 </div>

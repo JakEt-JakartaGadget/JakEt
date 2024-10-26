@@ -15,45 +15,44 @@
     <div class="bg-white shadow-md rounded-lg p-6">
       <!-- Profile Picture Section -->
       <div class="flex justify-center items-center mb-8">
-        <!-- Menampilkan gambar profil jika ada, atau gambar default jika tidak ada -->
-        <img class="w-24 h-24 rounded-full border border-gray-300" src="{% if user.auth.profile_picture %}{{ user.auth.profile_picture.url }}{% else %}{% static 'path_to_default_picture.jpg' %}{% endif %}" alt="Profile Picture">
+        <img class="w-24 h-24 rounded-full border border-gray-300" 
+             src="{% if form.instance.profile_picture %}{{ form.instance.profile_picture.url }}{% else %}{% static 'image/blank-profile.jpg' %}{% endif %}" 
+             alt="Profile Picture" id="profile_picture_preview">
       </div>
 
       <div class="flex justify-center gap-4 mb-8">
-        <!-- Form untuk mengunggah gambar profil baru -->
-        <form method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-          <input type="file" name="profile_picture" accept="image/*" class="hidden" id="profile_picture_input">
-          <button type="button" class="bg-blue-400 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg" id="change_picture_button">Change Picture</button>
-          <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg">Upload</button>
-        </form>
-
         <!-- Form untuk menghapus gambar profil -->
-        <form method="POST" action="{% url 'delete_picture' %}">
+        <form method="POST" action="{% url 'Profile:delete_profile_picture' %}">
           {% csrf_token %}
+          <input type="hidden" name="delete_picture" value="true">
           <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg">Delete Picture</button>
         </form>
       </div>
 
       <!-- Form Section -->
-      <form method="POST" class="space-y-6">
+      <form method="POST" enctype="multipart/form-data" class="space-y-6">
         {% csrf_token %}
+        {{ form.non_field_errors }}
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <!-- Left Column -->
           <div class="flex flex-col space-y-4">
             <div>
               <label for="profile_name" class="block text-lg font-medium text-gray-700">Profile Name</label>
-              <input type="text" id="profile_name" name="profile_name" value="{{ profile_name }}" placeholder="Profile Name" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+              {{ form.profile_name }}
+              {{ form.profile_name.errors }}
             </div>
 
             <div>
               <label for="username" class="block text-lg font-medium text-gray-700">Username</label>
-              <input type="text" id="username" name="username" value="{{ username }}" placeholder="Username" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+              {{ form.username }}
+              {{ form.username.errors }}
             </div>
 
             <div>
               <label for="about" class="block text-lg font-medium text-gray-700">About me</label>
-              <textarea id="about" name="about" placeholder="About me" class="w-full px-4 py-2 border border-gray-300 rounded-md h-28">{{ about }}</textarea>
+              {{ form.about }}
+              {{ form.about.errors }}
             </div>
           </div>
 
@@ -61,12 +60,21 @@
           <div class="flex flex-col space-y-4">
             <div>
               <label for="phone" class="block text-lg font-medium text-gray-700">Phone</label>
-              <input type="text" id="phone" name="phone" value="{{ phone }}" placeholder="Phone" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+              {{ form.phone }}
+              {{ form.phone.errors }}
             </div>
 
             <div>
               <label for="email" class="block text-lg font-medium text-gray-700">Email</label>
-              <input type="email" id="email" name="email" value="{{ email }}" placeholder="Email" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+              {{ form.email }}
+              {{ form.email.errors }}
+            </div>
+
+            <!-- File Upload Section -->
+            <div>
+              <label for="profile_picture" class="block text-lg font-medium text-gray-700">Change Profile Picture</label>
+              <input type="file" id="profile_picture_input" name="profile_picture" accept="image/*" class="mt-2">
+              <p class="text-sm text-gray-500">Choose a new profile picture if you wish to change it.</p>
             </div>
           </div>
         </div>
@@ -80,10 +88,17 @@
   </div>
 </div>
 
-<!-- JavaScript untuk memicu input file ketika tombol "Change Picture" diklik -->
+<!-- JavaScript untuk memicu input file dan menampilkan gambar yang dipilih -->
 <script>
-  document.getElementById("change_picture_button").addEventListener("click", function() {
-    document.getElementById("profile_picture_input").click();
+  document.getElementById("profile_picture_input").addEventListener("change", function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById("profile_picture_preview").src = e.target.result;
+      }
+      reader.readAsDataURL(file);
+    }
   });
 </script>
 

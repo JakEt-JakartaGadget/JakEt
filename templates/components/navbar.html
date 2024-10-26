@@ -38,7 +38,7 @@
                         <div class="px-4 py-2 text-gray-800 border-b border-gray-200">
                             Hai, {{ user.username }}
                         </div>
-                        <a href="{% url 'Homepage:home_section' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">View Profile</a>
+                        <a href="{% url 'Profile:profile_view' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">View Profile</a>
                         <form method="post" action="{% url 'Authenticate:logout' %}" class="px-4 py-2">
                             {% csrf_token %}
                             <button type="submit" class="w-full text-left text-gray-800 hover:bg-gray-100 transition duration-200">Logout</button>

@@ -126,9 +126,31 @@
         </div>
     </section>
 
-    <section class="relative flex items-center justify-center w-full h-screen bg-white">
-        <h1 class="text-black text-4xl font-bold">This is the third section</h1>
+    <section class="relative flex flex-col items-center w-full bg-white py-10">
+        <h1 class="text-black text-4xl font-bold mb-10">Recommended Service Centers</h1>
+    
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for service_center in service|slice:":6" %}
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden p-6 flex flex-col items-center text-center max-w-xs"> <!-- Ditambahkan max-w-xs untuk ukuran card -->
+                    <img src="{{ service_center.image.url }}" alt="{{ service_center.name }}" class="h-48 w-full object-cover rounded-lg mb-4">
+                    <h2 class="text-2xl font-bold text-black mb-2">{{ service_center.name }}</h2>
+                    <p class="text-gray-600">{{ service_center.address }}</p>
+                    <p class="text-gray-500">Contact: {{ service_center.contact }}</p>
+                    <p class="text-yellow-500 mt-2">{{ service_center.rating }} &#9733; ({{ service_center.total_reviews }} reviews)</p>
+                </div>
+            {% empty %}
+                <p class="col-span-3 text-center text-gray-500">No service centers available.</p>
+            {% endfor %}
+        </div>
+    
+        <div class="flex justify-center mt-8">
+            <a href="{% url 'ServiceCenter:show_service_page' %}" class="px-6 py-3 bg-[#B0D5F2] text-black rounded-lg hover:bg-white hover:text-black transition duration-300 font-poppins font-bold text-lg flex items-center">
+                See more
+                <span class="ml-2 text-lg">&#10095;</span>
+            </a>
+        </div>
     </section>
+    
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');

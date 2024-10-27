@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Confirm Cancel</title>
+{% endblock meta %}
+
+{% block content %}
+{% include 'components/navbar.html' %}
+
+<div class="manrope flex flex-col min-h-screen bg-slate-200 justify-center items-center">
+  <div class="container mx-auto px-4 py-8 max-w-xl mb-20">
+    <div class="bg-white shadow-md rounded-lg p-6 form-style">
+      <h1 class="text-3xl font-bold text-center mb-8 mt-3 text-black">Cancel Appointment</h1>
+      <p class="text-center text-lg text-black mb-8">Are you sure you want to cancel appointment?</p>
+      <form method="POST" class="space-y-6">
+        {% csrf_token %}
+        <div class="flex justify-center mt-6 space-x-4">
+          <a href="{% url 'ServiceCenter:show_service_page' %}" class="text-black font-semibold px-6 py-3 rounded-full bg-gray-200 hover:bg-gray-400 hover:opacity-80 transition duration-300 ease-in-out w-full text-center">
+            Back
+          </a>
+          <button type="submit" class="text-white font-semibold px-6 py-3 rounded-full bg-red-600 hover:bg-red-800 hover:opacity-80 transition duration-300 ease-in-out w-full">
+            Confirm
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

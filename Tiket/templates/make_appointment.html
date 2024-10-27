@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Create Appointment</title>
+{% endblock meta %}
+
+{% block content %}
+{% include 'components/navbar.html' %}
+
+<div class="manrope flex flex-col min-h-screen bg-slate-200">
+  <div class="container mx-auto px-4 py-8 mt-20 max-w-4xl">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="space-y-6">
+          {% if service_center.image %}
+            <img src="{{ service_center.image.url }}" alt="Service Center Image" class="rounded-lg h-64 w-full object-cover">
+          {% else %}
+            <div class="bg-gray-200 rounded-lg h-64"></div>
+          {% endif %}
+          <div class="flex flex-col space-y-4">
+            <div>
+              <h2 class="text-2xl font-bold mb-2">Location</h2>
+              <p class="text-gray-600">{{ service_center.address }}</p>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold mb-2">Contact</h2>
+              <p class="text-gray-600">{{ service_center.contact }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <h1 class="text-3xl font-bold text-black">{{ service_center.name }}</h1>
+          <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            {{ form.service_center.as_hidden }} 
+            <div class="flex flex-col">
+              <label for="{{ form.service_date.id_for_label }}" class="mb-2 font-semibold text-black">{{ form.service_date.label }}</label>
+              <div class="w-full border border-gray-400 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-700">
+                {{ form.service_date }}
+              </div>
+              {% if form.service_date.help_text %}
+                <p class="mt-1 text-sm text-gray-500">{{ form.service_date.help_text }}</p>
+              {% endif %}
+              {% for error in form.service_date.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+              {% endfor %}
+            </div>
+            <div class="flex flex-col">
+              <label for="{{ form.service_time.id_for_label }}" class="mb-2 font-semibold text-black">{{ form.service_time.label }}</label>
+              <div class="w-full border border-gray-400 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-700">
+                {{ form.service_time }}
+              </div>
+              {% if form.service_time.help_text %}
+                <p class="mt-1 text-sm text-gray-500">{{ form.service_time.help_text }}</p>
+              {% endif %}
+              {% for error in form.service_time.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+              {% endfor %}
+            </div>
+            <div class="flex flex-col">
+              <label for="{{ form.specific_problems.id_for_label }}" class="mb-2 font-semibold text-black">Specific Problems</label>
+              <textarea name="{{ form.specific_problems.html_name }}" class="border border-gray-400 rounded-lg p-2 w-full h-52 focus:outline-none focus:ring-2 focus:ring-gray-700">No specific problems mentioned</textarea>
+              {% if form.specific_problems.help_text %}
+                <p class="mt-1 text-sm text-gray-500">{{ form.specific_problems.help_text }}</p>
+              {% endif %}
+              {% for error in form.specific_problems.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+              {% endfor %}
+            </div>
+            <div class="flex justify-center mt-6">
+              <button type="submit" class="bg-blue-600 hover:bg-blue-950 text-white font-semibold px-6 py-3 rounded-lg transition duration-300 ease-in-out w-full">
+                <i class="fas fa-calendar-alt mr-2"></i> Save Appointment
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

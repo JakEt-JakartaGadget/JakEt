@@ -7,15 +7,18 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Phone
 from Wishlist.models import Favorite
+from ServiceCenter.models import ServiceCenter
 
 def home_section(request):
     phones = Phone.objects.all()
+    service = ServiceCenter.objects.all()
     user_favorites = []
     if request.user.is_authenticated:
         user_favorites = Favorite.objects.filter(user=request.user).values_list('phone_id', flat=True)
     context = {
         'phones': phones,
-        'user_favorites': user_favorites 
+        'user_favorites': user_favorites, 
+        'service' : service
     }
     return render(request, 'home.html', context)
 

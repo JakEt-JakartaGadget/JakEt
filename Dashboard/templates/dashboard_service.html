@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block meta %}
+<title>Dashboard Service</title>
+{% endblock meta %}
+{% block content %}
+{% include 'components/navbar_admin.html' %}
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-12 text-center">Dashboard Service Centers</h1>
+    <a href="{% url 'Dashboard:create_service_center' %}" class="bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded-full transition duration-300 mb-4 inline-block">Add New Service Center</a>
+    <ul class="space-y-4">
+        {% for service_center in service_centers %}
+        <li class="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
+            <span>{{ service_center.name }} - {{ service_center.address }}</span>
+            <div class="flex space-x-2">
+                <a href="{% url 'Dashboard:edit_service_center' service_center.id %}" class="bg-violet-500 hover:bg-violet-700 text-white py-1 px-3 rounded-full transition duration-300">Edit</a>
+                <a href="{% url 'Dashboard:delete_service_center' service_center.id %}" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-full transition duration-300">Delete</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

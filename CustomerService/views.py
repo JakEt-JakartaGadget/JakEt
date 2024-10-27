@@ -17,6 +17,10 @@ def customer_service(request, user_id=None):
     else:
         viewing_user = request.user
 
+    # Restrict regular users from viewing other users' chats
+    if not request.user.is_superuser and viewing_user != request.user:
+        return JsonResponse({'status': 'error', 'message': 'Permission denied'}, status=403)
+
     daily_chats = Chat.objects.filter(user=viewing_user).order_by('date', 'time_sent')
     grouped_chats = {}
 

@@ -74,7 +74,7 @@ class HomepageTests(TestCase):
     def test_search_results_no_match(self):
         response = self.client.get(reverse('Homepage:search_results'), {'q': 'UnknownBrand'})
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Sorry, we can't found your product.")
+        self.assertContains(response, "Sorry, we can't find your product.")
 
     def test_search_suggestions_view(self):
         self.client.login(username='testuser', password='password')

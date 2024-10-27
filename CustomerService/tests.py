@@ -9,11 +9,9 @@ User = get_user_model()
 
 class ChatModelTest(TestCase):
     def setUp(self):
-        # Create a user for testing
         self.user = User.objects.create_user(username='testuser', password='testpass')
 
     def test_create_chat_message(self):
-        # Create a chat message
         chat_message = Chat.objects.create(
             user=self.user,
             message='Hello, this is a test message.',
@@ -21,57 +19,41 @@ class ChatModelTest(TestCase):
         )
         self.assertEqual(chat_message.message, 'Hello, this is a test message.')
         self.assertEqual(chat_message.user, self.user)
-        self.assertFalse(chat_message.read)  # By default, it should not be read
+        self.assertFalse(chat_message.read) 
 
     def test_count_unread_messages(self):
-        # Create chat messages
         Chat.objects.create(user=self.user, message='First unread message.')
         Chat.objects.create(user=self.user, message='Second unread message.')
         Chat.objects.create(user=self.user, message='Read message.', read=True)
-
-        # Count unread messages
         unread_count = Chat.count_unread_messages(self.user)
         self.assertEqual(unread_count, 2)
 
     def test_mark_as_read(self):
-        # Create a chat message
         chat_message = Chat.objects.create(user=self.user, message='Message to mark as read.')
-
-        # Mark the message as read
         chat_message.mark_as_read()
         self.assertTrue(chat_message.read)
 
     def test_mark_as_read_multiple_messages(self):
-        # Create multiple chat messages
         message1 = Chat.objects.create(user=self.user, message='First message.')
         message2 = Chat.objects.create(user=self.user, message='Second message.')
-
-        # Mark the first message as read
         message1.mark_as_read()
         self.assertTrue(message1.read)
         self.assertFalse(message2.read)
 
 class DailyCustomerServiceModelTest(TestCase):
     def setUp(self):
-        # Create a user for testing
         self.user = User.objects.create_user(username='testuser', password='testpass')
 
     def test_daily_customer_service_creation(self):
-        # Create a daily customer service entry
         daily_service = DailyCustomerService.objects.create(user=self.user)
 
         self.assertEqual(daily_service.user, self.user)
         self.assertEqual(daily_service.date, date.today())
 
     def test_messages_property(self):
-        # Create a daily customer service entry
         daily_service = DailyCustomerService.objects.create(user=self.user)
-        
-        # Create chat messages for the same date
         Chat.objects.create(user=self.user, message='Message 1', date=daily_service.date)
         Chat.objects.create(user=self.user, message='Message 2', date=daily_service.date)
-
-        # Fetch messages using the property
         messages = daily_service.messages
         self.assertEqual(len(messages), 2)
         self.assertEqual(messages[0].message, 'Message 1')

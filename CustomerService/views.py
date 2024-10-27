@@ -8,20 +8,21 @@ import json
 from django.core import serializers
 from django.utils import timezone
 from django.db.models import Count
+from django.contrib.auth.models import User
 
 @login_required
-def customer_service(request):
-    # Get or create today's customer service instance
-    daily_service, created = DailyCustomerService.objects.get_or_create(
-        user=request.user,
-        date=timezone.now().date()
-    )
+def customer_service(request, user_id=None):
+    if request.user.is_superuser and user_id:
+        viewing_user = User.objects.get(id=user_id)
+    else:
+        viewing_user = request.user
 
-    # Fetch distinct chat dates and associated messages
-    daily_chats = Chat.objects.filter(user=request.user).order_by('date', 'time_sent')
+    daily_chats = Chat.objects.filter(user=viewing_user).order_by('date', 'time_sent')
     grouped_chats = {}
-    
+
     for chat in daily_chats:
+        if request.user.is_superuser:
+            chat.mark_as_read()
         if chat.date not in grouped_chats:
             grouped_chats[chat.date] = []
         grouped_chats[chat.date].append(chat)
@@ -29,37 +30,49 @@ def customer_service(request):
     context = {
         'grouped_chats': grouped_chats,
         'today': timezone.now().date(),
+        'viewing_user': viewing_user,
     }
 
     return render(request, 'customer-service.html', context)
 
 @login_required
 @csrf_exempt
-def send_message(request):
+def send_message(request, user_id=None):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
             message = data.get('message', '').strip()
-            
+
+            # Check if the user is a superuser and set the recipient accordingly
+            if request.user.is_superuser and user_id:
+                receiving_user = User.objects.get(id=user_id)
+                sentByUser = False
+            else:
+                receiving_user = request.user
+                sentByUser = True
+
             if message:
+                # Create a new chat message for the intended recipient
                 chat = Chat.objects.create(
-                    user=request.user,
-                    message=message
+                    user=receiving_user,
+                    message=message,
+                    sent_by_user=sentByUser
                 )
-                
+
                 return JsonResponse({
                     'status': 'success',
                     'message': {
                         'id': chat.id,
                         'message': chat.message,
                         'time': chat.time_sent.strftime('%H:%M'),
-                        'date': chat.date.strftime('%Y-%m-%d')
+                        'date': chat.date.strftime('%Y-%m-%d'),
+                        'sent_by_user': chat.sent_by_user,
                     }
                 })
-            
+
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-    
+
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
 @login_required

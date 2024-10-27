@@ -10,7 +10,11 @@ class Chat(models.Model):
     message = models.TextField()
     time_sent = models.TimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
-    sent_by_user = [True if user == User else False]
+    sent_by_user = models.BooleanField(default=True)
+
+    @classmethod
+    def count_unread_messages(cls, user):
+        return cls.objects.filter(user=user, read=False).count()
 
     def mark_as_read(self):
         self.read = True

@@ -1,8 +1,8 @@
-# views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Artikel
 from .forms import ArtikelForm
 from django.contrib.auth.decorators import user_passes_test
+from django.http import JsonResponse
 
 # Check if user is admin
 def is_admin(user):
@@ -10,30 +10,31 @@ def is_admin(user):
 
 
 def article_list(request):
-    """View to list all articles."""
     articles = Artikel.objects.all()
     return render(request, 'article_list.html', {'articles': articles})
 
 @user_passes_test(is_admin)
 def add_article(request):
-    """View to add a new article."""
     if request.method == 'POST':
         form = ArtikelForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            artikel = form.save()
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'message': 'Artikel berhasil ditambahkan', 'id': artikel.id}, status=200)
             return redirect('article_list')
-    else:
-        form = ArtikelForm()
-    return render(request, 'add_article.html', {'form': form})
+        else:
+            return JsonResponse({'message': 'Kesalahan saat menambahkan artikel', 'errors': form.errors}, status=400)
+    return JsonResponse({'message': 'Metode tidak diizinkan'}, status=405)
 
 @user_passes_test(is_admin)
 def edit_article(request, pk):
-    """View to edit an existing article."""
     artikel = get_object_or_404(Artikel, pk=pk)
     if request.method == 'POST':
         form = ArtikelForm(request.POST, request.FILES, instance=artikel)
         if form.is_valid():
             form.save()
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'message': 'Article edited successfully'}, status=200)
             return redirect('article_list')
     else:
         form = ArtikelForm(instance=artikel)
@@ -41,10 +42,11 @@ def edit_article(request, pk):
 
 @user_passes_test(is_admin)
 def delete_article(request, pk):
-    """View to delete an article."""
     artikel = get_object_or_404(Artikel, pk=pk)
     if request.method == 'POST':
         artikel.delete()
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest': 
+            return JsonResponse({'message': 'Article deleted successfully'}, status=200)
         return redirect('article_list')
     return render(request, 'delete_article_confirm.html', {'artikel': artikel})
 

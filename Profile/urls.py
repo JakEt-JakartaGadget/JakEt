@@ -18,7 +18,7 @@ urlpatterns = [
     path('profile/', profile_view, name='profile_view'),
     path('create-profile/', create_profile, name='create_profile'),
     path('edit-profile/', edit_profile, name='edit_profile'),
-    path('delete-picture/', delete_profile_picture, name='delete_profile_picture'),  # URL untuk menghapus gambar profil
+    path('delete-picture/', delete_profile_picture, name='delete_profile_picture'),
     path('xml/', show_xml, name='show_xml'),
     path('json/', show_json, name='show_json'),
 ]

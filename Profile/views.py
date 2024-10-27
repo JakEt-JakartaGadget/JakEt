@@ -55,10 +55,10 @@ def create_profile(request):
                 profile_picture=profile_picture,
             )
             user_data.save()
-            messages.success(request, "Profil berhasil dibuat!")
+            messages.success(request, "Profile created successfully!")
             return redirect('Profile:profile_view')
         except IntegrityError:
-            messages.error(request, "Terjadi kesalahan saat membuat profil. Silakan coba lagi.")
+            messages.error(request, "An error occurred while creating the profile. Please try again.")
 
     return render(request, 'create_profile.html', {'form': form})
 
@@ -69,16 +69,14 @@ def edit_profile(request):
 
     if request.method == "POST":
         if request.headers.get('x-requested-with') == 'XMLHttpRequest' and 'delete_picture' in request.POST:
-            # Menghapus gambar profil jika ada
             if profile.profile_picture:
                 profile.profile_picture.delete(save=False) 
                 profile.profile_picture = None
                 profile.save()
-                return JsonResponse({'status': 'success', 'message': 'Gambar profil berhasil dihapus.'})
+                return JsonResponse({'status': 'success', 'message': 'Profile picture successfully deleted.'})
             else:
-                return JsonResponse({'status': 'error', 'message': 'Tidak ada gambar profil untuk dihapus.'})
+                return JsonResponse({'status': 'error', 'message': 'No profile picture to delete.'})
 
-        # Update profil jika form valid
         if form.is_valid():
             form.save()
             new_username = form.cleaned_data['username']
@@ -86,10 +84,10 @@ def edit_profile(request):
             user.username = new_username
             user.save()
 
-            messages.success(request, "Profil berhasil diperbarui!")
+            messages.success(request, "Profile updated successfully!")
             return redirect(reverse('Profile:profile_view'))
         else:
-            messages.error(request, "Profil gagal diperbarui")
+            messages.error(request, "Profile update failed.")
 
     context = {'form': form}
     return render(request, "edit_profile.html", context)
@@ -102,10 +100,10 @@ def delete_profile_picture(request):
             profile.profile_picture.delete(save=True)
             profile.profile_picture = None
             profile.save()
-            return JsonResponse({'message': 'Gambar profil berhasil dihapus!'})
+            return JsonResponse({'message': 'Profile picture successfully deleted.'})
         else:
-            return JsonResponse({'message': 'Tidak ada gambar profil untuk dihapus.'}, status=404)
-    return JsonResponse({'message': 'Metode tidak diperbolehkan.'}, status=405)
+            return JsonResponse({'message': 'No profile picture to delete.'}, status=404)
+    return JsonResponse({'message': 'Invalid request.'}, status=405)
 
 def show_xml(request):
     data = UserData.objects.all()

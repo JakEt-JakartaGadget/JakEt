@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Include navbar -->
+{% include 'components/navbar.html' %}
+
+<div class="comparison-container">
+    <h1 class="comparison-title">Let's compare them</h1>
+
+    <form id="comparisonForm" data-url="{% url 'Comparison:comparison' %}">
+        <select id="device1" class="device-dropdown" name="device1">
+            <option value="" disabled selected>Choose a device</option>
+            {% for device in devices %}
+            <option value="{{ device.model }}" data-image="{{ device.picture_url }}">
+                {{ device.product_name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <h2 class="vs-text">VS</h2>
+
+        <select id="device2" class="device-dropdown" name="device2">
+            <option value="" disabled selected>Choose a device</option>
+            {% for device in devices %}
+            <option value="{{ device.model }}" data-image="{{ device.picture_url }}">
+                {{ device.product_name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="compare-button">Compare</button>
+    </form>
+
+    <div id="comparisonResults"></div>
+</div>
+{% endblock %}
+
+{% block meta %}
+
+<!-- Include comparison.css -->
+<link rel="stylesheet" href="{% static 'css/comparison.css' %}">
+<script defer src="{% static 'js/comparison.js' %}"></script>
+<script>
+    const heartIconPath = "{% static 'image/navbar/heart.png' %}";  // Path gambar yang benar
+</script>
+{% endblock %}

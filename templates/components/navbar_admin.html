@@ -1,24 +1,19 @@
 {% load static %}
 <nav id="navbar" class="fixed top-0 left-0 z-40 w-full transition-all duration-300 ease-in-out bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6] backdrop-blur-lg">
-    <div class="flex justify-between max-w-7xl mx-auto px-4 sm:px-6 h-16 w-full">
+    <div class="flex justify-between items-center max-w-7xl mx-auto px-4 sm:px-6 h-16 w-full">
         <div class="flex items-center space-x-6">
-            <a href="{% url 'Dashboard:main_dashboard' %}" class="flex items-center mr-[25px]">
-                <img src="{% static 'image/navbar/JaKet.png' %}" alt="JaKet" class="w-max h-max"> 
+            <a href="{% url 'Dashboard:main_dashboard' %}" class="flex items-center mr-4">
+                <img src="{% static 'image/navbar/logo.png' %}" alt="JaKet" class="w-28 h-20 rounded-lg transition-transform duration-300 transform hover:scale-110 hover:shadow-lg">
             </a>
-            <a href="{% url 'Dashboard:main_dashboard' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
-                Product
-            </a>
-            <a href="{% url 'Dashboard:dashboard_service' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
-                Service
-            </a>
-            <a href="{% url 'Dashboard:dashboard_tiket' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
-                Tiket
-            </a>
-            <a href="{% url 'Article:article_list' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">
-                Article
-            </a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="{% url 'Dashboard:main_dashboard' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Product</a>
+                <a href="{% url 'Dashboard:dashboard_service' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Service</a>
+                <a href="{% url 'Dashboard:dashboard_tiket' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Tiket</a>
+                <a href="{% url 'Article:article_list' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Article</a>
+                <a href="{% url 'Dashboard:chat_dashboard' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Support</a>
+            </div>
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center space-x-4">
             {% if user.is_authenticated %}
                 <div class="relative group">
                     <button id="user-menu-button" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110 focus:outline-none">
@@ -37,24 +32,73 @@
             {% else %}
                 <a href="{% url 'Authenticate:login' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Login</a>
             {% endif %}
+            <div class="md:hidden">
+                <button id="menu-button" class="focus:outline-none">
+                    <svg class="w-6 h-6 text-white transition-transform duration-300 transform hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden px-4 w-full bg-gradient-to-b from-[#7FADD0] to-[#2E29A6]">
+        <div class="pt-4 pb-4 space-y-2">
+            <a href="{% url 'Dashboard:main_dashboard' %}" class="block text-white hover:text-gray-300 transition duration-300">Product</a>
+            <a href="{% url 'Dashboard:dashboard_service' %}" class="block text-white hover:text-gray-300 transition duration-300">Service</a>
+            <a href="{% url 'Dashboard:dashboard_tiket' %}" class="block text-white hover:text-gray-300 transition duration-300">Tiket</a>
+            <a href="{% url 'Article:article_list' %}" class="block text-white hover:text-gray-300 transition duration-300">Article</a>
+            <a href="{% url 'Dashboard:chat_dashboard' %}" class="block text-white hover:text-gray-300 transition duration-300">Support</a>
+
+            {% if user.is_authenticated %}
+                <div class="pt-2">
+                    <div class="text-white">Hai, {{ user.username }}</div>
+                    <form method="post" action="{% url 'Authenticate:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full text-left text-white bg-red-500 hover:bg-red-600 py-2 mt-2 rounded transition duration-300">Logout</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'Authenticate:login' %}" class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 mt-2 rounded transition duration-300">Login</a>
+            {% endif %}
         </div>
     </div>
 </nav>
 
 <style>
-    #navbar {
-        transition: background-color 0.3s ease-in-out;
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
+    #mobile-menu {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+
     #navbar.bg-opacity-90 {
         background-color: rgba(0, 0, 0, 0.9);
     }
 
+
     #user-menu-dropdown {
         transform: translateY(10px);
     }
-    #user-menu-button:hover + #user-menu-dropdown, #user-menu-dropdown:hover {
-        display: block !important;
-        opacity: 1 !important;
-        transform: translateY(0);
-    }
 </style>
+
+<script>
+    const menuButton = document.getElementById('menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navbar = document.getElementById('navbar');
+
+    menuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('bg-opacity-90');
+        } else {
+            navbar.classList.remove('bg-opacity-90');
+        }
+    });
+</script>

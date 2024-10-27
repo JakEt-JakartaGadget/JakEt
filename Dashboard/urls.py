@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import *
-from Dashboard.views import dashboard_tiket, cancel_appointment, create_service_center, edit_service_center, delete_service_center, dashboard_service
 
 app_name = 'Dashboard'
 
@@ -15,5 +14,5 @@ urlpatterns = [
     path('edit-service-center/<uuid:id>/', edit_service_center, name='edit_service_center'),
     path('delete-service-center/<uuid:id>/', delete_service_center, name='delete_service_center'),
     path('service/', dashboard_service, name='dashboard_service'),
-    
+    path('customer-service/', chat_dashboard, name='chat_dashboard'), 
 ]

@@ -9,13 +9,10 @@
     {% include 'components/navbar.html' %}
     <section class="relative w-full h-screen overflow-hidden bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6]">
         <div id="slide-container" class="relative flex transition-transform duration-500 ease-in-out w-full h-full">
-            
             <div class="min-w-full flex flex-col md:flex-row items-center justify-between h-full px-4 md:px-10 lg:px-[80px] xl:px-[120px]">
                 <div class="flex flex-col items-center md:items-start justify-center w-full md:w-1/2 text-center md:text-left space-y-4">
                     <img src="{% static 'image/home/section1/apple.png' %}" alt="Apple Logo" class="w-12 md:w-20 lg:w-28 h-auto mb-4">
-                    
                     <h1 class="text-white text-3xl md:text-4xl lg:text-5xl font-bold">Latest Release</h1>
-                    
                     <a href="{% url 'Homepage:list_product' %}" class="px-6 py-2 md:px-8 md:py-3 bg-[#A2D2DF] text-white rounded-lg hover:bg-white hover:text-black transition duration-300 font-poppins font-bold text-base md:text-lg lg:text-xl">
                         View Product
                     </a>
@@ -45,14 +42,14 @@
                 </div>
             </div>
         </div>
-    
+        
         <button id="prev-slide" class="absolute top-1/2 left-2 md:left-5 transform -translate-y-1/2 bg-gray-700 text-white p-3 md:p-5 w-10 md:w-14 h-10 md:h-14 text-xl md:text-3xl rounded-full shadow-lg hover:bg-gray-900 transition duration-300 flex items-center justify-center">
             &#10094;
         </button>
         <button id="next-slide" class="absolute top-1/2 right-2 md:right-5 transform -translate-y-1/2 bg-gray-700 text-white p-3 md:p-5 w-10 md:w-14 h-10 md:h-14 text-xl md:text-3xl rounded-full shadow-lg hover:bg-gray-900 transition duration-300 flex items-center justify-center">
             &#10095;
         </button>
-    
+        
         <div class="absolute bottom-4 md:bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-2">
             <div class="w-2 h-2 md:w-3 md:h-3 bg-gray-500 rounded-full"></div>
             <div class="w-2 h-2 md:w-3 md:h-3 bg-gray-500 rounded-full"></div>
@@ -60,7 +57,6 @@
         </div>
     </section>
     
-
     <section class="relative flex flex-col items-center w-full h-auto md:h-screen bg-white">
         <h1 class="pt-10 text-black text-3xl md:text-4xl font-bold text-center">Today's Article</h1>
         <div class="w-full max-w-7xl mt-10 space-y-4 px-4 md:px-0">
@@ -87,16 +83,17 @@
                     {% endif %}
                 </div>
     
-
                 <div class="w-full md:w-1/2 h-48 bg-gray-300 rounded-lg shadow-lg flex items-center justify-center px-4 md:px-6 transition-transform transform hover:scale-105 hover:shadow-xl">
                     {% if user.is_authenticated %}
-                        <div class="flex items-center space-x-4 md:space-x-6">
-                            <div class="flex flex-col text-center md:text-left space-y-2">
-                                <p class="text-3xl md:text-4xl lg:text-5xl font-bold">Join the forum</p>
-                                <p class="text-3xl md:text-4xl lg:text-5xl font-bold">discussion</p>
+                        <a href="{% url 'UserForum:forum' %}">
+                            <div class="flex items-center space-x-4 md:space-x-6">
+                                <div class="flex flex-col text-center md:text-left space-y-2">
+                                    <p class="text-3xl md:text-4xl lg:text-5xl font-bold">Join the forum</p>
+                                    <p class="text-3xl md:text-4xl lg:text-5xl font-bold">discussion</p>
+                                </div>
+                                <img src="{% static 'image/chat.png' %}" alt="chat" class="w-20 md:w-14 lg:w-40">
                             </div>
-                            <img src="{% static 'image/chat.png' %}" alt="chat" class="w-20 md:w-14 lg:w-40">
-                        </div>
+                        </a>
                     {% else %}
                         <div class="flex flex-col items-center text-center">
                             <p class="text-lg md:text-2xl font-bold">Login required to join forum</p>
@@ -107,13 +104,11 @@
             </div>
         </div>
     </section>
-     
-    
 
     <section class="relative flex flex-col items-center w-full bg-white py-10">
         <h1 class="text-black text-4xl font-bold mb-10">Recommended Products</h1>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for product in phones|slice:":6" %}
                 {% include 'card_product.html' %}
             {% empty %}
@@ -132,7 +127,7 @@
     <section class="relative flex flex-col items-center w-full bg-white py-10">
         <h1 class="text-black text-4xl font-bold mb-10">Recommended Service Centers</h1>
     
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for service_center in service|slice:":6" %}
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden p-6 flex flex-col items-center text-center max-w-xs"> 
                     <img src="{{ service_center.image.url }}" alt="{{ service_center.name }}" class="h-48 w-full object-cover rounded-lg mb-4">
@@ -157,41 +152,8 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
-        .font-poppins {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        #slide-container {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .min-w-full {
-            min-width: 100%;
-        }
-
-        .h-screen {
-            height: 100vh;
-        }
-
-        .w-full {
-            width: 100%;
-        }
-
-        .active-dot {
-            background-color: #ffffff;
-        }
-
-        .mb-2 {
-            margin-bottom: 0.5rem;
-        }
-
-        .padding-custom {
-            padding-left: 200px;
-            padding-right: 200px;
-        }
-
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .active-dot { background-color: #ffffff; }
     </style>
 
     <script>

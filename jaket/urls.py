@@ -31,4 +31,6 @@ urlpatterns = [
     path('tiket/', include('Tiket.urls')),
     path('profile/', include('Profile.urls')),
     path('article/', include('Article.urls')),
+    path('customer-service/', include('CustomerService.urls')),
+    path('forum/', include('UserForum.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

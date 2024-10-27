@@ -29,6 +29,8 @@ DEBUG = not PRODUCTION
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "anthony-edbert-jaket.pbp.cs.ui.ac.id"]
 
+LOGIN_URL = '/authenticate/login/'
+
 
 # Application definition
 
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Article',
     'Comparison',
+    'CustomerService',
     'Dashboard',
     'DetailProduct',
     'Homepage',
@@ -121,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 

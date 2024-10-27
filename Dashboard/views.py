@@ -12,6 +12,16 @@ from ServiceCenter.models import ServiceCenter
 from Tiket.models import Tiket
 from ServiceCenter.forms import ServiceForm
 from Authenticate.models import UserData
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from CustomerService.models import Chat, DailyCustomerService
+import json
+from django.core import serializers
+from django.utils import timezone
+from django.db.models import OuterRef, Exists, Count, Subquery, Q 
+from django.contrib.auth.models import User
 
 @staff_member_required(login_url='/authenticate/login')
 def main_dashboard(request):
@@ -69,6 +79,7 @@ def delete_product(request, product_id):
     messages.success(request, 'Product deleted successfully!')
     return redirect('Dashboard:main_dashboard')
 
+@staff_member_required(login_url='/authenticate/login')
 def dashboard_tiket(request):
     users = UserData.objects.prefetch_related('tiket_set').all()
     users_with_appointments = []
@@ -83,16 +94,18 @@ def dashboard_tiket(request):
     
     return render(request, 'dashboard_tiket.html', {'users': users_with_appointments})
 
-
+@staff_member_required(login_url='/authenticate/login')
 def cancel_appointment(request, id):
     tiket = get_object_or_404(Tiket, pk=id)
     tiket.delete()
     return HttpResponseRedirect(reverse('Dashboard:dashboard_tiket'))
 
+@staff_member_required(login_url='/authenticate/login')
 def dashboard_service(request):
     service_centers = ServiceCenter.objects.all()
     return render(request, 'dashboard_service.html', {'service_centers': service_centers})
 
+@staff_member_required(login_url='/authenticate/login')
 def create_service_center(request):
     if request.method == "POST":
         form = ServiceForm(request.POST, request.FILES)
@@ -107,6 +120,7 @@ def create_service_center(request):
         form = ServiceForm()
     return render(request, "create_service_center.html", {'form': form})
 
+@staff_member_required(login_url='/authenticate/login')
 def edit_service_center(request, id):
     service_center = get_object_or_404(ServiceCenter, pk=id)
     form = ServiceForm(request.POST or None, request.FILES or None, instance=service_center)
@@ -115,8 +129,30 @@ def edit_service_center(request, id):
         return HttpResponseRedirect(reverse('Dashboard:dashboard_service'))
     return render(request, "edit_service_center.html", {'form': form})
 
+@staff_member_required(login_url='/authenticate/login')
 def delete_service_center(request, id):
     service_center = get_object_or_404(ServiceCenter, pk=id)
     service_center.delete()
     return HttpResponseRedirect(reverse('Dashboard:dashboard_service'))
+
+@login_required
+def chat_dashboard(request):
+    if not request.user.is_superuser:
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+    users_with_chats = User.objects.filter(
+        Exists(Chat.objects.filter(user=OuterRef('pk')))
+    ).annotate(
+        unread_messages=Count('chat', filter=Q(chat__read=False)),
+        last_chat=Subquery(
+            Chat.objects.filter(user=OuterRef('pk'))
+            .order_by('-date', '-time_sent')
+            .values('message')[:1]
+        )
+    ).order_by('username')
+
+    context = {
+        'users_with_chats': users_with_chats,
+    }
+
+    return render(request, 'customerservice-dashboard.html', context)
 

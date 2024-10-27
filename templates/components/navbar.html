@@ -1,123 +1,209 @@
 {% load static %}
 <nav id="navbar" class="fixed top-0 left-0 z-40 w-full transition-all duration-300 ease-in-out bg-gradient-to-r from-[#7FADD0] via-[#6D0CC9] via-[#BB89EC] to-[#2E29A6]">
-    <div class="flex justify-start max-w-7xl mx-auto px-4 sm:px-6 h-16 w-full">
-        <div class="flex justify-start">
-            <a href="{% url 'Homepage:home_section' %}" class="flex items-center mr-[25px]">
-                <img src="{% static 'image/navbar/JaKet.png' %}" alt="JaKet" class="w-max h-max"> 
-            </a>
-        </div>
+    <div class="flex justify-between items-center max-w-7xl mx-auto px-4 sm:px-6 h-16">
+        <a href="{% url 'Homepage:home_section' %}" class="flex items-center">
+            <img src="{% static 'image/navbar/logo.png' %}" alt="JaKet" class="w-25 h-20 rounded-lg transition-transform duration-300 transform hover:scale-110 hover:shadow-lg">
+        </a>
         <div class="hidden md:flex items-center space-x-8">
             <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Home</a>
             <a href="{% url 'Homepage:list_product' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Product</a>
             <a href="{% url 'Article:article_list' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Article</a>
-            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Support</a>
-            <a href="{% url 'ServiceCenter:show_service_page' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold min-w-[150px]">Service Center</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'CustomerService:customer_service_for_user' user.id %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Support</a>
+            {% else %}
+                <a href="{% url 'Authenticate:login' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Support</a>
+            {% endif %}
+            <a href="{% url 'ServiceCenter:show_service_page' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Service Center</a>
         </div>
 
-        <div class="flex justify-end items-center space-x-6 w-full">
+        <div class="hidden md:flex items-center space-x-6">
             <form id="searchForm" class="relative" action="{% url 'Homepage:search_results' %}" method="get">
-                <div class="ml-50 relative text-gray-600 focus-within:text-gray-400">
+                <div class="relative text-gray-600 focus-within:text-gray-400">
                     <img src="{% static 'image/navbar/search.png' %}" alt="Search Icon" class="absolute left-2 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500">
-                    <input id="searchInput" type="search" name="q" placeholder="Search by brand or model"
-                        class="pl-10 py-2 w-64 text-sm text-white bg-transparent border-b border-gray-300 focus:outline-none focus:border-white">
+                    <input id="searchInput" type="search" name="q" placeholder="Search by brand or model" 
+                           class="pl-10 py-2 w-64 text-sm text-white bg-white/10 rounded-full border border-transparent 
+                                  focus:border-white transition-colors duration-300 placeholder-gray-300 focus:outline-none">
                 </div>
-                <dl id="suggestions" class="absolute max-w-md text-gray-900 divide-y divide-gray-200 bg-gray-800 text-white rounded-md mt-1 shadow-lg w-64 hidden">
+                <dl id="suggestions" class="absolute w-full mt-2 bg-gray-800 rounded-md shadow-lg divide-y divide-gray-700 hidden z-50">
                 </dl>
             </form>
-            
+
             {% if user.is_authenticated %}
-                <div class="relative group">
-                    <button id="user-menu-button" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110 focus:outline-none">
+                <div class="relative inline-block text-left group">
+                    <button class="flex items-center text-white hover:text-gray-300 transition duration-300 transform hover:scale-110">
                         <img src="{% static 'image/navbar/User.png' %}" alt="User" class="w-6 h-6">
                     </button>
-                    <div id="user-menu-dropdown" class="absolute right-0 w-48 bg-white rounded-md shadow-lg py-2 hidden group-hover:block transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-                        <div class="px-4 py-2 text-gray-800 border-b border-gray-200">
-                            Hai, {{ user.username }}
-                        </div>
-                        <a href="{% url 'Profile:profile_view' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">View Profile</a>
-                        <form method="post" action="{% url 'Authenticate:logout' %}" class="px-4 py-2">
+                    <div class="hidden group-hover:block absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                        <div class="px-4 py-2 text-sm text-gray-900">Hi, {{ user.username }}</div>
+                        <a href="{% url 'Profile:profile_view' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Profile</a>
+                        <form method="post" action="{% url 'Authenticate:logout' %}" class="block w-full">
                             {% csrf_token %}
-                            <button type="submit" class="w-full text-left text-gray-800 hover:bg-gray-100 transition duration-200">Logout</button>
+                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
                         </form>
                     </div>
                 </div>
-                <a href="{% url 'Wishlist:favorite_list' %}" class="mb-2 text-white hover:text-gray-300 transition duration-300 transform hover:scale-110">
+
+                <a href="{% url 'Wishlist:favorite_list' %}" class="text-white hover:text-gray-300 transition duration-300 transform hover:scale-110">
                     <img src="{% static 'image/navbar/heart.png' %}" alt="Wishlist" class="w-6 h-6">
                 </a>
             {% else %}
-                <a href="{% url 'Authenticate:login' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Login</a>
+                <a href="{% url 'Authenticate:login' %}" class="text-white hover:text-gray-300 transition duration-300 font-semibold">Login</a>
             {% endif %}
+        </div>
+
+        <div class="md:hidden flex items-center">
+            <button id="menu-button" class="text-white focus:outline-none" aria-label="Toggle menu">
+                <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-sm transform -translate-y-full transition-all duration-300 md:hidden z-50">
+        <div class="flex flex-col h-full pt-20 pb-6 px-4">
+            <form id="searchFormMobile" class="mb-8" action="{% url 'Homepage:search_results' %}" method="get">
+                <div class="relative">
+                    <img src="{% static 'image/navbar/search.png' %}" alt="Search Icon" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5">
+                    <input id="searchInputMobile" type="search" name="q" placeholder="Search by brand or model"
+                           class="w-full pl-10 py-2 bg-white/10 rounded-full border border-transparent 
+                                  focus:border-white text-white placeholder-gray-300 focus:outline-none">
+                </div>
+                <dl id="suggestionsMobile" class="mt-2 bg-gray-800 rounded-md shadow-lg divide-y divide-gray-700 hidden">
+                </dl>
+            </form>
+
+            <div class="flex flex-col space-y-4">
+                <a href="{% url 'Homepage:home_section' %}" class="text-white text-lg hover:text-gray-300">Home</a>
+                <a href="{% url 'Homepage:list_product' %}" class="text-white text-lg hover:text-gray-300">Product</a>
+                <a href="{% url 'Article:article_list' %}" class="text-white text-lg hover:text-gray-300">Article</a>
+                <a href="{% url 'ServiceCenter:show_service_page' %}" class="text-white text-lg hover:text-gray-300">Service Center</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'CustomerService:customer_service_for_user' user.id %}" class="text-white text-lg hover:text-gray-300">Support</a>
+                    <a href="{% url 'Profile:profile_view' %}" class="text-white text-lg hover:text-gray-300">Profile</a>
+                    <a href="{% url 'Wishlist:favorite_list' %}" class="text-white text-lg hover:text-gray-300">Wishlist</a>
+                    <form method="post" action="{% url 'Authenticate:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-white text-lg hover:text-gray-300 w-full text-left">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'Authenticate:login' %}" class="text-white text-lg hover:text-gray-300">Login</a>
+                {% endif %}
+            </div>
+
+            <button id="close-menu" class="absolute top-4 right-4 text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
     </div>
 </nav>
 
 <style>
     nav {
-        background-color: rgba(0, 0, 0, 0.3); 
-        backdrop-filter: blur(10px);
-        transition: background-color 0.3s ease-in-out;
+        background-image: linear-gradient(to right, #7FADD0, #6D0CC9, #BB89EC, #2E29A6);
     }
-    .bg-opacity-90 { background-color: rgba(0, 0, 0, 0.9); }
-    #suggestions div { padding: 0.5rem; }
-    #suggestions div:hover { background-color: #374151; }
-    #suggestions dt { color: #9CA3AF; }
+    
+    #mobile-menu {
+        transition: transform 0.3s ease-in-out;
+    }
+    
+    #mobile-menu.show {
+        transform: translateY(0);
+    }
+    
+    .group:hover .group-hover\:block {
+        display: block;
+    }
+    
+    #suggestions div, #suggestionsMobile div {
+        @apply p-3 cursor-pointer;
+    }
+    
+    #suggestions div:hover, #suggestionsMobile div:hover {
+        @apply bg-gray-700;
+    }
 </style>
 
 <script>
-    const searchForm = document.getElementById('searchForm');
-    const searchInput = document.getElementById('searchInput');
-    const suggestionsBox = document.getElementById('suggestions');
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenu = document.getElementById('close-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
 
-    searchInput.addEventListener('input', function() {
-        const query = searchInput.value.trim();
-        if (query.length > 1) {  
-            fetch(`/search-suggestions/?q=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(data => {
-                    suggestionsBox.innerHTML = ''; 
-                    if (data.length > 0) {
-                        data.forEach(item => {
-                            const suggestionItem = document.createElement('div');
-                            suggestionItem.classList.add('flex', 'flex-col', 'p-3', 'cursor-pointer', 'hover:bg-gray-700');
-
-                            const dt = document.createElement('dt');
-                            dt.classList.add('text-gray-500', 'md:text-lg', 'dark:text-gray-400');
-                            dt.textContent = item.brand;
-                            
-                            const dd = document.createElement('dd');
-                            dd.classList.add('text-lg', 'font-semibold');
-                            dd.textContent = item.model;
-                            
-                            suggestionItem.appendChild(dt);
-                            suggestionItem.appendChild(dd);
-
-                            suggestionItem.addEventListener('click', () => {
-                                window.location.href = `/detail/${item.product_id}/`;
-                            });
-
-                            suggestionsBox.appendChild(suggestionItem);
-                        });
-                        suggestionsBox.classList.remove('hidden'); 
-                    } else {
-                        suggestionsBox.classList.add('hidden'); 
-                    }
-                })
-                .catch(error => console.error('Error fetching suggestions:', error));
-        } else {
-            suggestionsBox.classList.add('hidden');  
+        function toggleMenu() {
+            const isOpen = !mobileMenu.classList.contains('-translate-y-full');
+            if (isOpen) {
+                mobileMenu.classList.add('-translate-y-full');
+            } else {
+                mobileMenu.classList.remove('-translate-y-full');
+            }
         }
-    });
 
-    searchForm.addEventListener('submit', function(e) {
-        if (!suggestionsBox.classList.contains('hidden')) {
-            suggestionsBox.classList.add('hidden');
-        }
-    });
+        menuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.add('-translate-y-full');
+        });
 
-    document.addEventListener('click', (e) => {
-        if (!searchForm.contains(e.target)) {
-            suggestionsBox.classList.add('hidden');
-        }
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !menuButton.contains(e.target)) {
+                mobileMenu.classList.add('-translate-y-full');
+            }
+        });
+        mobileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
     });
+    function setupSearchSuggestions(inputId, suggestionsId, formId) {
+        const searchInput = document.getElementById(inputId);
+        const suggestionsBox = document.getElementById(suggestionsId);
+        const searchForm = document.getElementById(formId);
+        let debounceTimer;
 
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const query = searchInput.value.trim();
+                if (query.length > 1) {
+                    fetch(`/search-suggestions/?q=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            suggestionsBox.innerHTML = '';
+                            if (data.length > 0) {
+                                data.forEach(item => {
+                                    const div = document.createElement('div');
+                                    div.className = 'p-3 hover:bg-gray-700 cursor-pointer';
+                                    div.innerHTML = `
+                                        <dt class="text-gray-400 text-sm">${item.brand}</dt>
+                                        <dd class="text-white font-medium">${item.model}</dd>
+                                    `;
+                                    div.addEventListener('click', () => {
+                                        window.location.href = `/detail/${item.product_id}/`;
+                                    });
+                                    suggestionsBox.appendChild(div);
+                                });
+                                suggestionsBox.classList.remove('hidden');
+                            } else {
+                                suggestionsBox.classList.add('hidden');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    suggestionsBox.classList.add('hidden');
+                }
+            }, 300);
+        });
+        document.addEventListener('click', (e) => {
+            if (!searchForm.contains(e.target)) {
+                suggestionsBox.classList.add('hidden');
+            }
+        });
+    }
+    setupSearchSuggestions('searchInput', 'suggestions', 'searchForm');
+    setupSearchSuggestions('searchInputMobile', 'suggestionsMobile', 'searchFormMobile');
 </script>

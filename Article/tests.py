@@ -57,15 +57,25 @@ class ArtikelModelTest(TestCase):
 
 
 class ArtikelViewTest(TestCase):
+
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpass')
-        self.admin_user = User.objects.create_superuser(username='admin', password='adminpass') 
-        self.client.login(username='admin', password='adminpass')  
+        self.admin_user = User.objects.create_superuser(username='admin', password='adminpass')  # Admin user
+        self.client.login(username='admin', password='adminpass')  # Login as admin user
         self.artikel = Artikel.objects.create(
             title='Test Article',
             content='This is a test article content.',
             source='Test Source',
         )
 
+    def test_article_list_view(self):
+        response = self.client.get(reverse('Article:article_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'article_list.html')
+        self.assertContains(response, 'Test Article')
 
-
+    def test_article_detail_view(self):
+        response = self.client.get(reverse('Article:article_detail', args=[self.artikel.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'article_detail.html')
+        self.assertContains(response, 'Test Article')

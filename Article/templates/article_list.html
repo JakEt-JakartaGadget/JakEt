@@ -13,29 +13,29 @@
 {% endif %}
 
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold text-center mb-8">Article List</h1>
+    <h1 class="text-3xl md:text-4xl font-bold text-center mb-8">Article List</h1>
 
     {% if request.user.is_staff %}
-        <div class="text-right mb-4">
-            <button id="add-article-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg">Add Article</button>
+        <div class="text-center md:text-right mb-4">
+            <button id="add-article-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg w-full md:w-auto">Add Article</button>
         </div>
     {% endif %}
 
     <div class="space-y-8">
         {% for artikel in articles %}
-            <div class="flex items-start space-x-4 bg-white p-6 rounded-lg shadow-md">
+            <div class="flex flex-col md:flex-row items-start md:space-x-4 bg-white p-6 rounded-lg shadow-md space-y-4 md:space-y-0">
                 {% if artikel.image_url %}
-                    <img class="w-24 h-24 rounded-md" src="{{ artikel.image_url }}" alt="{{ artikel.title }}">
+                    <img class="w-full md:w-24 h-auto md:h-24 rounded-md object-cover" src="{{ artikel.image_url }}" alt="{{ artikel.title }}">
                 {% endif %}
                 <div class="flex-1">
-                    <h2 class="text-2xl font-bold text-black">
+                    <h2 class="text-xl md:text-2xl font-bold text-black">
                         <a href="{% url 'Article:article_detail' artikel.id %}">{{ artikel.title }}</a>
                     </h2>
                     <p class="text-gray-700">{{ artikel.content|truncatewords:20 }}</p>
                     <p class="text-gray-500 text-sm">Published: {{ artikel.published_date }}</p>
                 </div>
                 {% if request.user.is_staff %}
-                    <div class="flex space-x-2">
+                    <div class="flex space-x-2 mt-4 md:mt-0">
                         <a href="{% url 'Article:edit_article' artikel.id %}" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold px-4 py-2 rounded-lg">Edit</a>
                         <a href="{% url 'Article:delete_article' artikel.id %}" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg">Delete</a>
                     </div>
@@ -47,10 +47,9 @@
     </div>
 </div>
 
-<!-- Modal for add artikel -->
-<div id="addArticleModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-4">Add Article</h2>
+<div id="addArticleModal" class="fixed inset-0 flex items-center justify-center z-50 hidden px-4">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg mx-auto">
+        <h2 class="text-xl md:text-2xl font-bold mb-4">Add Article</h2>
         <form id="add-article-form" method="POST">
             {% csrf_token %}
             <div class="mb-4">
@@ -63,21 +62,20 @@
             </div>
             <div class="mb-4">
                 <label class="block text-lg font-medium text-gray-700">Image URL</label>
-                <input type="url" name="image_url" class="w-full px-4 py-2 border rounded-lg" placeholder="Masukkan URL gambar" required>
+                <input type="url" name="image_url" class="w-full px-4 py-2 border rounded-lg" placeholder="Enter image URL" required>
             </div>
             <div class="mb-4">
                 <label class="block text-lg font-medium text-gray-700">Source</label>
-                <input type="text" name="source" class="w-full px-4 py-2 border rounded-lg" placeholder="Masukkan sumber artikel" required>
+                <input type="text" name="source" class="w-full px-4 py-2 border rounded-lg" placeholder="Enter article source" required>
             </div>
-            <div class="text-right">
-                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg">Save</button>
+            <div class="flex justify-end space-x-2">
                 <button type="button" id="close-modal" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-lg">Cancel</button>
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg">Save</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- JavaScript for AJAX -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $('#add-article-btn').click(function() {

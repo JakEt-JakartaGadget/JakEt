@@ -16,21 +16,21 @@ def article_list(request):
 @user_passes_test(is_admin)
 def add_article(request):
     if request.method == 'POST':
-        form = ArtikelForm(request.POST, request.FILES)
+        form = ArtikelForm(request.POST)
         if form.is_valid():
             artikel = form.save()
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({'message': 'Artikel berhasil ditambahkan', 'id': artikel.id}, status=200)
+                return JsonResponse({'message': 'Article added successfully', 'id': artikel.id}, status=200)
             return redirect('article_list')
         else:
-            return JsonResponse({'message': 'Kesalahan saat menambahkan artikel', 'errors': form.errors}, status=400)
-    return JsonResponse({'message': 'Metode tidak diizinkan'}, status=405)
+            return JsonResponse({'message': 'Error while adding the article', 'errors': form.errors}, status=400)
+    return JsonResponse({'message': 'Method not allowed'}, status=405)
 
 @user_passes_test(is_admin)
 def edit_article(request, pk):
     artikel = get_object_or_404(Artikel, pk=pk)
     if request.method == 'POST':
-        form = ArtikelForm(request.POST, request.FILES, instance=artikel)
+        form = ArtikelForm(request.POST, instance=artikel)
         if form.is_valid():
             form.save()
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -38,7 +38,7 @@ def edit_article(request, pk):
             return redirect('article_list')
     else:
         form = ArtikelForm(instance=artikel)
-    return render(request, 'edit_article.html', {'form': form})
+    return render(request, 'edit_article.html', {'form': form, 'artikel': artikel})
 
 @user_passes_test(is_admin)
 def delete_article(request, pk):

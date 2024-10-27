@@ -13,7 +13,7 @@
     <h1 class="text-4xl font-bold text-center mb-8 text-black">Edit Article</h1>
 
     <div class="bg-white shadow-lg rounded-lg p-8">
-      <form method="POST" enctype="multipart/form-data">
+      <form method="POST">
         {% csrf_token %}
         
         <div class="mb-6">
@@ -27,10 +27,10 @@
         </div>
 
         <div class="mb-6">
-          <label for="id_image" class="block text-gray-700 font-semibold">Image</label>
-          <input type="file" name="image" id="id_image" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+          <label for="id_image" class="block text-gray-700 font-semibold">Image URL</label>
+          <input type="text" name="image_url" id="id_image" value="{% if form.instance.image %}{{ form.instance.image }}{% endif %}" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Masukkan URL gambar">
           {% if form.instance.image %}
-            <img class="mt-2 w-32 h-auto rounded-md" src="{{ form.instance.image.url }}" alt="{{ form.instance.title }}">
+            <img class="mt-2 w-32 h-auto rounded-md" src="{{ form.instance.image }}" alt="{{ form.instance.title }}">
           {% endif %}
         </div>
 

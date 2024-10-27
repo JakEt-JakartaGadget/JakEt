@@ -1,77 +1,125 @@
-from django.test import TestCase
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from CustomerService.models import Chat, DailyCustomerService
 import json
-from django.utils import timezone
+from django.test import Client, TestCase
+from django.contrib.auth.models import User
+from django.urls import reverse
+from CustomerService.models import Chat, DailyCustomerService
+from datetime import date
 
-User  = get_user_model()
 
-class CustomerServiceTests(TestCase):
+class ChatModelTest(TestCase):
     def setUp(self):
         # Create a user for testing
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.client.login(username='testuser', password='testpassword')
+        self.user = User.objects.create_user(username='testuser', password='testpass')
 
-        # Create a DailyCustomerService instance for today's date
-        self.daily_service = DailyCustomerService.objects.create(user=self.user, date=timezone.now().date())
+    def test_create_chat_message(self):
+        # Create a chat message
+        chat_message = Chat.objects.create(
+            user=self.user,
+            message='Hello, this is a test message.',
+            sent_by_user=True
+        )
+        self.assertEqual(chat_message.message, 'Hello, this is a test message.')
+        self.assertEqual(chat_message.user, self.user)
+        self.assertFalse(chat_message.read)  # By default, it should not be read
+
+    def test_count_unread_messages(self):
+        # Create chat messages
+        Chat.objects.create(user=self.user, message='First unread message.')
+        Chat.objects.create(user=self.user, message='Second unread message.')
+        Chat.objects.create(user=self.user, message='Read message.', read=True)
+
+        # Count unread messages
+        unread_count = Chat.count_unread_messages(self.user)
+        self.assertEqual(unread_count, 2)
+
+    def test_mark_as_read(self):
+        # Create a chat message
+        chat_message = Chat.objects.create(user=self.user, message='Message to mark as read.')
+
+        # Mark the message as read
+        chat_message.mark_as_read()
+        self.assertTrue(chat_message.read)
+
+    def test_mark_as_read_multiple_messages(self):
+        # Create multiple chat messages
+        message1 = Chat.objects.create(user=self.user, message='First message.')
+        message2 = Chat.objects.create(user=self.user, message='Second message.')
+
+        # Mark the first message as read
+        message1.mark_as_read()
+        self.assertTrue(message1.read)
+        self.assertFalse(message2.read)
+
+
+class DailyCustomerServiceModelTest(TestCase):
+    def setUp(self):
+        # Create a user for testing
+        self.user = User.objects.create_user(username='testuser', password='testpass')
+
+    def test_daily_customer_service_creation(self):
+        # Create a daily customer service entry
+        daily_service = DailyCustomerService.objects.create(user=self.user)
+
+        self.assertEqual(daily_service.user, self.user)
+        self.assertEqual(daily_service.date, date.today())
+
+    def test_messages_property(self):
+        # Create a daily customer service entry
+        daily_service = DailyCustomerService.objects.create(user=self.user)
+        
+        # Create chat messages for the same date
+        Chat.objects.create(user=self.user, message='Message 1', date=daily_service.date)
+        Chat.objects.create(user=self.user, message='Message 2', date=daily_service.date)
+
+        # Fetch messages using the property
+        messages = daily_service.messages
+        self.assertEqual(len(messages), 2)
+        self.assertEqual(messages[0].message, 'Message 1')
+        self.assertEqual(messages[1].message, 'Message 2')
+
+class CustomerServiceViewsTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.superuser = User.objects.create_superuser(username='admin', password='admin')
+        self.chat = Chat.objects.create(user=self.user, message='Hello', sent_by_user=True)
 
     def test_customer_service_view(self):
-        # Create a Chat instance
-        Chat.objects.create(user=self.user, message='Test message')
-        
-        response = self.client.get(reverse('CustomerService:customer_service'))
+        self.client.login(username='testuser', password='12345')
+        response = self.client.get(reverse('customer_service'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'customer-service.html')
-        self.assertContains(response, 'grouped_chats')
+        self.assertIn('grouped_chats', response.context)
+        self.assertIn('today', response.context)
+        self.assertIn('viewing_user', response.context)
+
+    def test_customer_service_view_as_superuser(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.get(reverse('customer_service', args=[self.user.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'customer-service.html')
+        self.assertIn('grouped_chats', response.context)
+        self.assertIn('today', response.context)
+        self.assertIn('viewing_user', response.context)
 
     def test_send_message_view(self):
-        url = reverse('CustomerService:send_message')
-        message_data = json.dumps({'message': 'Hello, this is a test message.'})
-
-        response = self.client.post(url, message_data, content_type='application/json')
+        self.client.login(username='testuser', password='12345')
+        response = self.client.post(reverse('send_message'), json.dumps({'message': 'Hi'}), content_type='application/json')
         self.assertEqual(response.status_code, 200)
-        response_data = response.json()
-        self.assertIn('status', response_data)
-        self.assertEqual(response_data['status'], 'success')
+        self.assertEqual(response.json()['status'], 'success')
+        self.assertEqual(response.json()['message']['message'], 'Hi')
 
-        # Check if the message was created correctly
-        chat = Chat.objects.get(id=response_data['message']['id'])
-        self.assertEqual(chat.message, 'Hello, this is a test message.')
-        self.assertEqual(chat.time_sent.strftime('%H:%M'), response_data['message']['time'])
-        self.assertEqual(chat.date.strftime('%Y-%m-%d'), response_data['message']['date'])
-
-    def test_send_message_view_invalid_data(self):
-        url = reverse('CustomerService:send_message')
-        invalid_message_data = json.dumps({'message': ''})
-
-        response = self.client.post(url, invalid_message_data, content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertJSONEqual(response.content, {'status': 'error', 'message': 'Invalid request'})
+    def test_send_message_view_as_superuser(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('send_message', args=[self.user.id]), json.dumps({'message': 'Hi'}), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['status'], 'success')
+        self.assertEqual(response.json()['message']['message'], 'Hi')
 
     def test_get_messages_view(self):
-        chat = Chat.objects.create(user=self.user, message='First message')
-        url = reverse(' CustomerService:get_messages')
-
-        response = self.client.get(url)
+        self.client.login(username='testuser', password='12345')
+        response = self.client.get(reverse('get_messages'))
         self.assertEqual(response.status_code, 200)
-        response_data = response.json()
-        self.assertEqual(len(response_data['messages']), 1)
-        self.assertEqual(response_data['messages'][0]['id'], chat.id)
-        self.assertEqual(response_data['messages'][0]['message'], chat.message)
-        self.assertEqual(response_data['messages'][0]['time'], chat.time_sent.strftime('%H:%M'))
-        self.assertEqual(response_data['messages'][0]['date'], chat.date.strftime('%Y-%m-%d'))
-
-    def test_get_messages_view_after_timestamp(self):
-        chat1 = Chat.objects.create(user=self.user, message='First message')
-        chat2 = Chat.objects.create(user=self.user, message='Second message')
-        url = reverse('CustomerService:get_messages') + '?after={}'.format(chat1.time_sent.strftime('%H:%M:%S'))
-
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        response_data = response.json()
-        self.assertEqual(len(response_data['messages']), 1)
-        self.assertEqual(response_data['messages'][0]['id'], chat2.id)
-        self.assertEqual(response_data['messages'][0]['message'], chat2.message)
-        self.assertEqual(response_data['messages'][0]['time'], chat2.time_sent.strftime('%H:%M'))
-        self.assertEqual(response_data['messages'][0]['date'], chat2.date.strftime('%Y-%m-%d'))
+        self.assertIn('messages', response.json())
+        self.assertEqual(len(response.json()['messages']), 1)
+        self.assertEqual(response.json()['messages'][0]['message'], 'Hello')

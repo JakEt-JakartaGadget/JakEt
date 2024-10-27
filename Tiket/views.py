@@ -49,12 +49,13 @@ def reschedule_appointment(request, id):
 
 
 def cancel_appointment(request, id):
-    # Get tiket berdasarkan id
-    tiket = Tiket.objects.get(pk = id)
-    # Hapus tiket
-    tiket.delete()
-    # Kembali ke halaman awal
-    return HttpResponseRedirect(reverse('ServiceCenter:show_service_page'))
+    tiket = Tiket.objects.get(pk=id)
+    
+    if request.method == "POST":
+        tiket.delete()
+        return HttpResponseRedirect(reverse('ServiceCenter:show_service_page'))
+    
+    return render(request, 'confirm_cancel.html', {'tiket': tiket})
 
 
 def show_xml(request):

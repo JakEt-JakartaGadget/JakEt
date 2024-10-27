@@ -29,11 +29,12 @@ def add_discussion(request):
                 'topic': topic,
                 'id': str(new_discussion.id),
                 'username': request.user.username,
-                'profile_picture': request.user.profile_picture.url if hasattr(request.user, 'profile_picture') else '',
+                'profile_picture': request.user.profile_picture if hasattr(request.user, 'profile_picture') else '',
                 'created_at': new_discussion.started.strftime("%Y-%m-%d %H:%M:%S")
             })
     return JsonResponse({'success': False})
 
+@csrf_exempt
 @user_passes_test(lambda u: u.is_superuser)
 def delete_discussion(request, discussion_id):
     try:

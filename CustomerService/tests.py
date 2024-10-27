@@ -1,10 +1,11 @@
-import json
 from django.test import Client, TestCase
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from CustomerService.models import Chat, DailyCustomerService
 from datetime import date
+import json
 
+User = get_user_model()
 
 class ChatModelTest(TestCase):
     def setUp(self):
@@ -49,7 +50,6 @@ class ChatModelTest(TestCase):
         message1.mark_as_read()
         self.assertTrue(message1.read)
         self.assertFalse(message2.read)
-
 
 class DailyCustomerServiceModelTest(TestCase):
     def setUp(self):

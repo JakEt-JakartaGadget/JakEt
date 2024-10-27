@@ -2,7 +2,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: white; /* Background menjadi putih */
+    background-color: white; 
 }
 
 .comparison-container {
@@ -12,8 +12,8 @@ html, body {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Memastikan konten ada di tengah secara vertikal */
-    align-items: center; /* Memastikan konten di tengah secara horizontal */
+    justify-content: center;
+    align-items: center; 
 }
 
 .comparison-title {
@@ -26,7 +26,7 @@ html, body {
 }
 
 .device-dropdown option[disabled] {
-    color: #cccccc; /* Warna abu-abu untuk teks placeholder */
+    color: #cccccc; 
 }
 
 .device-dropdown {
@@ -34,28 +34,28 @@ html, body {
     font-size: 18px;
     width: 985px;
     height: 55px;
-    border-radius: 28px; /* Rounded shape */
+    border-radius: 28px; 
     border: 1px solid #ccc;
     padding-left: 10px;
     background-color: #f0f0f0;
     display: block;
-    margin: 0 auto; /* Membuat dropdown berada di tengah */
-    text-align: center; /* Membuat teks berada di tengah */
-    appearance: none; /* Menghilangkan default dropdown arrow */
-    background-image: url('{% static "path/to/arrow-icon.png" %}'); /* Tambahkan custom arrow icon jika diperlukan */
+    margin: 0 auto; 
+    text-align: center; 
+    appearance: none;
+    background-image: url('{% static "path/to/arrow-icon.png" %}'); 
     background-repeat: no-repeat;
     background-position: right 10px center;
 }
 
 .device-dropdown option {
-    text-align: center; /* Opsi lainnya tetap rata kiri */
+    text-align: center; 
 }
 
 #comparisonResults {
     display: flex;
-    justify-content: space-around; /* Membuat jarak antara cards */
-    flex-wrap: nowrap; /* Mencegah cards jatuh ke bawah */
-    gap: 20px; /* Jarak antar cards */
+    justify-content: space-around;
+    flex-wrap: nowrap; 
+    gap: 20px;
     margin-top: 20px;
     align-items: flex-start;
 }
@@ -71,20 +71,19 @@ html, body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center; /* Ini memastikan semua elemen di dalam card, termasuk gambar, berada di tengah */
+    align-items: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin: 0 20px;
 }
 
-/* Tambahkan media query untuk responsif */
 @media (max-width: 1280px) {
     #comparisonResults {
-        flex-wrap: wrap; /* Pada layar lebih kecil, cards akan jatuh ke bawah */
-        justify-content: center; /* Tetap sejajarkan di tengah */
+        flex-wrap: wrap; 
+        justify-content: center; 
     }
 
     .device-card {
-        width: 100%; /* Membuat card mengambil seluruh lebar pada layar kecil */
+        width: 100%; 
     }
 }
 
@@ -101,7 +100,7 @@ html, body {
     height: 395px;
     margin-bottom: 20px;
     display: block;
-    object-fit: contain; /* Untuk memastikan gambar tetap proporsional */
+    object-fit: contain;
 }
 
 .device-card h3 {
@@ -140,7 +139,7 @@ html, body {
     font-size: 18px;
     font-weight: bold;
     display: block;
-    margin: 0 auto; /* Membuat tombol berada di tengah */
+    margin: 0 auto;
 }
 
 .compare-button:hover {
@@ -160,23 +159,4 @@ html, body {
     line-height: 57px;
     margin-bottom: 20px;
     display: inline-block;
-}
-
-.wishlist-button {
-    display: inline-block;
-    width: 50px; /* Pastikan lebar dan tinggi sama */
-    height: 50px;
-    background-color: #6D0CC9;
-    border-radius: 50%;
-    text-align: center; /* Agar gambar berada di tengah secara horizontal */
-    line-height: 50px; /* Agar gambar berada di tengah secara vertikal */
-    position: relative; /* Ini akan memungkinkan Anda untuk memposisikan gambar secara absolut */
-}
-
-.wishlist-button img {
-    width: 24px;
-    height: 24px;
-    position: relative;
-    top: 11px; /* Geser gambar secara vertikal */
-    left: 13px; /* Geser gambar secara horizontal */
 }

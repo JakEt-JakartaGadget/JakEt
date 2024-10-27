@@ -65,17 +65,19 @@
         <h1 class="pt-10 text-black text-3xl md:text-4xl font-bold text-center">Today's Article</h1>
         <div class="flex flex-col items-center w-full max-w-7xl mt-10 space-y-4 px-4 md:px-0">
             
-            <div class="w-full h-60 md:h-96 bg-gray-200 rounded-lg shadow-lg flex items-center justify-center">
+            <div class="w-full h-60 md:h-96 bg-gray-200 rounded-lg shadow-lg flex items-center justify-center transition-transform transform hover:scale-105 hover:shadow-xl">
                 <img src="https://via.placeholder.com/1200x500" alt="Article Image" class="w-full h-full object-cover rounded-lg">
             </div>
     
             <div class="flex flex-col md:flex-row w-full space-y-4 md:space-y-0 md:space-x-4">
-                <div class="w-full md:w-1/2 h-48 bg-gray-300 rounded-lg shadow-lg flex items-center justify-center">
+                <div class="w-full md:w-1/2 h-48 bg-gray-300 rounded-lg shadow-lg flex items-center justify-center transition-transform transform hover:scale-105 hover:shadow-xl">
                     {% if user.is_authenticated %}
-                        <div class="flex items-center space-x-4 px-4 md:px-0">
-                            <p class="text-3xl md:text-4xl lg:text-5xl font-bold">Comparison</p>
-                            <img src="{% static 'image/VS.png' %}" alt="VS" class="w-12 md:w-16 lg:w-20">
-                        </div>
+                        <a href="{% url 'Comparison:comparison' %}">
+                            <div class="flex items-center space-x-4 px-4 md:px-0 cursor-pointer">
+                                <p class="text-3xl md:text-4xl lg:text-5xl font-bold">Comparison</p>
+                                <img src="{% static 'image/VS.png' %}" alt="VS" class="w-12 md:w-16 lg:w-20">
+                            </div>
+                        </a>
                     {% else %}
                         <div class="flex flex-col items-center text-center">
                             <p class="text-lg md:text-2xl font-bold">Login required for comparison</p>
@@ -84,7 +86,7 @@
                     {% endif %}
                 </div>
     
-                <div class="w-full md:w-1/2 h-48 bg-gray-300 rounded-lg shadow-lg flex items-center justify-center px-4 md:px-6">
+                <div class="w-full md:w-1/2 h-48 bg-gray-300 rounded-lg shadow-lg flex items-center justify-center px-4 md:px-6 transition-transform transform hover:scale-105 hover:shadow-xl">
                     {% if user.is_authenticated %}
                         <div class="flex items-center space-x-4 md:space-x-6">
                             <div class="flex flex-col text-center md:text-left space-y-2">
@@ -100,10 +102,9 @@
                         </div>
                     {% endif %}
                 </div>
-    
             </div>
         </div>
-    </section>
+    </section>    
     
 
     <section class="relative flex flex-col items-center w-full bg-white py-10">

@@ -24,4 +24,5 @@ urlpatterns = [
     path('detail/', include("DetailProduct.urls")),
     path('wishlist/', include("Wishlist.urls")),
     path('dasboard/', include("Dashboard.urls")),
+    path('comparison/', include ('Comparison.urls')),
 ]

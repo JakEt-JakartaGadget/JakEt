@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'Wishlist',
     'Authenticate',
     'django.contrib.humanize',
-    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [

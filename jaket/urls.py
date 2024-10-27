@@ -29,4 +29,6 @@ urlpatterns = [
     path('comparison/', include ('Comparison.urls')),
     path('servicecenter/', include('ServiceCenter.urls')),
     path('tiket/', include('Tiket.urls')),
+    path('profile/', include('Profile.urls')),
+    path('article/', include('Article.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

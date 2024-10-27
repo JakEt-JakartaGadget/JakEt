@@ -63,12 +63,13 @@
 
     <section class="relative flex flex-col items-center w-full h-auto md:h-screen bg-white">
         <h1 class="pt-10 text-black text-3xl md:text-4xl font-bold text-center">Today's Article</h1>
-        <div class="flex flex-col items-center w-full max-w-7xl mt-10 space-y-4 px-4 md:px-0">
+        <div class="w-full max-w-7xl mt-10 space-y-4 px-4 md:px-0">
+            <a href="{% url 'Article:article_list' %}">
+                <div class="w-full h-80 md:h-96 bg-gray-200 rounded-lg shadow-lg flex items-center justify-center transition-transform transform hover:scale-105 hover:shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Article Image" class="w-full h-full object-cover rounded-lg">
+                </div>
+            </a>
             
-            <div class="w-full h-60 md:h-96 bg-gray-200 rounded-lg shadow-lg flex items-center justify-center transition-transform transform hover:scale-105 hover:shadow-xl">
-                <img src="https://via.placeholder.com/1200x500" alt="Article Image" class="w-full h-full object-cover rounded-lg">
-            </div>
-    
             <div class="flex flex-col md:flex-row w-full space-y-4 md:space-y-0 md:space-x-4">
                 <div class="w-full md:w-1/2 h-48 bg-gray-300 rounded-lg shadow-lg flex items-center justify-center transition-transform transform hover:scale-105 hover:shadow-xl">
                     {% if user.is_authenticated %}
@@ -86,6 +87,7 @@
                     {% endif %}
                 </div>
     
+
                 <div class="w-full md:w-1/2 h-48 bg-gray-300 rounded-lg shadow-lg flex items-center justify-center px-4 md:px-6 transition-transform transform hover:scale-105 hover:shadow-xl">
                     {% if user.is_authenticated %}
                         <div class="flex items-center space-x-4 md:space-x-6">
@@ -104,7 +106,8 @@
                 </div>
             </div>
         </div>
-    </section>    
+    </section>
+     
     
 
     <section class="relative flex flex-col items-center w-full bg-white py-10">
@@ -131,7 +134,7 @@
     
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for service_center in service|slice:":6" %}
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden p-6 flex flex-col items-center text-center max-w-xs"> <!-- Ditambahkan max-w-xs untuk ukuran card -->
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden p-6 flex flex-col items-center text-center max-w-xs"> 
                     <img src="{{ service_center.image.url }}" alt="{{ service_center.name }}" class="h-48 w-full object-cover rounded-lg mb-4">
                     <h2 class="text-2xl font-bold text-black mb-2">{{ service_center.name }}</h2>
                     <p class="text-gray-600">{{ service_center.address }}</p>

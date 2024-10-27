@@ -37,7 +37,7 @@
     <div class="container mx-auto bg-slate-200 rounded-xl w-full max-w-full p-20">
       <div class="mb-20 flex justify-center items-center">
         <!-- Search Bar -->
-        <input type="text" id="searchInput" class="p-3 rounded-full border border-gray-300 w-full max-w-lg mr-7" placeholder="Search service centers by name..." onkeyup="filterServiceCenters()">
+        <input type="text" id="searchInputService" class="p-3 rounded-full border border-gray-300 w-full max-w-lg mr-7" placeholder="Search service centers by name..." onkeyup="filterServiceCenters()">
         
         <!-- Sort Dropdown -->
         <div class="relative inline-block text-left">
@@ -231,7 +231,7 @@
 
 
   function filterServiceCenters() {
-      const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+      const searchQuery = document.getElementById('searchInputService').value.toLowerCase();
       const filteredEntries = serviceEntries.filter(item => 
           item.fields.name.toLowerCase().includes(searchQuery)
       );

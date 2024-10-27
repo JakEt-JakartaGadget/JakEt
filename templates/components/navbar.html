@@ -9,9 +9,9 @@
         <div class="hidden md:flex items-center space-x-8">
             <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Home</a>
             <a href="{% url 'Homepage:list_product' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Product</a>
-            <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Article</a>
+            <a href="{% url 'Article:article_list' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Article</a>
             <a href="{% url 'Homepage:home_section' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Support</a>
-            <a href="{% url 'ServiceCenter:show_service_page' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold">Service</a>
+            <a href="{% url 'ServiceCenter:show_service_page' %}" class="text-white hover:text-gray-300 transition duration-300 text-md font-semibold min-w-[150px]">Service Center</a>
         </div>
 
         <div class="flex justify-end items-center space-x-6 w-full">
@@ -34,7 +34,7 @@
                         <div class="px-4 py-2 text-gray-800 border-b border-gray-200">
                             Hai, {{ user.username }}
                         </div>
-                        <a href="{% url 'Homepage:home_section' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">View Profile</a>
+                        <a href="{% url 'Profile:profile_view' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">View Profile</a>
                         <form method="post" action="{% url 'Authenticate:logout' %}" class="px-4 py-2">
                             {% csrf_token %}
                             <button type="submit" class="w-full text-left text-gray-800 hover:bg-gray-100 transition duration-200">Logout</button>

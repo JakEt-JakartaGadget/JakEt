@@ -7,7 +7,7 @@ class UserData(models.Model):
     favorite_phones = models.ManyToManyField(Phone, blank=True, related_name='favorited_by')
     profile_name = models.CharField(max_length=255)
     username = models.CharField(max_length=255)
-    profile_picture = models.TextField(blank=True,null=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     about = models.TextField(blank=True)
     location = models.CharField(max_length=255)
     phone = models.CharField(max_length=15,blank=True,null=True)

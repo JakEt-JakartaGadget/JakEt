@@ -78,9 +78,6 @@ document.getElementById('comparisonForm').addEventListener('submit', function(ev
                     <button class="view-button">
                         <a href="${data.device1.url}" target="_blank">View product page</a>
                     </button>
-                    <a href="" class="wishlist-button">
-                        <img src="${heartIconPath}" alt="Wishlist">
-                    </a>
                 </div>
                 <div class="device-card">
                     <h2>${data.device2.product_name}</h2>
@@ -95,9 +92,6 @@ document.getElementById('comparisonForm').addEventListener('submit', function(ev
                     <button class="view-button">
                         <a href="${data.device2.url}" target="_blank">View product page</a>
                     </button>
-                    <a href="" class="wishlist-button">
-                        <img src="${heartIconPath}" alt="Wishlist">
-                    </a>
                 </div>
             `;
         } else {

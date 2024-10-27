@@ -161,22 +161,3 @@ html, body {
     margin-bottom: 20px;
     display: inline-block;
 }
-
-.wishlist-button {
-    display: inline-block;
-    width: 50px; /* Pastikan lebar dan tinggi sama */
-    height: 50px;
-    background-color: #6D0CC9;
-    border-radius: 50%;
-    text-align: center; /* Agar gambar berada di tengah secara horizontal */
-    line-height: 50px; /* Agar gambar berada di tengah secara vertikal */
-    position: relative; /* Ini akan memungkinkan Anda untuk memposisikan gambar secara absolut */
-}
-
-.wishlist-button img {
-    width: 24px;
-    height: 24px;
-    position: relative;
-    top: 11px; /* Geser gambar secara vertikal */
-    left: 13px; /* Geser gambar secara horizontal */
-}

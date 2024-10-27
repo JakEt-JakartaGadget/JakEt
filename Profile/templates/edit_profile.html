@@ -21,12 +21,10 @@
       </div>
 
       <div class="flex justify-center gap-4 mb-8">
-        <!-- Form untuk menghapus gambar profil -->
-        <form method="POST" action="{% url 'Profile:delete_profile_picture' %}">
-          {% csrf_token %}
-          <input type="hidden" name="delete_picture" value="true">
-          <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg">Delete Picture</button>
-        </form>
+        <!-- Delete Picture Button with AJAX -->
+        <button id="delete-picture-btn" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg">
+          Delete Picture
+        </button>
       </div>
 
       <!-- Form Section -->
@@ -88,8 +86,53 @@
   </div>
 </div>
 
-<!-- JavaScript untuk memicu input file dan menampilkan gambar yang dipilih -->
+<!-- JavaScript for AJAX and Preview -->
 <script>
+  // CSRF token function for AJAX
+  function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+  const csrftoken = getCookie('csrftoken');
+
+  // AJAX for deleting the profile picture
+  document.getElementById("delete-picture-btn").addEventListener("click", function(e) {
+      e.preventDefault();
+
+      fetch("{% url 'Profile:delete_profile_picture' %}", {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrftoken
+          },
+          body: JSON.stringify({delete_picture: true})
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.status === "success") {
+              alert(data.message);
+              document.getElementById("profile_picture_preview").src = "{% static 'image/blank-profile.jpg' %}";
+          } else {
+              alert(data.message);
+          }
+      })
+      .catch(error => {
+          console.error("Error:", error);
+          alert("An error occurred while trying to delete the profile picture.");
+      });
+  });
+
+  // JavaScript for image preview
   document.getElementById("profile_picture_input").addEventListener("change", function() {
     const file = this.files[0];
     if (file) {

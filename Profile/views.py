@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.db import IntegrityError
 from Authenticate.models import UserData
+from django.contrib.auth.models import User
 from Profile.forms import ProfileForm
 
 @login_required(login_url='/authenticate')
@@ -41,9 +42,11 @@ def create_profile(request):
         profile_picture = request.FILES.get('profile_picture')
 
         try:
-            user = UserData.objects.create_user(username=username)
-            user_data = UserData(
-                user=user,
+            user = request.user
+            user.username = username
+            user.save()
+            user_data = UserData.objects.create(
+                user=request.user,
                 profile_name=profile_name,
                 username=username,
                 about=about,
@@ -65,16 +68,28 @@ def edit_profile(request):
     form = ProfileForm(request.POST or None, request.FILES or None, instance=profile)
 
     if request.method == "POST":
-        if 'delete_picture' in request.POST:
-            profile.profile_picture.delete(save=True)
-            profile.profile_picture = None
-            profile.save()
-            return HttpResponseRedirect(reverse('Profile:profile_view'))
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest' and 'delete_picture' in request.POST:
+            # Menghapus gambar profil jika ada
+            if profile.profile_picture:
+                profile.profile_picture.delete(save=False) 
+                profile.profile_picture = None
+                profile.save()
+                return JsonResponse({'status': 'success', 'message': 'Gambar profil berhasil dihapus.'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Tidak ada gambar profil untuk dihapus.'})
 
+        # Update profil jika form valid
         if form.is_valid():
             form.save()
+            new_username = form.cleaned_data['username']
+            user = profile.user
+            user.username = new_username
+            user.save()
+
             messages.success(request, "Profil berhasil diperbarui!")
-            return HttpResponseRedirect(reverse('Profile:profile_view'))
+            return redirect(reverse('Profile:profile_view'))
+        else:
+            messages.error(request, "Profil gagal diperbarui")
 
     context = {'form': form}
     return render(request, "edit_profile.html", context)
@@ -84,7 +99,7 @@ def delete_profile_picture(request):
     if request.method == "POST":
         profile = UserData.objects.get(user=request.user)
         if profile.profile_picture:
-            profile.profile_picture.delete(save=True)  # Hapus file dari storage
+            profile.profile_picture.delete(save=True)
             profile.profile_picture = None
             profile.save()
             return JsonResponse({'message': 'Gambar profil berhasil dihapus!'})

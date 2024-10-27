@@ -10,12 +10,19 @@
 
 <div class="min-h-screen flex flex-col items-center bg-gray-100">
     <div class="container mx-auto px-4 py-10 max-w-4xl">
+
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-success bg-green-500 text-white p-4 rounded mb-4">
                     {{ message }}
                 </div>
             {% endfor %}
+        {% endif %}
+
+        {% if form.errors %}
+            <div class="alert alert-danger bg-red-500 text-white p-4 rounded mb-4">
+                Profil gagal diperbarui
+            </div>
         {% endif %}
 
         <!-- Profile Header -->

@@ -21,7 +21,7 @@
       </div>
 
       <div class="flex justify-center gap-4 mb-8">
-        <!-- Form untuk mengunggah gambar profil baru -->
+        <!-- Form to upload new profile picture  -->
         <form method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           <input type="file" name="profile_picture" accept="image/*" class="hidden" id="profile_picture_input">
@@ -73,8 +73,6 @@
     </div>
   </div>
 </div>
-
-<!-- JavaScript untuk memicu input file ketika tombol "Add Picture" diklik dan menampilkan gambar yang dipilih -->
 <script>
   document.getElementById("add_picture_button").addEventListener("click", function() {
     document.getElementById("profile_picture_input").click();

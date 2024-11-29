@@ -88,7 +88,4 @@ Dengan **JakEt**, kami berharap dapat memberikan pengalaman digital yang lebih m
 ## 🌐 Tautan Deployment Aplikasi 🌐
 Tautan aplikasi PWS: [http://anthony-edbert-jaket.pbp.cs.ui.ac.id](http://anthony-edbert-jaket.pbp.cs.ui.ac.id)
 
-## 🎨 Tautan Desain Aplikasi 🎨
-Tautan desain aplikasi: https://www.figma.com/design/HcGymRYfGfosqGJk7KvEc5/JakEt?node-id=789-426&t=8MfI33vzERljEQzc-1
-
 

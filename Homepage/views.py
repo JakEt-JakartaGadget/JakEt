@@ -120,3 +120,5 @@ def search_suggestions(request):
         results = [{'product_id': str(phone.id), 'brand': phone.brand, 'model': phone.model} for phone in suggestions]
         return JsonResponse(results, safe=False)
     return JsonResponse([], safe=False)
+
+#tambah branch anthony new

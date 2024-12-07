@@ -27,10 +27,9 @@ SECRET_KEY = 'django-insecure-*p62&9y&$y+s&^e2q5)g9@&y_^!e=!172w_04j$n@-35h*k05=
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "anthony-edbert-jaket.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "anthony-edbert-jaket.pbp.cs.ui.ac.id","10.0.2.2"]
 
 LOGIN_URL = '/authenticate/login/'
-
 
 # Application definition
 
@@ -54,6 +53,7 @@ INSTALLED_APPS = [
     'Wishlist',
     'Authenticate',
     'django.contrib.humanize',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'jaket.urls'
@@ -128,6 +129,18 @@ TIME_ZONE = 'Asia/Jakarta'
 USE_I18N = True
 
 USE_TZ = True
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SAMESITE = 'None'
+
+SESSION_COOKIE_SAMESITE = 'None'
 
 
 # Static files (CSS, JavaScript, Images)

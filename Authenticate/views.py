@@ -106,7 +106,6 @@ def register_app(request):
 
 @csrf_exempt
 def login_app(request):
-    print("masuk sini")
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
@@ -129,8 +128,6 @@ def login_app(request):
             "status": False,
             "message": "Login gagal, periksa kembali email atau kata sandi."
         }, status=401)
-
-
 
 @csrf_exempt
 def logout_app(request):

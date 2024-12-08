@@ -70,83 +70,44 @@ FLUTTER APP AUTHENTICATION
 
 @csrf_exempt
 def register_app(request):
-    if request.method != 'POST':
-        return JsonResponse({
-            "status": False,
-            "message": "Method not allowed. Use POST."
-        }, status=405)
-
-    try:
+    if request.method == 'POST':
         data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return JsonResponse({
-            "status": False,
-            "message": "Invalid JSON."
-        }, status=400)
+        username = data['username']
+        password1 = data['password1']
+        password2 = data['password2']
 
-    username = data.get('username')
-    password1 = data.get('password1')
-    password2 = data.get('password2')
-
-    if not username or not password1 or not password2:
-        return JsonResponse({
-            "status": False,
-            "message": "All fields are required."
-        }, status=400)
-
-    if password1 != password2:
-        return JsonResponse({
-            "status": False,
-            "message": "Passwords do not match."
-        }, status=400)
-
-    if User.objects.filter(username=username).exists():
-        return JsonResponse({
-            "status": False,
-            "message": "Username already exists."
-        }, status=400)
-
-    try:
+        if password1 != password2:
+            return JsonResponse({
+                "status": False,
+                "message": "Passwords do not match."
+            }, status=400)
+        
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({
+                "status": False,
+                "message": "Username already exists."
+            }, status=400)
+        
         user = User.objects.create_user(username=username, password=password1)
         user.save()
-    except Exception as e:
+        
+        return JsonResponse({
+            "username": user.username,
+            "status": 'success',
+            "message": "User created successfully!"
+        }, status=200)
+    
+    else:
         return JsonResponse({
             "status": False,
-            "message": "Error creating user."
-        }, status=500)
-
-    return JsonResponse({
-        "username": user.username,
-        "status": True,
-        "message": "User created successfully!"
-    }, status=201)
+            "message": "Invalid request method."
+        }, status=400)
 
 
 @csrf_exempt
 def login_app(request):
-    if request.method != 'POST':
-        return JsonResponse({
-            "status": False,
-            "message": "Method not allowed. Use POST."
-        }, status=405)
-
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return JsonResponse({
-            "status": False,
-            "message": "Invalid JSON."
-        }, status=400)
-
-    username = data.get('username')
-    password = data.get('password')
-
-    if not username or not password:
-        return JsonResponse({
-            "status": False,
-            "message": "Username and password are required."
-        }, status=400)
-
+    username = request.POST['username']
+    password = request.POST['password']
     user = authenticate(username=username, password=password)
     if user is not None:
         if user.is_active:
@@ -154,19 +115,19 @@ def login_app(request):
             return JsonResponse({
                 "username": user.username,
                 "status": True,
-                "message": "Login successful!"
+                "message": "Login sukses!"
             }, status=200)
         else:
             return JsonResponse({
                 "status": False,
-                "message": "Login failed, account is deactivated."
-            }, status=403)
+                "message": "Login gagal, akun dinonaktifkan."
+            }, status=401)
+
     else:
         return JsonResponse({
             "status": False,
-            "message": "Login failed, please check your username or password."
+            "message": "Login gagal, periksa kembali email atau kata sandi."
         }, status=401)
-
 
 @csrf_exempt
 def logout_app(request):

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-*p62&9y&$y+s&^e2q5)g9@&y_^!e=!172w_04j$n@-35h*k05=
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "anthony-edbert-jaket.pbp.cs.ui.ac.id","10.0.2.2"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "anthony-edbert-jaket.pbp.cs.ui.ac.id","10.0.2.2",'192.168.56.1',]
 
 LOGIN_URL = '/authenticate/login/'
 
@@ -162,5 +162,5 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
-CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://anthony-edbert-jaket.pbp.cs.ui.ac.id/", "https://anthony-edbert-jaket.pbp.cs.ui.ac.id/"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://anthony-edbert-jaket.pbp.cs.ui.ac.id/", "https://anthony-edbert-jaket.pbp.cs.ui.ac.id/","http://192.168.56.1:8000",]
 LOGIN_URL = '/authenticate/login/'

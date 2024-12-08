@@ -7,7 +7,6 @@ from django.http import JsonResponse
 def is_admin(user):
     return user.is_staff
 
-
 def article_list(request):
     articles = Artikel.objects.all()
     return render(request, 'article_list.html', {'articles': articles})

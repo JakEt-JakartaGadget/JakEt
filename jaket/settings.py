@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-*p62&9y&$y+s&^e2q5)g9@&y_^!e=!172w_04j$n@-35h*k05=
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "anthony-edbert-jaket.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "anthony-edbert-jaket.pbp.cs.ui.ac.id", "10.0.2.2"]
 
 LOGIN_URL = '/authenticate/login/'
 
@@ -54,9 +54,11 @@ INSTALLED_APPS = [
     'Wishlist',
     'Authenticate',
     'django.contrib.humanize',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -151,3 +153,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://anthony-edbert-jaket.pbp.cs.ui.ac.id/", "https://anthony-edbert-jaket.pbp.cs.ui.ac.id/"]
 LOGIN_URL = '/authenticate/login/'
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'

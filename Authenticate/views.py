@@ -112,6 +112,7 @@ def login_app(request):
     if user is not None:
         if user.is_active:
             login(request, user)
+            print("Login sukses!")
             return JsonResponse({
                 "username": user.username,
                 "status": True,

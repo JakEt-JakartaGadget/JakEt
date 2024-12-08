@@ -9,4 +9,6 @@ urlpatterns = [
     path('list_product/',list_products, name='list_product'),
     path('search_results/',search_results, name='search_results'),
     path('search-suggestions/', search_suggestions, name='search_suggestions'),
+    path('json_allproduct/',show_json,name='show_json'),
+    path('json_allproduct/<uuid:id>/', show_json_by_id, name='show_json_by_id'),
 ]

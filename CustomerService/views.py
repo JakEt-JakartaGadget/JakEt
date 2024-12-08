@@ -101,3 +101,12 @@ def get_messages(request):
     } for msg in messages]
     
     return JsonResponse({'messages': data})
+
+def show_json(request):
+    dailyCustomerServices = DailyCustomerService.objects.all()
+    chats = Chat.objects.all()
+    data = {
+        'dailyCustomerServices': json.loads(serializers.serialize('json', dailyCustomerServices)),
+        'chats': json.loads(serializers.serialize('json', chats))
+    }
+    return JsonResponse(data, safe=False)

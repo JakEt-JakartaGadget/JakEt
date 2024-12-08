@@ -1,10 +1,11 @@
 from datetime import timezone
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from .models import Discussion, Reply
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core import serializers
 
 @login_required
 def forum_view(request):
@@ -87,3 +88,12 @@ def send_reply(request, id):
         'message': new_reply.message,
         'sender': {'username': new_reply.sender.username, 'profile_picture': new_reply.sender.profile_picture.url}
     }})
+
+def show_json(request):
+    discussions = Discussion.objects.all()
+    replies = Reply.objects.all()
+    data = {
+        'discussions': json.loads(serializers.serialize('json', discussions)),
+        'replies': json.loads(serializers.serialize('json', replies))
+    }
+    return JsonResponse(data, safe=False)

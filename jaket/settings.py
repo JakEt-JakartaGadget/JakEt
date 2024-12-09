@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'Wishlist',
     'Authenticate',
     'django.contrib.humanize',
+    'corsheaders',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -65,6 +67,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
 ]
 
 ROOT_URLCONF = 'jaket.urls'
@@ -151,3 +156,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://anthony-edbert-jaket.pbp.cs.ui.ac.id/", "https://anthony-edbert-jaket.pbp.cs.ui.ac.id/"]
 LOGIN_URL = '/authenticate/login/'
+
+CORS_ALLOW_ALL_ORIGINS = True

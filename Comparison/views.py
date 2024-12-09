@@ -3,6 +3,7 @@ import csv
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+
 def convert_inr_to_idr(price_in_inr):
     if not price_in_inr:  
         return "Price not available"
@@ -58,3 +59,37 @@ def comparison_view(request):
             return JsonResponse({'error': 'Device not found'}, status=404)
 
     return HttpResponse(status=405)
+
+
+#Flutter
+# Comparison/views.py
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Gadget
+from .serializers import GadgetSerializer
+
+@csrf_exempt
+@api_view(['GET'])
+def get_devices_from_csv(request):
+    devices = load_devices_from_csv() # Ambil data dari CSV
+    return JsonResponse(devices, safe=False)
+
+@api_view(['POST'])
+def compare_devices(request):
+    model1 = request.data.get('model1')
+    model2 = request.data.get('model2')
+
+    try:
+        device1 = Gadget.objects.get(model=model1)
+        device2 = Gadget.objects.get(model=model2)
+    except Gadget.DoesNotExist:
+        return Response({"error": "One or both devices not found."}, status=404)
+
+    serializer1 = GadgetSerializer(device1)
+    serializer2 = GadgetSerializer(device2)
+
+    return Response({
+        "device1": serializer1.data,
+        "device2": serializer2.data
+    })

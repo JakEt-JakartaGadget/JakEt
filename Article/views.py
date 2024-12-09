@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Artikel
 from .forms import ArtikelForm
 from django.contrib.auth.decorators import user_passes_test
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
+from django.core import serializers
 
 def is_admin(user):
     return user.is_staff
@@ -53,3 +54,13 @@ def article_detail(request, pk):
     """View to display details of a specific article."""
     artikel = get_object_or_404(Artikel, pk=pk)
     return render(request, 'article_detail.html', {'artikel': artikel})
+
+def show_json(request):
+    data = Artikel.objects.all()  # Mengambil semua artikel
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_xml(request):
+    data = Artikel.objects.all()  # Mengambil semua artikel
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+

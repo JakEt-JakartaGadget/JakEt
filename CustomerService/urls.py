@@ -8,4 +8,5 @@ urlpatterns = [
     path('<int:user_id>/send/', views.send_message, name='send_message'),
     path('messages/', views.get_messages, name='get_messages'),
     path('json/', views.show_json, name='show_json'),
+    path('send_message_flutter/', views.send_message_flutter, name='send_message_flutter'),
 ]

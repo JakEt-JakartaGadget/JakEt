@@ -80,16 +80,14 @@ def compare_devices(request):
     model1 = request.data.get('model1')
     model2 = request.data.get('model2')
 
-    try:
-        device1 = Gadget.objects.get(model=model1)
-        device2 = Gadget.objects.get(model=model2)
-    except Gadget.DoesNotExist:
+    devices = load_devices_from_csv()
+    device1 = next((device for device in devices if device['model'] == model1), None)
+    device2 = next((device for device in devices if device['model'] == model2), None)
+
+    if device1 and device2:
+        return Response({
+            "device1": device1,
+            "device2": device2
+        })
+    else:
         return Response({"error": "One or both devices not found."}, status=404)
-
-    serializer1 = GadgetSerializer(device1)
-    serializer2 = GadgetSerializer(device2)
-
-    return Response({
-        "device1": serializer1.data,
-        "device2": serializer2.data
-    })

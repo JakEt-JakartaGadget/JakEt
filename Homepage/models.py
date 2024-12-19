@@ -1,3 +1,5 @@
+# models.py
+
 from django.db import models
 import uuid
 from django.contrib.auth.models import User
@@ -49,8 +51,31 @@ class Phone(models.Model):
             self.four_star + 
             self.five_star
         )
+    
+    def to_dict(self):
+        return {
+            "pk": self.pk,
+            "brand": self.brand,
+            "model": self.model,
+            "storage": self.storage,
+            "ram": self.ram,
+            "screen_size_inches": self.screen_size_inches,
+            "camera_mp": self.camera_mp,
+            "battery_capacity_mAh": self.battery_capacity_mAh,
+            "price_usd": float(self.price_usd),
+            "price_inr": float(self.price_inr) if self.price_inr else None,
+            "rating": self.rating,
+            "image_url": self.image_url,
+            "one_star": self.one_star,
+            "two_star": self.two_star,
+            "three_star": self.three_star,
+            "four_star": self.four_star,
+            "five_star": self.five_star,
+            "avg_rating": self.avg_rating,
+            "total_respondents": self.total_respondents,
+        }
+
     class Meta:
         indexes = [
             GinIndex(fields=['brand', 'model'])
         ]
-    

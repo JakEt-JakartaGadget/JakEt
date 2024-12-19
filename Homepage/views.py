@@ -62,17 +62,33 @@ def list_products(request):
     return render(request, 'list_product.html', context)
 
 
+# @csrf_exempt
+# @login_required(login_url='/authenticate/login')
+# def toggle_favorite(request, phone_id):
+#     phone = get_object_or_404(Phone, id=phone_id)
+#     favorite, created = Favorite.objects.get_or_create(user=request.user, phone=phone)
+#     if not created:
+#         favorite.delete() 
+#         is_favorite = False
+#     else:
+#         is_favorite = True
+#     return JsonResponse({'is_favorite': is_favorite})
+
 @csrf_exempt
-@login_required(login_url='/authenticate/login')
+@login_required(login_url='/authenticate/login/')
 def toggle_favorite(request, phone_id):
-    phone = get_object_or_404(Phone, id=phone_id)
-    favorite, created = Favorite.objects.get_or_create(user=request.user, phone=phone)
-    if not created:
-        favorite.delete() 
-        is_favorite = False
+    if request.method == 'POST':
+        phone = get_object_or_404(Phone, id=phone_id)
+        favorite, created = Favorite.objects.get_or_create(user=request.user, phone=phone)
+        if not created:
+            favorite.delete()
+            is_favorite = False
+        else:
+            is_favorite = True
+        return JsonResponse({'is_favorite': is_favorite})
     else:
-        is_favorite = True
-    return JsonResponse({'is_favorite': is_favorite})
+        return JsonResponse({"status": "error", "message": "Invalid request method"}, status=405)
+    
 
 def search_results(request):
     query = request.GET.get('q')

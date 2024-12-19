@@ -158,3 +158,16 @@ def logout_app(request):
             "message": "Logout failed."
         }, status=500)
 
+
+@csrf_exempt
+def check_login(request):
+    if request.user.is_authenticated:
+        return JsonResponse({
+            "status": True,
+            "username": request.user.username,
+        }, status=200)
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "User is not authenticated.",
+        }, status=200)

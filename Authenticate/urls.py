@@ -10,4 +10,5 @@ urlpatterns = [
     path('login_app/', login_app, name='login_app'),  
     path('register_app/', register_app, name='register_app'),  
     path('logout_app/', logout_app, name='logout_app'),  
+    path('check_login/', check_login, name='check_login'), 
 ]

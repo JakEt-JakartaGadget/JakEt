@@ -6,6 +6,8 @@ from Profile.views import (
     delete_profile_picture,
     show_xml,
     show_json,
+    create_profile_flutter,
+    edit_profile_flutter,
 )
 from Authenticate.views import log_in
 from django.conf import settings
@@ -21,6 +23,8 @@ urlpatterns = [
     path('delete-picture/', delete_profile_picture, name='delete_profile_picture'),
     path('xml/', show_xml, name='show_xml'),
     path('json/', show_json, name='show_json'),
+    path('create-flutter/', create_profile_flutter, name='create_profile_flutter'),
+    path('edit-flutter/', edit_profile_flutter, name='edit_profile_flutter'),
 ]
 
 if settings.DEBUG:

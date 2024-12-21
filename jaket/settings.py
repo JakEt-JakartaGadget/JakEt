@@ -162,5 +162,5 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
-CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://anthony-edbert-jaket.pbp.cs.ui.ac.id/", "https://anthony-edbert-jaket.pbp.cs.ui.ac.id/","http://192.168.56.1:8000",]
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://anthony-edbert-jaket.pbp.cs.ui.ac.id/", "https://anthony-edbert-jaket.pbp.cs.ui.ac.id/","http://192.168.56.1:8000", 'http://localhost:65368']
 LOGIN_URL = '/authenticate/login/'

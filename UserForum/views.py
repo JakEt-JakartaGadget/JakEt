@@ -4,6 +4,7 @@ from django.http import JsonResponse, HttpResponse
 from .models import Discussion, Reply
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
+from django.forms.models import model_to_dict
 import json
 from django.core import serializers
 
@@ -97,3 +98,57 @@ def show_json(request):
         'replies': json.loads(serializers.serialize('json', replies))
     }
     return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def get_replies(request, id):
+    try:
+        discussion = Discussion.objects.get(id=id)
+    except Discussion.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Discussion not found'}, status=404)
+
+    replies = Reply.objects.filter(discussion=discussion).order_by('replied')
+    return JsonResponse({
+        # 'replies': [model_to_dict(reply) for reply in replies],
+        'replies': json.loads(serializers.serialize('json', replies)),
+        'status': 'success'
+    })
+
+@csrf_exempt
+def add_discussion_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        topic = data.get('topic')
+        if topic:
+            new_discussion = Discussion.objects.create(
+                owner=request.user,
+                topic=topic
+            )
+
+            return JsonResponse({
+                'discussion': model_to_dict(new_discussion),
+                'status': 'success'
+            }, status=201)
+    return JsonResponse({
+        'discussion': None
+    }, status=400)
+
+@csrf_exempt
+def send_reply_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        message = data.get('reply')
+        discussion_id = data.get('discussion')
+        if message and discussion_id:
+            try:
+                discussion = Discussion.objects.get(id=discussion_id)
+            except Discussion.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'Discussion not found'}, status=404)
+
+            reply = Reply.objects.create(discussion=discussion, sender=request.user, message=message)
+            return JsonResponse({
+                'reply': model_to_dict(reply),
+                'status': 'success'
+            }, status=201)
+    return JsonResponse({
+        'reply': None
+    }, status=400)

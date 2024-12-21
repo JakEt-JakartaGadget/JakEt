@@ -10,7 +10,8 @@ from django.contrib.auth import authenticate
 from django.views.decorators.http import require_POST
 from ServiceCenter.models import ServiceCenter
 from Authenticate.models import UserData
-
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def create_tiket(request, id):
     service_center = get_object_or_404(ServiceCenter, pk=id)
@@ -77,6 +78,7 @@ def show_json(request):
                     'name': tiket.service_center.name,
                     'address': tiket.service_center.address,
                     'contact': tiket.service_center.contact,
+                    'image': tiket.service_center.image.url,
                 },
             }
             tiket_list.append(tiket_dict)
@@ -92,3 +94,83 @@ def show_xml_by_id(request, id):
 def show_json_by_id(request, id):
     data = Tiket.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@csrf_exempt
+def create_ticket_flutter(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            service_center = ServiceCenter.objects.get(id=data["service_center_id"])
+
+            if request.user.is_authenticated:
+                user_data, created = UserData.objects.get_or_create(user=request.user)
+            else:
+                return JsonResponse({"status": "error", "message": "User not authenticated."}, status=403)
+    
+            new_ticket = Tiket.objects.create(
+                user=user_data, 
+                service_center=service_center,
+                service_date=data["service_date"],  
+                service_time=data["service_time"],  
+                specific_problems=data["specific_problems"],
+            )
+            new_ticket.save()
+
+            return JsonResponse({"status": "success"}, status=200)
+        except ServiceCenter.DoesNotExist:
+            return JsonResponse({"status": "error"}, status=404)
+    else:
+        return JsonResponse({"status": "error"}, status=405)
+
+@csrf_exempt
+def reschedule_ticket_flutter(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            ticket_id = data.get("ticket_id")
+
+            tiket = get_object_or_404(Tiket, id=ticket_id)
+
+            if request.user.is_authenticated:
+                if tiket.user.user != request.user:
+                    return JsonResponse({"status": "error"}, status=403)
+            else:
+                return JsonResponse({"status": "error"}, status=403)
+            
+            if "service_date" in data:
+                tiket.service_date = data["service_date"]
+            if "service_time" in data:
+                tiket.service_time = data["service_time"]
+            if "specific_problems" in data:
+                tiket.specific_problems = data["specific_problems"]
+
+            tiket.save()
+
+            return JsonResponse({"status": "success"}, status=200)
+        except Tiket.DoesNotExist:
+            return JsonResponse({"status": "error"}, status=404)
+    else:
+        return JsonResponse({"status": "error"}, status=405)
+    
+@csrf_exempt
+def cancel_appointment_flutter(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            ticket_id = data.get('ticket_id')
+            tiket = get_object_or_404(Tiket, pk=ticket_id)
+
+            if not request.user.is_authenticated:
+                return JsonResponse({"status": "error"}, status=403)
+
+            user_data = UserData.objects.filter(user=request.user).first()
+            if tiket.user != user_data:
+                return JsonResponse({"status": "error"}, status=403)
+
+            tiket.delete()
+            return JsonResponse({"status": "success"}, status=200)
+
+        except Tiket.DoesNotExist:
+            return JsonResponse({"status": "error"}, status=404)
+    else:
+        return JsonResponse({"status": "error"}, status=405)

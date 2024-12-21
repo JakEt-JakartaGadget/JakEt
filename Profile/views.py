@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.core import serializers
@@ -8,6 +9,9 @@ from django.db import IntegrityError
 from Authenticate.models import UserData
 from django.contrib.auth.models import User
 from Profile.forms import ProfileForm
+from django.views.decorators.csrf import csrf_exempt
+import base64
+from django.core.files.base import ContentFile
 
 @login_required(login_url='/authenticate')
 def profile_view(request):
@@ -117,3 +121,110 @@ def show_xml(request):
 def show_json(request):
     data = UserData.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@csrf_exempt
+def create_profile_flutter(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+
+            profile_name = data.get("profile_name", "")
+            username = data.get("username", "")
+            phone = data.get("phone", "")
+            email = data.get("email", "")
+            about = data.get("about", "")
+            profile_picture_data = data.get("profilePicture", None)
+
+            if not (profile_name and username and phone and email and about):
+                return JsonResponse({"status": "error", "message": "All fields are required."}, status=400)
+
+            # Handle profile picture if provided
+            profile_picture = None
+            if profile_picture_data:
+                if "base64" in profile_picture_data:  # Handle Base64 data
+                    format, imgstr = profile_picture_data.split(';base64,')
+                    ext = format.split('/')[-1]
+                    profile_picture = ContentFile(base64.b64decode(imgstr), name=f"profile_{request.user.id}.{ext}")
+                else:
+                    return JsonResponse({"status": "error", "message": "Invalid profile picture format."}, status=400)
+
+            # Create or update user profile
+            user = request.user
+            user.username = username
+            user.save()
+
+            user_data, created = UserData.objects.update_or_create(
+                user=user,
+                defaults={
+                    "profile_name": profile_name,
+                    "username": username,
+                    "about": about,
+                    "phone": phone,
+                    "email": email,
+                    "profile_picture": profile_picture,
+                }
+            )
+
+            return JsonResponse({"status": "success", "message": "Profile created successfully."})
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+    return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)
+
+@csrf_exempt
+def edit_profile_flutter(request):
+    if request.method == "POST":
+        try:
+            # Mengambil data JSON dari body request
+            data = json.loads(request.body.decode('utf-8'))
+
+            # Mengambil data dari request
+            profile_name = data.get("profile_name", "")
+            username = data.get("username", "")
+            phone = data.get("phone", "")
+            email = data.get("email", "")
+            about = data.get("about", "")
+            profile_picture_data = data.get("profilePicture", None)  # Memeriksa adanya gambar profil dalam format base64
+
+            # Validasi: Memastikan semua field wajib terisi
+            if not (profile_name and username and phone and email and about):
+                return JsonResponse({"status": "error", "message": "All fields are required."}, status=400)
+
+            # Memeriksa apakah username sudah ada
+            user = request.user
+            if user.username != username:
+                if User.objects.filter(username=username).exists():
+                    return JsonResponse({"status": "error", "message": "Username already exists."}, status=400)
+
+            # Menangani gambar profil jika ada
+            profile_picture = None
+            if profile_picture_data:
+                if "base64" in profile_picture_data:  # Menangani data gambar dalam format base64
+                    format, imgstr = profile_picture_data.split(';base64,')
+                    ext = format.split('/')[-1]
+                    profile_picture = ContentFile(base64.b64decode(imgstr), name=f"profile_{request.user.id}.{ext}")
+                else:
+                    return JsonResponse({"status": "error", "message": "Invalid profile picture format."}, status=400)
+
+            # Mengupdate informasi pengguna
+            user.username = username
+            user.save()
+
+            # Update atau buat data profil baru
+            user_data, created = UserData.objects.update_or_create(
+                user=user,
+                defaults={
+                    "profile_name": profile_name,
+                    "username": username,
+                    "about": about,
+                    "phone": phone,
+                    "email": email,
+                    "profile_picture": profile_picture,
+                }
+            )
+
+            return JsonResponse({"status": "success", "message": "Profile updated successfully."})
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+    return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)

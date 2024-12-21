@@ -11,6 +11,8 @@ urlpatterns = [
     path('<int:pk>/', article_detail, name='article_detail'),
     path('edit/<int:pk>/', edit_article, name='edit_article'),
     path('delete/<int:pk>/', delete_article, name='delete_article'),
+    path('xml/', show_xml, name='show_xml'),
+    path('json/', show_json, name='show_json'),
 ]
 
 if settings.DEBUG:

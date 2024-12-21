@@ -18,7 +18,7 @@
                 {% csrf_token %}
                 <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg">Delete</button>
             </form>
-            <a href="{% url 'article_list' %}" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-lg">Cancel</a>
+            <a href="{% url 'Article:article_list' %}" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-lg">Cancel</a>
         </div>
     </div>
 </div>

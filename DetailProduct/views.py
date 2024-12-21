@@ -15,6 +15,7 @@ from collections import defaultdict
 from django.contrib import messages
 from django.utils import timezone
 
+# WEB
 @login_required(login_url='/authenticate/login')
 def product_detail(request, product_id):
     product = get_object_or_404(Phone, id=product_id)
@@ -122,3 +123,199 @@ def delete_review(request, review_id):
     review.delete()
     messages.success(request, "Review berhasil dihapus!")
     return redirect('DetailProduct:review_page', product_id=product_id)
+
+
+# FLUTTER
+@csrf_exempt
+def create_review_flutter(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            product_id = data.get('product_id')
+            content = data.get('content', '').strip()
+            rating = data.get('rating')
+
+            if not product_id or not rating:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Product ID dan rating wajib diisi.'
+                }, status=400)
+
+            try:
+                rating = int(rating)
+                if rating < 1 or rating > 5:
+                    raise ValueError
+            except ValueError:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Rating harus berupa angka antara 1 dan 5.'
+                }, status=400)
+
+            product = get_object_or_404(Phone, id=product_id)
+            if Review.objects.filter(product=product, user=request.user).exists():
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Anda sudah memberikan review untuk produk ini.'
+                }, status=400)
+
+            new_review = Review(
+                user=request.user,
+                product=product,
+                content=content,
+                rating=rating
+            )
+            new_review.save()
+
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Review berhasil ditambahkan.',
+                'review_id': new_review.id
+            }, status=201)
+
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Data JSON tidak valid.'
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Terjadi kesalahan: {str(e)}'
+            }, status=500)
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Metode request tidak diizinkan.'
+        }, status=405)
+
+@csrf_exempt
+def edit_review_flutter(request, review_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            review = get_object_or_404(Review, id=review_id)
+            if review.user != request.user:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Anda tidak memiliki izin untuk mengedit review ini.'
+                }, status=403)
+
+            content = data.get('content', '').strip()
+            rating = data.get('rating')
+
+            if rating:
+                try:
+                    rating = int(rating)
+                    if rating < 1 or rating > 5:
+                        raise ValueError
+                except ValueError:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': 'Rating harus berupa angka antara 1 dan 5.'
+                    }, status=400)
+                review.rating = rating
+
+            if 'content' in data:
+                review.content = content
+            review.save()
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Review berhasil diperbarui.'
+            }, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Data JSON tidak valid.'
+            }, status=400)
+        except Review.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Review tidak ditemukan.'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Terjadi kesalahan: {str(e)}'
+            }, status=500)
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Metode request tidak diizinkan.'
+        }, status=405)
+
+
+@csrf_exempt
+def delete_review_flutter(request, review_id):
+    if request.method == 'POST':
+        try:
+            review = get_object_or_404(Review, id=review_id)
+            if review.user != request.user:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Anda tidak memiliki izin untuk menghapus review ini.'
+                }, status=403)
+
+            review.delete()
+
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Review berhasil dihapus.'
+            }, status=200)
+
+        except Review.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Review tidak ditemukan.'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Terjadi kesalahan: {str(e)}'
+            }, status=500)
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Metode request tidak diizinkan.'
+        }, status=405)
+
+def list_reviews_flutter(request, product_id):
+    if request.method == 'GET':
+        try:
+            product = get_object_or_404(Phone, id=product_id)
+            reviews = Review.objects.filter(product=product).order_by('-date_added')
+            review_data = []
+            for review in reviews:
+                profile_image_url = getattr(review.user, 'profile_image_url', '')
+                review_data.append({
+                    'id': review.id,
+                    'user': {
+                        'username': review.user.username,
+                        'profile_image_url': profile_image_url if profile_image_url else '/static/images/default_profile.png' 
+                    },
+                    'content': review.content,
+                    'rating': review.rating,
+                    'date_added': review.date_added.strftime('%Y-%m-%d %H:%M:%S'),
+                    'last_edited': review.last_edited.strftime('%Y-%m-%d %H:%M:%S') if review.last_edited else None
+                })
+
+            return JsonResponse({
+                'status': 'success',
+                'reviews': review_data
+            }, status=200)
+
+        except Phone.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Produk tidak ditemukan.'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Terjadi kesalahan: {str(e)}'
+            }, status=500)
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Metode request tidak diizinkan.'
+        }, status=405)

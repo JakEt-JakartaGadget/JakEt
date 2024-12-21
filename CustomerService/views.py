@@ -1,5 +1,5 @@
 # views.py
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -101,3 +101,41 @@ def get_messages(request):
     } for msg in messages]
     
     return JsonResponse({'messages': data})
+
+@csrf_exempt
+def show_json(request):
+    chats = Chat.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', chats), content_type='application/json')
+
+@csrf_exempt
+def send_message_flutter(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            message = data.get("message")
+            receiving_user = request.user
+
+            if not message or not receiving_user:
+                return JsonResponse({'status': 'error', 'message': 'Missing message or user_id'}, status=400)
+            
+            chat = Chat.objects.create(
+                user=receiving_user,
+                message=message,
+                sent_by_user=True
+            )
+
+            return JsonResponse({
+                'status': 'success',
+                'message': {
+                    'id': chat.id,
+                    'message': chat.message,
+                    'time': chat.time_sent.strftime('%H:%M'),
+                    'date': chat.date.strftime('%Y-%m-%d'),
+                    'sent_by_user': chat.sent_by_user,
+                }
+            })
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
